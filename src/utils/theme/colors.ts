@@ -8,7 +8,7 @@ export const palette = {
   transparent: "transparent",
   gray: "#878787",
 
-  /**taileind colors*/
+  /**tailwind colors*/
 
   slate50: "#f8fafc",
   slate100: "#f1f5f9",
