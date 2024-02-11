@@ -10,13 +10,16 @@
     "ts:check": "tsc"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/native": "^6.1.9",
-    "@react-navigation/native-stack": "^6.9.17",
+    "@react-navigation/native-stack": "^6.9.18",
     "@shopify/restyle": "^2.4.2",
     "@types/react": "~18.2.45",
+    "axios": "^1.6.7",
     "babel-plugin-module-resolver": "^5.0.0",
     "expo": "~50.0.3",
+    "expo-cli": "^6.3.10",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-native": "0.73.2",

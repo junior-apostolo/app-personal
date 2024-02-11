@@ -4,8 +4,9 @@ import { Feather } from "@expo/vector-icons";
 import Home from "@/screens/Home";
 import Profile from "@/screens/Profile";
 import Settings from "@/screens/Settings";
+import { TabParamList } from "./types";
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 export default function TabRoutes() {
   return (
