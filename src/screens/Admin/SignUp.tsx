@@ -1,5 +1,5 @@
 import { SafeAreaWrapper } from "@/components/safe-area-wrapper";
-import { AuthScreenNavigationType } from "@/routes/types";
+import { AdminScreenNavigationType } from "@/routes/types";
 import theme, { Box, Text } from "@/utils/theme";
 import { useNavigation } from "@react-navigation/native";
 import { ThemeProvider } from "@shopify/restyle";
@@ -7,11 +7,12 @@ import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, View } from "react-native";
 
 export default function SignUp() {
-  const navigation = useNavigation<AuthScreenNavigationType<"SignUp">>();
+  const navigation = useNavigation<AdminScreenNavigationType<"Register">>();
 
   const navigateToSignIn = () => {
-    navigation.navigate("SignIn");
+    navigation.navigate("HomeAdmin");
   };
+  
   return (
     <SafeAreaWrapper>
       <Box>

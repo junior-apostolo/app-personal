@@ -7,22 +7,27 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 export type AuthStackParamList = {
   Welcome: undefined;
   SignIn: undefined;
-  SignUp: undefined;
 };
 
-export type TabParamList = {
+export type UserStackParamList = {
   Home: undefined;
   Profile: undefined;
   Settings: undefined;
 };
 
+export type AdminStackParamList = {
+  HomeAdmin: undefined;
+  Register: undefined;
+};
+
 export type AppStackParamList = {
-  Root: NavigatorScreenParams<TabParamList>;
+  Root: NavigatorScreenParams<UserStackParamList>;
 };
 
 export type RootStackParamList = {
   AppStack: NavigatorScreenParams<AppStackParamList>;
   AuthStack: NavigatorScreenParams<AuthStackParamList>;
+  AdminStack: NavigatorScreenParams<AdminStackParamList>;
 };
 
 declare global {
@@ -35,5 +40,12 @@ export type AuthScreenNavigationType<
   RouteName extends keyof AuthStackParamList
 > = CompositeNavigationProp<
   NativeStackNavigationProp<AuthStackParamList, RouteName>,
+  NativeStackNavigationProp<AppStackParamList, "Root">
+>;
+
+export type AdminScreenNavigationType<
+  RouteName extends keyof AdminStackParamList
+> = CompositeNavigationProp<
+  NativeStackNavigationProp<AdminStackParamList, RouteName>,
   NativeStackNavigationProp<AppStackParamList, "Root">
 >;

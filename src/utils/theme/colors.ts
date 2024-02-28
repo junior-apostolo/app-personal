@@ -4,6 +4,8 @@ export const palette = {
   gray550: "#939292",
   gray650: "#848484",
   gray4: "#898681",
+  gray5: "#887d8e",
+  gray8: "#29262e",
   gray9: "#101928",
   transparent: "transparent",
   gray: "#878787",

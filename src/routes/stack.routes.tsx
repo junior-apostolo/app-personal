@@ -1,5 +1,5 @@
 import SignIn from "@/screens/SignIn";
-import SignUp from "@/screens/SignUp";
+import SignUp from "@/screens/Admin/SignUp";
 import Welcome from "@/screens/Welcome";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthStackParamList } from "./types";
@@ -23,14 +23,6 @@ export default function AuthStackRoutes() {
           headerShown: false,
         }}
         component={SignIn}
-      />
-
-      <Stack.Screen
-        name="SignUp"
-        options={{
-          headerShown: false,
-        }}
-        component={SignUp}
       />
     </Stack.Navigator>
   );

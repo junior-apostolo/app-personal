@@ -4,11 +4,10 @@ import { ThemeProvider } from "@shopify/restyle";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 
-export default function Settings() {
+export default function Profile() {
   return (
       <View style={styles.container}>
-        <Text variant="text3Xl">Settings</Text>
-        <Button />
+        <Text variant="text3Xl">Profile</Text>
         <StatusBar style="auto" />
       </View>
   );

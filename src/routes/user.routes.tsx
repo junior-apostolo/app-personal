@@ -1,14 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 
-import Home from "@/screens/Home";
-import Profile from "@/screens/Profile";
-import Settings from "@/screens/Settings";
-import { TabParamList } from "./types";
+import Home from "@/screens/User/Home";
+import Profile from "@/screens/User/Profile";
+import Settings from "@/screens/User/Settings";
+import { UserStackParamList } from "./types";
 
-const Tab = createBottomTabNavigator<TabParamList>();
+const Tab = createBottomTabNavigator<UserStackParamList>();
 
-export default function TabRoutes() {
+export default function UserRoutes() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
       <Tab.Screen

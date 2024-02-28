@@ -1,11 +1,23 @@
 import { NavigationContainer } from "@react-navigation/native";
-import TabRoutes from "./tab.routes";
 import AuthStackRoutes from "./stack.routes";
+import { AuthContext } from "@/context/AuthContext";
+import { useContext } from "react";
+import UserRoutes from "./user.routes";
+import AdminRoutes from "./admin.routes";
 
 export default function Routes() {
+  const { isAuthenticated, isAdmin } = useContext(AuthContext);
   return (
     <NavigationContainer>
-      <AuthStackRoutes/>
+      {isAuthenticated ? (
+        isAdmin ? (
+          <AdminRoutes />
+        ) : (
+          <UserRoutes />
+        )
+      ) : (
+        <AuthStackRoutes />
+      )}
     </NavigationContainer>
   );
 }
