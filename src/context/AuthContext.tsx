@@ -10,7 +10,9 @@ type AuthContextProps = {
   isAdmin: boolean;
 };
 
-export const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
+export const AuthContext = createContext<AuthContextProps>(
+  {} as AuthContextProps
+);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState<IUser | null>(null);
@@ -21,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   //   }
   // }, [])
 
-  const login = async(email: string, password: string) => {
+  const login = async (email: string, password: string) => {
     try {
       const response = await axios.post("", {
         email,
@@ -39,10 +41,18 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-  }
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, isAdmin: user.isAdmin }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        isAuthenticated: !!user,
+        isAdmin: user.isAdmin,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -51,4 +61,4 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   return context;
-}
+};

@@ -10,9 +10,9 @@ import { StyleSheet, View } from "react-native";
 export default function Welcome() {
   const navigation = useNavigation<AuthScreenNavigationType<"Welcome">>();
 
-  const navigateToSignUp = () => {
-    navigation.navigate("SignUp");
-  };
+  // const navigateToSignUp = () => {
+  //   navigation.navigate("SignIn");
+  // };
 
   const navigateToSignIn = () => {
     navigation.navigate("SignIn");

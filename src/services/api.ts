@@ -1,6 +1,6 @@
 import axiosInstance, { saveToken } from "./config";
 
-type LoginUserTypes = IUser
+type LoginUserTypes = IUser;
 
 export const loginUser = async ({email, password}: LoginUserTypes) => {
   try {

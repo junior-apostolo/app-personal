@@ -49,3 +49,8 @@ export type AdminScreenNavigationType<
   NativeStackNavigationProp<AdminStackParamList, RouteName>,
   NativeStackNavigationProp<AppStackParamList, "Root">
 >;
+
+export type SignInNavigationType = CompositeNavigationProp<
+  NativeStackNavigationProp<AuthStackParamList, 'SignIn'>,
+  NativeStackNavigationProp<RootStackParamList>
+>;
