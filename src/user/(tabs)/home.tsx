@@ -1,11 +1,10 @@
-import { View, StyleSheet, Text, ScrollView } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { theme } from "@/theme";
 import Bottom from "@gorhom/bottom-sheet";
 
-import { Header } from "@/components/header";
-import { MenuBottomSheet } from "@/components/menu";
+import { Header } from "@/components/Header";
+import { MenuBottomSheet } from "@/components/MenuBottom";
 import { useRef } from "react";
-import { CardLink } from "@/components/cardLink";
 
 export default function Home() {
   // const [isBottomSheetOpen, setIsOpenSheetOpen] = useState(false);
@@ -22,7 +21,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Header userName="Olá, Admin" openMenu={handleBottomSheetOpen} />
+      <Header userName="Olá, Junior" openMenu={handleBottomSheetOpen} />
       <Text style={styles.text}>Home</Text>
 
       <MenuBottomSheet
@@ -30,23 +29,7 @@ export default function Home() {
         title="Mais opções"
         snapPoints={[0.01, 280]}
       >
-        <ScrollView contentContainerStyle={styles.containerContent}>
-          <CardLink
-            iconName="person-add-alt"
-            text="Novo aluno"
-            url="/admin/registerUser"
-          />
-          <CardLink
-            iconName="groups"
-            text="Meus alunos"
-            url="/admin/registerUser"
-          />
-          <CardLink
-            iconName="directions-run"
-            text="Criar treino"
-            url="/admin/registerWorkout"
-          />
-        </ScrollView>
+        <Text>Hello!!</Text>
       </MenuBottomSheet>
     </View>
   );
@@ -64,11 +47,4 @@ const styles = StyleSheet.create({
     color: theme.colors.blue_600,
     fontFamily: theme.fonts.regular,
   },
-
-  containerContent: {
-    flexWrap: "wrap",
-    flexDirection: 'row',
-    gap: 20,
-    paddingBottom: 20
-  }
 });

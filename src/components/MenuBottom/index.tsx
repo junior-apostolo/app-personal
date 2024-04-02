@@ -1,6 +1,9 @@
 import { theme } from "@/theme";
 import { View, Text, StyleSheet } from "react-native";
-import Bottom, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
+import Bottom, {
+  BottomSheetBackdrop,
+  BottomSheetView,
+} from "@gorhom/bottom-sheet";
 import { ReactNode, forwardRef, useCallback } from "react";
 import { colors } from "@/theme/colors";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -14,7 +17,6 @@ export type Props = {
 
 export const MenuBottomSheet = forwardRef<Bottom, Props>(
   ({ onClose, children, snapPoints, title }, ref) => {
-
     const renderBackdrop = useCallback(
       (props: any) => (
         <BottomSheetBackdrop
@@ -26,31 +28,20 @@ export const MenuBottomSheet = forwardRef<Bottom, Props>(
       []
     );
 
-
     return (
       <Bottom
         ref={ref}
         index={0}
         snapPoints={snapPoints}
         backgroundStyle={{
-          backgroundColor: colors.white_200,
+          backgroundColor: colors.white,
         }}
         backdropComponent={renderBackdrop}
       >
-        <View className="p-8 gap-4">
-          <View className="flex-row">
-            <Text style={styles.text}>
-              {title}
-            </Text>
+        <View style={styles.container}>
+          <Text style={styles.text}>{title}</Text>
 
-            {/* <MaterialIcons
-              name="close"
-              size={24}
-              color={colors.white_200}
-              onPress={onClose}
-            /> */}
-          </View>
-          {children}
+          <View style={styles.contentContainer}>{children}</View>
         </View>
       </Bottom>
     );
@@ -59,19 +50,18 @@ export const MenuBottomSheet = forwardRef<Bottom, Props>(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 20,
+    gap: 16
   },
   contentContainer: {
-    flex: 1,
-    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
   },
   text: {
-    flex: 1,
     color: theme.colors.black,
     fontFamily: theme.fonts.medium,
     fontSize: theme.fonts.size.heading.md,
-    fontWeight: '600'
+    fontWeight: "600",
   },
 });

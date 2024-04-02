@@ -1,20 +1,23 @@
 import { Tabs } from "expo-router";
 import { Foundation, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { theme } from "@/theme";
+import React from "react";
+import { Header } from "@/components/Header";
 
 export default function TabLayout() {
+
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        header: () => <Header userName="User" />,
         tabBarActiveTintColor: theme.colors.blue_600,
         tabBarInactiveTintColor: theme.colors.gray[200],
         tabBarStyle: {
-          backgroundColor: theme.colors.white_200,
+          backgroundColor: theme.colors.white,
         },
         tabBarLabelStyle: {
           fontFamily: theme.fonts.regular,
-        }
+        },
       }}
     >
       <Tabs.Screen

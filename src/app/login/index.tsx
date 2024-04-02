@@ -1,13 +1,35 @@
-import { Input } from "@/components/input";
+import { Input } from "@/components/Input/input";
+import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";
 import { Link } from "expo-router";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
 
 import * as Animatable from "react-native-animatable";
 
-export default function Login() { 
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { onLogin, isLoading } = useAuth();
+
+  const onSignInPress = async () => {
+    onLogin!(email, password);
+  };
+
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Animatable.View
         animation="fadeInLeft"
         delay={500}
@@ -18,21 +40,36 @@ export default function Login() {
 
       <Animatable.View animation="fadeInUp" style={styles.containerForm}>
         <View style={styles.containerInput}>
-          <Input label="E-mail" placeholder="Digite o E-mail..." />
-          <Input label="Senha" placeholder="Digite o nome..." />
+          <Input
+            label="E-mail"
+            placeholder="Digite o E-mail..."
+            value={email}
+            onChangeText={setEmail}
+          />
+          <Input
+            label="Senha"
+            placeholder="Digite o nome..."
+            password={true}
+            value={password}
+            onChangeText={setPassword}
+          />
         </View>
 
-        <Link href='/admin/registerUser' asChild>
-          <TouchableOpacity style={styles.button}>
+        <TouchableOpacity onPress={onSignInPress} style={styles.button} activeOpacity={0.8}>
+          {!isLoading ? (
             <Text style={styles.buttonText}>Acessar</Text>
-          </TouchableOpacity>
-        </Link>
+          ) : (
+            <ActivityIndicator color={"#fff"} size={30} />
+          )}
+        </TouchableOpacity>
+
+        {/* <Link href="/admin/home" asChild></Link> */}
 
         <TouchableOpacity style={styles.buttonResetPassword}>
           <Text style={styles.buttonResetText}>Esqueceu a senha?</Text>
         </TouchableOpacity>
       </Animatable.View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -71,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.blue_600,
     width: "100%",
     height: 50,
-    borderRadius: theme.borderRadius.xl,
+    borderRadius: theme.borderRadius.md,
     paddingVertical: 8,
     marginTop: 14,
     justifyContent: "center",
