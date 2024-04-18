@@ -19,7 +19,7 @@ export const ListItem = ({ data }: ListProps) => {
 
   return (
     <View style={styles.containerItem}>
-      <Avatar/>
+      <Avatar source={{uri: 'https://github.com/junior-apostolo.png'}}/>
       <View>
         <Text style={styles.textName}>{data.name}</Text>
         <Text style={styles.textEmail}>{data.email}</Text>

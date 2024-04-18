@@ -45,6 +45,8 @@ export default function Login() {
             placeholder="Digite o E-mail..."
             value={email}
             onChangeText={setEmail}
+            autoCorrect={false}
+            keyboardType="email-address"
           />
           <Input
             label="Senha"
@@ -52,6 +54,8 @@ export default function Login() {
             password={true}
             value={password}
             onChangeText={setPassword}
+            autoCorrect={false}
+            keyboardType="default"
           />
         </View>
 

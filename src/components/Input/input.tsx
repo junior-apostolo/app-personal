@@ -7,31 +7,35 @@ import {
   StyleSheet,
 } from "react-native";
 
-type InputProps = {
+type InputProps = TextInputProps & {
   label: string;
   placeholder?: string;
   error?: undefined;
   value: string;
   onChangeText: (text: string) => void;
-  password?: boolean
-} & TextInputProps;
+  password?: boolean;
+};
 
 export const Input = ({
   label,
   placeholder,
   onChangeText,
   value,
-  password
+  password,
+  ...rest
 }: InputProps) => {
   return (
     <View style={styles.containerInput}>
       <Text style={styles.text}>{label}</Text>
       <TextInput
+        {...rest}
         style={styles.input}
         placeholder={placeholder}
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={password}
+        selectionColor={theme.colors.blue_200}
+        cursorColor={theme.colors.blue_200}
       />
     </View>
   );
@@ -50,6 +54,7 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 10,
+    height: 50,
     borderWidth: 1,
     borderColor: theme.colors.gray[100],
     borderRadius: theme.borderRadius.sm,
@@ -65,5 +70,4 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 10,
   },
-
 });
