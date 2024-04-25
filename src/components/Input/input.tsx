@@ -1,73 +1,95 @@
+import React, { useRef, useEffect, useCallback, useState } from "react";
+
+import { TextInputProps } from "react-native";
+
+import { Container, InputComponent, Label, Icon } from "./styles";
+import { useField } from "@unform/core";
 import { theme } from "@/theme";
-import {
-  View,
-  Text,
-  TextInput,
-  TextInputProps,
-  StyleSheet,
-} from "react-native";
 
-type InputProps = TextInputProps & {
+interface InputProps extends TextInputProps {
+  name: string;
   label: string;
-  placeholder?: string;
-  error?: undefined;
-  value: string;
-  onChangeText: (text: string) => void;
-  password?: boolean;
-};
+  icon?: any;
+}
 
-export const Input = ({
+export const Input: React.FC<InputProps> = ({
+  name,
   label,
-  placeholder,
+  icon,
   onChangeText,
-  value,
-  password,
   ...rest
 }: InputProps) => {
+  const inputRef: any = useRef(null);
+  const { fieldName, registerField, defaultValue, error } = useField(name);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isField, setIsField] = useState(false);
+
+  useEffect(() => {
+    inputRef.current.value = defaultValue;
+  }, [defaultValue]);
+
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.value = defaultValue;
+  }, [defaultValue]);
+
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputRef.current,
+      getValue() {
+        if (inputRef.current) return inputRef.current.value;
+        return "";
+      },
+      setValue(ref, value) {
+        if (inputRef.current) {
+          inputRef.current.setNativeProps({ text: value });
+          inputRef.current.value = value;
+        }
+      },
+      clearValue() {
+        if (inputRef.current) {
+          inputRef.current.setNativeProps({ text: "" });
+          inputRef.current.value = "";
+        }
+      },
+    });
+  }, [fieldName, registerField]);
+
+  const handleInputFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const handleInputBlur = useCallback(async () => {
+    setIsFocused(false);
+    if (inputRef.current.value) {
+      setIsField(true);
+    } else {
+      setIsField(false);
+    }
+  }, []);
+
+  const handleChangeText = useCallback(
+    (text: string) => {
+      if (inputRef.current) inputRef.current.value = text;
+      if (onChangeText) onChangeText(text);
+    },
+    [onChangeText]
+  );
+
   return (
-    <View style={styles.containerInput}>
-      <Text style={styles.text}>{label}</Text>
-      <TextInput
-        {...rest}
-        style={styles.input}
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={password}
-        selectionColor={theme.colors.blue_200}
-        cursorColor={theme.colors.blue_200}
-      />
-    </View>
+    <>
+      {label && <Label>{label}</Label>}
+      <Container isFocused={isFocused} isErrored={!!error}>
+        <InputComponent
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          ref={inputRef}
+          onChangeText={handleChangeText}
+          defaultValue={defaultValue}
+          {...rest}
+        />
+        {!!icon && <Icon name={icon} size={20} isField={isField} isFocused={isFocused} isErrored={!!error} />}
+      </Container>
+    </>
   );
 };
-
-const styles = StyleSheet.create({
-  containerInput: {
-    flexDirection: "column",
-    gap: 8,
-    marginBottom: 20,
-  },
-  text: {
-    textTransform: "uppercase",
-    fontSize: theme.fonts.size.body.sm,
-    lineHeight: theme.fonts.size.body.sm,
-  },
-  input: {
-    padding: 10,
-    height: 50,
-    borderWidth: 1,
-    borderColor: theme.colors.gray[100],
-    borderRadius: theme.borderRadius.sm,
-    fontFamily: theme.fonts.regular,
-    fontSize: theme.fonts.size.body.sm,
-  },
-
-  inputField: {
-    marginVertical: 4,
-    height: 40,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 10,
-  },
-});

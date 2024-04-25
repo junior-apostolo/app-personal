@@ -97,9 +97,8 @@ export default function Admin() {
         <FlatList
           data={workouts}
           showsHorizontalScrollIndicator={false}
-          horizontal
           contentContainerStyle={{
-            gap: 5,
+            gap: 3,
             padding: 20,
             paddingTop: StatusBar.currentHeight || 20,
           }}

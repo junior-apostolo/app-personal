@@ -1,4 +1,5 @@
 import { Input } from "@/components/Input/input";
+import { Form } from "@unform/mobile";
 import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";
 import { Link } from "expo-router";
@@ -39,27 +40,33 @@ export default function Login() {
       </Animatable.View>
 
       <Animatable.View animation="fadeInUp" style={styles.containerForm}>
-        <View style={styles.containerInput}>
-          <Input
-            label="E-mail"
-            placeholder="Digite o E-mail..."
-            value={email}
-            onChangeText={setEmail}
-            autoCorrect={false}
-            keyboardType="email-address"
-          />
-          <Input
-            label="Senha"
-            placeholder="Digite o nome..."
-            password={true}
-            value={password}
-            onChangeText={setPassword}
-            autoCorrect={false}
-            keyboardType="default"
-          />
-        </View>
+        <Form onSubmit={() => console.log("")}>
+          <View style={styles.containerInput}>
+            <Input
+              label="E-mail"
+              name="email"
+              icon="mail"
+              placeholder="Digite o E-mail..."
+              autoCorrect={false}
+              keyboardType="email-address"
+            />
+            <Input
+              icon="lock-closed"
+              label="Senha"
+              name="password"
+              secureTextEntry
+              placeholder="Digite o nome..."
+              autoCorrect={false}
+              keyboardType="default"
+            />
+          </View>
+        </Form>
 
-        <TouchableOpacity onPress={onSignInPress} style={styles.button} activeOpacity={0.8}>
+        <TouchableOpacity
+          onPress={onSignInPress}
+          style={styles.button}
+          activeOpacity={0.8}
+        >
           {!isLoading ? (
             <Text style={styles.buttonText}>Acessar</Text>
           ) : (

@@ -12,6 +12,8 @@ export const colors = {
   blue_600: "#176B87",
   blue_800: "#265073",
 
+  error: "#FF3B3B",
+
   gray: {
     100: "#cccccc",
     200: "#8e8e8e",
