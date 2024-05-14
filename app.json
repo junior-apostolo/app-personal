@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#176B87"
+      "backgroundColor": "#142c43"
     },
     "assetBundlePatterns": [
       "**/*"

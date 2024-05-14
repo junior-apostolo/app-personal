@@ -5,7 +5,7 @@ import {theme} from '@/theme'
 export default function News() {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>News</Text>
+      <Text style={styles.text}>test</Text>
     </View>
   );
 }

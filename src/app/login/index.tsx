@@ -3,7 +3,7 @@ import { Form } from "@unform/mobile";
 import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -16,14 +16,17 @@ import {
 } from "react-native";
 
 import * as Animatable from "react-native-animatable";
+import { AuthAuthentication } from "@/types/AuthAuthentication";
+import { FormHandles } from "@unform/core";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  
+  const formRef: FormHandles | any = useRef(null);
   const { onLogin, isLoading } = useAuth();
 
-  const onSignInPress = async () => {
-    onLogin!(email, password);
+  const onSignInPress = async (data: AuthAuthentication) => {
+    console.log(data)
+    onLogin!(data);
   };
 
   return (
@@ -40,7 +43,7 @@ export default function Login() {
       </Animatable.View>
 
       <Animatable.View animation="fadeInUp" style={styles.containerForm}>
-        <Form onSubmit={() => console.log("")}>
+        <Form ref={formRef} onSubmit={onSignInPress}>
           <View style={styles.containerInput}>
             <Input
               label="E-mail"
@@ -63,7 +66,7 @@ export default function Login() {
         </Form>
 
         <TouchableOpacity
-          onPress={onSignInPress}
+          onPress={() => formRef?.current?.submitForm()}
           style={styles.button}
           activeOpacity={0.8}
         >

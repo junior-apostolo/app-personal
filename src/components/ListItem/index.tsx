@@ -8,8 +8,8 @@ import { Container, Content, Subtitle, Title } from "./styles";
 // export type IconNameType = keyof typeof MaterialIcons.glyphMap;
 
 type DataProps = {
-  name: string;
-  email?: string;
+  title: string;
+  subtitle?: string;
 };
 
 type ListProps = {
@@ -20,10 +20,9 @@ export const ListItem = ({ data }: ListProps) => {
 
   return (
     <Container>
-      <Avatar source={{uri: 'https://github.com/junior-apostolo.png'}}/>
       <Content>
-        <Title >{data.name}</Title>
-        <Subtitle>{data.email}</Subtitle>
+        <Title >{data.title}</Title>
+        <Subtitle>{data.subtitle}</Subtitle>
       </Content>
     </Container>
   );

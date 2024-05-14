@@ -4,7 +4,6 @@ import { TextInputProps } from "react-native";
 
 import { Container, InputComponent, Label, Icon } from "./styles";
 import { useField } from "@unform/core";
-import { theme } from "@/theme";
 
 interface InputProps extends TextInputProps {
   name: string;

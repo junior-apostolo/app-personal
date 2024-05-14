@@ -1,3 +1,4 @@
+import { AuthAuthentication } from "@/types/AuthAuthentication";
 import axios from "axios";
 import { createContext, useContext, useState } from "react";
 
@@ -14,7 +15,7 @@ interface AuthProps {
     username: string | null;
     role: Role | null;
   };
-  onLogin: (email: string, password: string) => void;
+  onLogin: (auth:AuthAuthentication) => void;
   onLogout: () => void;
   isLoading: boolean;
 }
@@ -37,7 +38,8 @@ export const AuthProvider = ({ children }: any) => {
   });
   const [loading, setLoading] = useState(false);
 
-  const login = async (email: string, password: string) => {
+  const login = async (auth: AuthAuthentication) => {
+    const {email, password} = auth;
     setLoading(true);
     // try {
     //   const response = await axios.post(`${apiUrl}/Auth`, {

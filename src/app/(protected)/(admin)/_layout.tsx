@@ -1,8 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Role, useAuth } from "../../context/AuthContext";
-import { Header } from "@/components/Header";
+import { Role, useAuth } from "../../../context/AuthContext";
+import { Header } from "@/components/Home/Header";
 import { theme } from "@/theme";
 import { View } from "react-native";
 
@@ -14,12 +14,10 @@ const TabLayout = () => {
       <Tabs
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
+            let iconName: any;
 
             if (route.name === "index") {
-              iconName = focused
-                ? "home"
-                : "home-outline";
+              iconName = focused ? "home" : "home-outline";
             } else if (route.name === "admin") {
               iconName = focused ? "cog" : "cog-outline";
             }
@@ -38,33 +36,36 @@ const TabLayout = () => {
         })}
       >
         <Tabs.Screen
-          name="index"
+          name="home/index"
           options={{
-            header: () =>
-              authState?.role === Role.ADMIN ? (
-                <Header userName="Admin" />
-              ) : (
-                <Header userName="User" />
-              ),
+            headerShown: false,
+
+            // header: () =>
+            //   authState?.role === Role.ADMIN ? (
+            //     <Header userName="Admin" />
+            //   ) : (
+            //     <Header userName="User" />
+            //   ),
             tabBarLabel: "início",
-            // tabBarIcon: ({ size, color, focused }) => (
-            //   <Ionicons name="home" size={size} color={color} />
-            // ),
+            tabBarIcon: ({ size, color, focused }) => (
+              <Ionicons name="home" size={size} color={color} />
+            ),
           }}
           redirect={authState?.authenticated === null}
         />
 
         <Tabs.Screen
-          name="news"
+          name="(admin)/news"
           options={{
-            headerTitle: "Newsfeed",
-            tabBarIcon: ({ size, color }) => (
-              <Ionicons name="newspaper-outline" size={size} color={color} />
-            ),
+            headerShown: false,
+            tabBarLabel: "aaa",
+            // tabBarIcon: ({ size, color, focused }) => (
+            //   <Ionicons name="home" size={size} color={color} />
+            // ),
           }}
           redirect={authState?.role !== Role.USER}
         />
-        <Tabs.Screen
+        {/* <Tabs.Screen
           name="admin"
           options={{
             headerShown: false,
@@ -73,7 +74,7 @@ const TabLayout = () => {
             // ),
           }}
           redirect={authState?.role !== Role.ADMIN}
-        />
+        /> */}
       </Tabs>
     </GestureHandlerRootView>
   );
