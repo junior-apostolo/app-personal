@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components/native";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { theme } from "@/theme";
 
@@ -7,6 +7,7 @@ interface InputStyleProps {
   isField?: boolean;
   isFocused?: boolean;
   isErrored?: boolean;
+  multiline?: boolean;
 }
 
 export const Container = styled.View<InputStyleProps>`
@@ -16,7 +17,7 @@ export const Container = styled.View<InputStyleProps>`
   align-items: center;
   border-width: 1px;
   border-color: ${theme.colors.gray[100]};
-  border-radius: ${theme.borderRadius.mdpls}px;
+  border-radius: ${theme.borderRadius.md}px;
   ${(props) =>
     props.isErrored &&
     css`
@@ -29,15 +30,25 @@ export const Container = styled.View<InputStyleProps>`
       border-color: ${theme.colors.blue_800};
       border-width: 2px;
     `}
+    ${(props) =>
+    props.multiline &&
+    css`
+      height: 150px;
+    `}
 `;
 
-export const InputComponent = styled.TextInput.attrs({
+export const InputComponent = styled.TextInput.attrs<InputStyleProps>({
   placeholderTextColor: "rgba(255,255,255,0.3)",
 })`
   flex: 1;
   width: 250px;
   font-family: ${theme.fonts.regular};
   font-size: ${theme.fonts.size.body.sm};
+  ${(props) =>
+    props.multiline &&
+    css`
+      height: 150px;
+    `}
 `;
 
 export const Label = styled.Text`
@@ -49,7 +60,7 @@ export const Label = styled.Text`
 
 export const Icon = styled(Ionicons)<InputStyleProps>`
   margin-right: 5px;
-  color:  ${theme.colors.gray[100]};
+  color: ${theme.colors.gray[100]};
   ${(props) =>
     props.isField &&
     css`

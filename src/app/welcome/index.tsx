@@ -24,7 +24,8 @@ export default function Welcome() {
         <Text style={styles.title}>Bem-vindo ao melhor app fitness</Text>
         <Text style={styles.text}>Faça login para iniciar</Text>
 
-        <Link href="/login/" asChild>
+        {/* <Link href="/login/" asChild> */}
+        <Link href="/(protected)/(views)/(register)/exercises/" asChild>
           <Pressable style={styles.button}>
             <Text style={styles.buttonText}>Acessar</Text>
           </Pressable>

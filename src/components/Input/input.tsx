@@ -8,6 +8,7 @@ import { useField } from "@unform/core";
 interface InputProps extends TextInputProps {
   name: string;
   label: string;
+  multiline?: boolean;
   icon?: any;
 }
 
@@ -15,6 +16,7 @@ export const Input: React.FC<InputProps> = ({
   name,
   label,
   icon,
+  multiline = false,
   onChangeText,
   ...rest
 }: InputProps) => {
@@ -78,8 +80,9 @@ export const Input: React.FC<InputProps> = ({
   return (
     <>
       {label && <Label>{label}</Label>}
-      <Container isFocused={isFocused} isErrored={!!error}>
+      <Container isFocused={isFocused} isErrored={!!error} multiline={multiline}>
         <InputComponent
+        multiline={multiline}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           ref={inputRef}
