@@ -8,29 +8,18 @@ import { FormHandles } from "@unform/core";
 import { Title } from "@/components/Card/styles";
 import Button from "@/components/Button";
 import YoutubePlayer from "react-native-youtube-iframe";
-import { Alert } from "react-native";
 
 const exercises: React.FC = () => {
   const formRef: FormHandles | any = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [selectVideoPreview, setSelectVideoPreview] = useState("");
 
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {
-      setPlaying(false);
-      Alert.alert("video has finished playing!");
-    }
-  }, []);
-  const togglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
-
   const selectVideo = (event: { nativeEvent: { text: string } }) => {
     const newValue = event.nativeEvent.text?.split("be/");
-    if (newValue.length > 0) {
+    if (newValue.length > 1) {
       setSelectVideoPreview(newValue[1]);
     } else {
-      setSelectVideoPreview("");
+      setSelectVideoPreview(() => "");
     }
   };
 
@@ -43,13 +32,12 @@ const exercises: React.FC = () => {
           <Input name="linkVideo" label="Link do video:" onBlur={selectVideo} />
           <Input name="descricao" label="Descrição:" multiline />
           <View style={{ marginBottom: 20 }} />
-          {selectVideoPreview != "" && (
+          {selectVideoPreview && (
             <View>
               <YoutubePlayer
                 height={280}
                 play={playing}
                 videoId={selectVideoPreview}
-                onChangeState={onStateChange}
               />
             </View>
           )}
