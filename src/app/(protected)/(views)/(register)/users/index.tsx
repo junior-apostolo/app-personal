@@ -7,13 +7,18 @@ import { Input } from "@/components/Input";
 import { FormHandles } from "@unform/core";
 import { Title } from "@/components/Card/styles";
 import Button from "@/components/Button";
+import { useHeaderHeight } from '@react-navigation/elements';
 import YoutubePlayer from "react-native-youtube-iframe";
+import InputMask from "@/components/InputMask";
+import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
+import Select from "@/components/Select";
 
-const exercises: React.FC = () => {
+const User: React.FC = () => {
   const formRef: FormHandles | any = useRef(null);
   const [playing, setPlaying] = useState(false);
+  const [cpfRaw, setCpfRaw] = useState("");
   const [selectVideoPreview, setSelectVideoPreview] = useState("");
-
+  const headerHeight = useHeaderHeight() +35;
   const selectVideo = (event: { nativeEvent: { text: string } }) => {
     const newValue = event.nativeEvent.text?.split("be/");
     if (newValue.length > 1) {
@@ -26,11 +31,20 @@ const exercises: React.FC = () => {
   return (
     <Container>
       <Content>
-        <Title>Cadastro de Exercicio</Title>
+        <Title>Cadastro de usuarios</Title>
         <Form ref={formRef} onSubmit={() => {}}>
-          <Input name="nome" label="Nome:" />
-          <Input name="linkVideo" label="Link do video:" onBlur={selectVideo} />
-          <Input name="descricao" label="Descrição:" multiline />
+          <Input name="name" label="Nome:" />
+          <Input name="email" label="Email:" />
+          <InputMask
+            type="cpf"
+            rawText={cpfRaw}
+            setRawText={setCpfRaw}
+            name="cpf"
+            label="CPF:"
+          />
+          <Input name="password" label="Senha:" />
+          <Input name="password_confirm" label="Confirma Senha:" />
+         
           <View style={{ marginBottom: 20 }} />
           {selectVideoPreview && (
             <View>
@@ -43,9 +57,13 @@ const exercises: React.FC = () => {
           )}
           <Button text="Cadastrar" />
         </Form>
+
+        <AutocompleteDropdownContextProvider headerOffset={headerHeight}>
+            <Select />
+          </AutocompleteDropdownContextProvider>
       </Content>
     </Container>
   );
 };
 
-export default exercises;
+export default User;

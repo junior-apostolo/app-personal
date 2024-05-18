@@ -1,4 +1,4 @@
-import { Input } from "@/components/Input/input";
+import { Input } from "@/components/Input";
 import { Form } from "@unform/mobile";
 import { useAuth } from "@/context/AuthContext";
 import { theme } from "@/theme";

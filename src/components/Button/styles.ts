@@ -9,6 +9,7 @@ export const Container = styled.TouchableOpacity`
   border-radius: 10px;
   height: 50px;
   margin-bottom: 10px;
+  z-index: -1;
 `;
 
 export const BtnText = styled.Text`
