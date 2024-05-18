@@ -1,64 +1,100 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { AuthAuthentication } from "@/types/AuthAuthentication";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext, useContext, useState } from "react";
 
-type AuthContextProps = {
-  user: IUser | null;
-  login: (email: string, password: string) => void;
-  logout: () => void;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-};
+const apiUrl = process.env.EXPO_PUBLIC_API_URL;
 
-export const AuthContext = createContext<AuthContextProps>(
-  {} as AuthContextProps
-);
+export enum Role {
+  ADMIN = "admin",
+  USER = "user",
+}
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState<IUser | null>(null);
-
-  // useEffect(() => {
-  //   async function loadStoragedData() {
-
-  //   }
-  // }, [])
-
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post("", {
-        email,
-        password,
-      });
-
-      await AsyncStorage.setItem("@Auth:user", JSON.stringify(response.data));
-      await AsyncStorage.setItem("@Auth:token", response.data);
-
-      setUser(response?.data);
-    } catch (error) {
-      console.log(error);
-    }
+interface AuthProps {
+  authState: {
+    authenticated: boolean | null;
+    username: string | null;
+    role: Role | null;
   };
+  onLogin: (auth:AuthAuthentication) => void;
+  onLogout: () => void;
+  isLoading: boolean;
+}
 
-  const logout = () => {
-    setUser(null);
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        isAuthenticated: !!user,
-        isAdmin: user.isAdmin,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
-};
+const AuthContext = createContext<Partial<AuthProps>>({});
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  return context;
+  return useContext(AuthContext);
+};
+
+export const AuthProvider = ({ children }: any) => {
+  const [authState, setAuthState] = useState<{
+    authenticated: boolean | null;
+    username: string | null;
+    role: Role | null;
+  }>({
+    authenticated: null,
+    username: null,
+    role: null,
+  });
+  const [loading, setLoading] = useState(false);
+
+  const login = async (auth: AuthAuthentication) => {
+    const {email, password} = auth;
+    setLoading(true);
+    // try {
+    //   const response = await axios.post(`${apiUrl}/Auth`, {
+    //     email,
+    //     password,
+    //   });
+
+    //   const user = response.data;
+    //   console.log("Teste", user);
+
+    //   setAuthState({
+    //     authenticated: true,
+    //     username: user.name,
+    //     role: user.isAdmin ? Role.ADMIN : Role.USER,
+    //   });
+    // } catch (error) {
+    //   console.log("Error", error);
+    //   alert("Invalid username or password!");
+    // } finally {
+    //   setLoading(false);
+    // }
+    if (email === "admin" && password === "admin") {
+      setAuthState({
+        authenticated: true,
+        username: email,
+        role: Role.ADMIN,
+      });
+      setLoading(false);
+    } else if (email === "user" && password === "user") {
+      setAuthState({
+        authenticated: true,
+        username: email,
+        role: Role.USER,
+      });
+      setLoading(false);
+    } else {
+      alert("Invalid username or password!");
+    }
+    setLoading(false);
+  };
+
+  const logout = async () => {
+    setAuthState({
+      authenticated: false,
+      username: null,
+      role: null,
+    });
+  };
+
+  const value = {
+    onLogin: login,
+    onLogout: logout,
+    authState,
+    isLoading: loading,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
