@@ -1,6 +1,6 @@
 import "@/theme/global.css";
 
-import {  Stack, useRouter, useSegments } from "expo-router";
+import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -14,7 +14,6 @@ import { useCallback, useEffect } from "react";
 import { BottomSheetProvider } from "@/context/MenuSheetRefContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-
 
 const StackLayout = () => {
   const { authState } = useAuth();
@@ -31,15 +30,35 @@ const StackLayout = () => {
   }, [authState]);
 
   return (
-    <Stack >
+    <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="welcome/index" options={{ headerShown: false, headerTitle: "Onboarding" }} />
-      <Stack.Screen name="(protected)/(admin)" options={{ headerShown: false }} />
-      <Stack.Screen name="(protected)/(views)/(register)/exercises/index" options={{ headerShown: true, headerTitle: "Cadastro de Exercicio" }} />
-      <Stack.Screen name="(protected)/(views)/(register)/users/index" options={{ headerShown: true, headerTitle: "Cadastro de Usuarios" }} />
+      <Stack.Screen
+        name="welcome/index"
+        options={{ headerShown: false, headerTitle: "Onboarding" }}
+      />
+      <Stack.Screen
+        name="(protected)/(admin)"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(protected)/(views)/(register)/exercises/index"
+        options={{ headerShown: true, headerTitle: "Cadastro de Exercicio" }}
+      />
+      <Stack.Screen
+        name="(protected)/(views)/(register)/training/index"
+        options={{ headerShown: true, headerTitle: "Cadastro de treino" }}
+      />
+       <Stack.Screen
+        name="(protected)/(views)/(register)/trainingExercise/index"
+        options={{ headerShown: true, headerTitle: "Cadastro de treino com exercicio" }}
+      />
+      <Stack.Screen
+        name="(protected)/(views)/(register)/users/index"
+        options={{ headerShown: true, headerTitle: "Cadastro de Usuarios" }}
+      />
       <Stack.Screen name="login/index" options={{ headerShown: false }} />
     </Stack>
-  ); 
+  );
 };
 
 export default function RootLayoutNav() {
@@ -63,7 +82,7 @@ export default function RootLayoutNav() {
     <SafeAreaProvider>
       <AuthProvider>
         <BottomSheetProvider>
-          <StatusBar barStyle={'default'}/>
+          <StatusBar barStyle={"default"} />
           <StackLayout />
         </BottomSheetProvider>
       </AuthProvider>

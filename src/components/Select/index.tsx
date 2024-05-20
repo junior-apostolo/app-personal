@@ -1,3 +1,4 @@
+import { theme } from "@/theme";
 import React, { memo, useCallback, useRef, useState } from "react";
 import { Button, Dimensions, Text, View, Platform } from "react-native";
 import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
@@ -58,30 +59,32 @@ export const Select = memo(() => {
         loading={loading}
         useFilter={false} // set false to prevent rerender twice
         textInputProps={{
-          placeholder: "Type 3+ letters (dolo...)",
+          placeholder: "Selecione o aluno",
           autoCorrect: false,
           autoCapitalize: "none",
           style: {
-            backgroundColor: "#383b42",
-            color: "#fff",
-            paddingLeft: 18,
+            color: "#000",
+
           },
         }}
         rightButtonsContainerStyle={{
 
-          alignSelf: "center",
         }}
         inputContainerStyle={{
-          backgroundColor: "#383b42",
+          backgroundColor: "#fff",
+          borderRadius: theme.borderRadius.md,
+          borderWidth: 1,
+          borderColor: "#cccccc",
         }}
         suggestionsListContainerStyle={{
-          backgroundColor: "#383b42",
-          width: "100%",
-          alignSelf: "flex-start",
-          marginRight: 20
+          backgroundColor: "#fff",
+          right: 20,
+          borderRadius: theme.borderRadius.md,
+          borderWidth: 1,
+          borderColor: "#cccccc"
         }}
         renderItem={(item, text) => (
-          <Text style={{ color: "#fff", padding: 3 }}>{item.title}</Text>
+          <Text style={{ color: "#000", padding: 5 }}>{item.title}</Text>
         )}
         //   ChevronIconComponent={<Feather name="chevron-down" size={20} color="#fff" />}
         //   ClearIconComponent={<Feather name="x-circle" size={18} color="#fff" />}
