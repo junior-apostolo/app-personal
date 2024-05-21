@@ -16,6 +16,21 @@ const Training: React.FC = () => {
   const formRef: FormHandles | any = useRef(null);
   const [dateRawInitial, setDateRawInitial] = useState("");
   const [dateRawFinal, setDateRawFinal] = useState("");
+  const [userSelect, setUserSelect] = useState("")
+  const [users, setUsers] = useState([
+    {
+        id: '123',
+        name: "vinicius"
+    }, 
+    {
+        id: '345',
+        name: "vitoria"
+    },
+    {
+        id: '164',
+        name: "vitor"
+    }
+  ])
 
   const headerHeight = useHeaderHeight() + 35;
 
@@ -26,7 +41,7 @@ const Training: React.FC = () => {
         <Form ref={formRef} onSubmit={() => {}}>
           <Input name="name" label="Nome do treino:" />
           <AutocompleteDropdownContextProvider headerOffset={headerHeight}>
-            <Select />
+            <Select data={users} title="name" key="id" setItem={setUserSelect} label="Selecione o Aluno" placeholder="Alunos"/>
           </AutocompleteDropdownContextProvider>
           <InputMask
             setRawText={setDateRawInitial}

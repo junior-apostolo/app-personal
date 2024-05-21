@@ -8,14 +8,33 @@ import { FormHandles } from "@unform/core";
 import { Title } from "@/components/Card/styles";
 import Button from "@/components/Button";
 import { useHeaderHeight } from "@react-navigation/elements";
-import InputMask from "@/components/InputMask";
 import { AutocompleteDropdownContextProvider } from "react-native-autocomplete-dropdown";
 import Select from "@/components/Select";
 
 const TrainingExercises: React.FC = () => {
   const formRef: FormHandles | any = useRef(null);
-  const [dateRawInitial, setDateRawInitial] = useState("");
-  const [dateRawFinal, setDateRawFinal] = useState("");
+  const [exerciseId, setExerciseId] = useState("")
+  const [trainingId, setTrainingId] = useState("")
+  const [training, setTraings] = useState([
+    {
+      id: "123",
+      name: "teste",
+    },
+    {
+      id: "345",
+      name: "teste2",
+    },
+  ]);
+  const [exercises, setExercises] = useState([
+    {
+      id: "123",
+      name: "teste",
+    },
+    {
+      id: "345",
+      name: "teste2",
+    },
+  ]);
 
   const headerHeight = useHeaderHeight() + 35;
 
@@ -29,14 +48,28 @@ const TrainingExercises: React.FC = () => {
           <Input name="metodo" label="Metodo:" />
           <Input name="peso" label="Peso:" />
           <AutocompleteDropdownContextProvider headerOffset={headerHeight}>
-            <Select />
+            <Select
+              data={training}
+              title="name"
+              key="id"
+              setItem={setTrainingId}
+              label="Selecione o Treino:"
+              placeholder="Treino"
+            />
           </AutocompleteDropdownContextProvider>
           <AutocompleteDropdownContextProvider headerOffset={headerHeight}>
-            <Select />
+            <Select
+              data={exercises}
+              title="name"
+              key="id"
+              setItem={setExerciseId}
+              label="Selecione o exercicio"
+              placeholder="Exercicios"
+            />
           </AutocompleteDropdownContextProvider>
           <Input name="seqTreino" label="Sequencia de treino:" />
           <Input name="tipoTreino" label="Tipo do treino:" />
-          
+
           <Input name="observacao" label="Observação: " multiline />
 
           <View style={{ marginBottom: 20 }} />

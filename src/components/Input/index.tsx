@@ -79,7 +79,7 @@ export const Input: React.FC<InputProps> = ({
 
   return (
     <>
-      {label && <Label>{label}</Label>}
+      {label && <Label >{label}</Label>}
       <Container isFocused={isFocused} isErrored={!!error} multiline={multiline}>
         <InputComponent
         multiline={multiline}

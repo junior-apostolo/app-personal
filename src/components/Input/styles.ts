@@ -35,6 +35,7 @@ export const Container = styled.View<InputStyleProps>`
     css`
       height: 150px;
     `}
+  z-index: -1;
 `;
 
 export const InputComponent = styled.TextInput.attrs<InputStyleProps>({
@@ -52,6 +53,7 @@ export const InputComponent = styled.TextInput.attrs<InputStyleProps>({
 `;
 
 export const Label = styled.Text`
+  z-index: -1;
   text-transform: uppercase;
   font-size: ${theme.fonts.size.body.sm};
   line-height: ${theme.fonts.size.body.sm};

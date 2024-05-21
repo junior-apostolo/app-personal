@@ -25,7 +25,7 @@ export default function Welcome() {
         <Text style={styles.text}>Faça login para iniciar</Text>
 
         {/* <Link href="/login/" asChild> */}
-        <Link href="/(protected)/(views)/(register)/users" asChild>
+        <Link href="/(protected)/(views)/(register)/training/" asChild>
           <Pressable style={styles.button}>
             <Text style={styles.buttonText}>Acessar</Text>
           </Pressable>
