@@ -13,8 +13,8 @@ import Select from "@/components/Select";
 
 const TrainingExercises: React.FC = () => {
   const formRef: FormHandles | any = useRef(null);
-  const [exerciseId, setExerciseId] = useState("")
-  const [trainingId, setTrainingId] = useState("")
+  const [exerciseId, setExerciseId] = useState("");
+  const [trainingId, setTrainingId] = useState("");
   const [training, setTraings] = useState([
     {
       id: "123",
@@ -51,7 +51,7 @@ const TrainingExercises: React.FC = () => {
             <Select
               data={training}
               title="name"
-              key="id"
+              value="id"
               setItem={setTrainingId}
               label="Selecione o Treino:"
               placeholder="Treino"
@@ -61,7 +61,7 @@ const TrainingExercises: React.FC = () => {
             <Select
               data={exercises}
               title="name"
-              key="id"
+              value="id"
               setItem={setExerciseId}
               label="Selecione o exercicio"
               placeholder="Exercicios"
