@@ -3,12 +3,13 @@ import { View, Text } from 'react-native'
 import { StyleSheet } from "react-native";
 
 
-export function Welcome() {
+export default function Welcome() {
   return (
     <View style={styles.container}>
       <Text>Hello</Text>
 
         <Link href="(tabs)">Ir para Tabs</Link>
+        <Link href="login">Ir para Login</Link>
 
     </View>
   )

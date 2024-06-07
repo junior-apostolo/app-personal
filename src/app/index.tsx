@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar'
-import { Welcome } from './welcome';
+import Welcome from './welcome';
 
 export default function App() {
   return (
