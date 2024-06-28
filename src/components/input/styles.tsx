@@ -7,11 +7,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 7,
     justifyContent: 'space-between',
-    backgroundColor: theme.colors.gray[100],
+    backgroundColor: theme.colors.white,
     borderRadius: 18,
     height: 54,
     padding: 12,
-
   },
   input: {
     flex: 1,

@@ -12,7 +12,7 @@ function Input({ children, style }: ViewProps) {
 }
 
 function Field({...rest}: TextInputProps) {
-  // Importante que ...rest fique como ultima propriedade, pois...
+  // Importante que ...rest fique como ultima propriedade, pois ele pode sobrescrever as propriedades...
   return <TextInput style={styles.input} placeholderTextColor={theme.colors.gray[300]} {...rest}/>
 }
 

@@ -11,6 +11,8 @@ export const colors = {
   blue_800: "#265073",
   error: "#FF3B3B",
 
+  bg_color: "#122E46",
+
   gray: {
     100: "#cccccc",
     200: "#8e8e8e",

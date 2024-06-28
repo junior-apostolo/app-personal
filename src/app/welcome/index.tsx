@@ -1,24 +1,42 @@
 import { Link } from 'expo-router';
-import { View, Text } from 'react-native'
-import { StyleSheet } from "react-native";
+import { View, Text, Pressable } from 'react-native'
+import { styles } from "./styles";
+
+import * as Animatable from 'react-native-animatable'
 
 
 export default function Welcome() {
   return (
     <View style={styles.container}>
-      <Text>Hello</Text>
+      <View style={styles.containerLogo}>
+        <Animatable.Image
+          animation="flipInY"
+          source={require('../../../assets/logo-image.png')}
+          style={{ width: '100%', marginTop: 100, height: 180 }}
+          resizeMode="contain"
+        />
+      </View>
 
-        <Link href="(tabs)">Ir para Tabs</Link>
-        <Link href="login">Ir para Login</Link>
+      <Animatable.View
+        delay={600}
+        animation="fadeInUp"
+        style={styles.containerForm}
+      >
+        <Text style={styles.title}>Bem-vindo ao melhor app fitness</Text>
+        <Text style={styles.text}>Faça login para iniciar</Text>
+
+        <Link href="login" asChild>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Acessar</Text>
+          </Pressable>
+        </Link>
+      </Animatable.View>
+      {/* <Text>Hello</Text>
+
+      <Link href="(tabs)">Ir para Tabs</Link>
+      <Link href="login">Ir para Login</Link> */}
 
     </View>
   )
 }
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-})
