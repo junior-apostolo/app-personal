@@ -13,25 +13,44 @@ import {
 
 const { height, width } = Dimensions.get("window");
 
-const ITEM_SIZE = width * 0.38;
-const ITEM_SPACING = (width - ITEM_SIZE) / 2;
+// const ITEM_SIZE = width * 0.38;
+// const ITEM_SPACING = (width - ITEM_SIZE) / 2;
 
 type SelectListProps = {
   data: number[];
   setState: React.Dispatch<React.SetStateAction<number>>;
   info?: string;
+  orientation?: "horizontal" | "vertical";
 };
 
-export function SelectList({ data, setState, info }: SelectListProps) {
-  const scrollX = useRef(new Animated.Value(0)).current;
+const getItemSize = (orientation: "horizontal" | "vertical") => {
+  return orientation === "horizontal" ? width * 0.38 : height * 0.25;
+};
+
+const getItemSpacing = (orientation: "horizontal" | "vertical") => {
+  return orientation === "horizontal"
+    ? (width - getItemSize(orientation)) / 2
+    : (height - getItemSize(orientation)) / 4;
+};
+
+export function SelectList({
+  data,
+  setState,
+  info,
+  orientation = "horizontal",
+}: SelectListProps) {
+  const scroll = useRef(new Animated.Value(0)).current;
+  const ITEM_SIZE = getItemSize(orientation);
+  const ITEM_SPACING = getItemSpacing(orientation);
+
+  const scrollEventName = orientation === "horizontal" ? "x" : "y";
+
   return (
     <View
       style={{
-        position: "absolute",
-        top: height / 3,
-        left: 0,
-        right: 0,
         flex: 1,
+        alignItems: 'center',
+        justifyContent: "center",
       }}
     >
       <Animated.FlatList
@@ -39,22 +58,24 @@ export function SelectList({ data, setState, info }: SelectListProps) {
         keyExtractor={(item) => item.toString()}
         bounces={false}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          [{ nativeEvent: { contentOffset: { [scrollEventName]: scroll } } }],
           { useNativeDriver: true }
         )}
         onMomentumScrollEnd={(event) => {
           const index = Math.round(
-            event.nativeEvent.contentOffset.x / ITEM_SIZE
+            event.nativeEvent.contentOffset[scrollEventName] / ITEM_SIZE
           );
           setState(data[index]);
         }}
         showsHorizontalScrollIndicator={false}
-        horizontal
+        showsVerticalScrollIndicator={false}
+        horizontal={orientation === "horizontal"}
         style={{ flexGrow: 0 }}
         snapToInterval={ITEM_SIZE}
         decelerationRate="fast"
         contentContainerStyle={{
-          paddingHorizontal: ITEM_SPACING,
+          paddingHorizontal: orientation === "horizontal" ? ITEM_SPACING : 0,
+          paddingVertical: orientation === "vertical" ? ITEM_SPACING : 0,
         }}
         renderItem={({ item, index }) => {
           const inputRange = [
@@ -63,23 +84,24 @@ export function SelectList({ data, setState, info }: SelectListProps) {
             (index + 1) * ITEM_SIZE,
           ];
 
-          const opacity = scrollX.interpolate({
+          const opacity = scroll.interpolate({
             inputRange,
             outputRange: [0.4, 1, 0.4],
           });
 
-          const scale = scrollX.interpolate({
+          const scale = scroll.interpolate({
             inputRange,
             outputRange: [0.7, 1, 0.7],
           });
-          const visibleInfo = scrollX.interpolate({
+          const visibleInfo = scroll.interpolate({
             inputRange,
             outputRange: [0, 1, 0],
           });
           return (
             <View
               style={{
-                width: ITEM_SIZE,
+                width: orientation === "horizontal" ? ITEM_SIZE : "100%",
+                height: orientation === "vertical" ? ITEM_SIZE : "100%",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -90,6 +112,7 @@ export function SelectList({ data, setState, info }: SelectListProps) {
                     styles.infoText,
                     {
                       opacity: visibleInfo,
+                      fontSize: ITEM_SIZE * 0.2,
                     },
                   ]}
                 >
@@ -106,6 +129,7 @@ export function SelectList({ data, setState, info }: SelectListProps) {
                         scale,
                       },
                     ],
+                    fontSize: ITEM_SIZE * 0.3,
                   },
                 ]}
               >
@@ -121,12 +145,10 @@ export function SelectList({ data, setState, info }: SelectListProps) {
 
 const styles = StyleSheet.create({
   ageNumber: {
-    fontSize: ITEM_SIZE * 0.4,
     fontFamily: theme.fontFamily.bold,
     color: colors.white,
   },
   infoText: {
-    fontSize: ITEM_SIZE * 0.2,
     fontFamily: theme.fontFamily.bold,
     color: colors.white,
   },
