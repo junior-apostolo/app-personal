@@ -1,6 +1,6 @@
 import { View, Image, useWindowDimensions, Text } from "react-native";
 import { styles } from "./styles";
-import { OnboardingProps } from "../../types/OnboardingProps";
+import { OnboardingProps } from "@/types/OnboardingProps";
 
 type OnboardingItemProps = {
   item: OnboardingProps;
