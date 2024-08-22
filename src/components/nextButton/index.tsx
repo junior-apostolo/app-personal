@@ -42,7 +42,12 @@ export function NextButton({ percentage, scrollTo }: ButtonProps) {
         });
       }
     });
-  });
+
+    return () => {
+      progressAnimation.removeAllListeners();
+    };
+    
+  }, []);
 
   return (
     <View style={styles.container}>
