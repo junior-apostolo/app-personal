@@ -1,9 +1,7 @@
-import { borderRadius } from './borderRadius';
-import { fonts } from './fonts';
-import {colors} from "./colors"
+import { colors } from "./colors";
+import { fontFamily } from "./fontFamily";
 
 export const theme = {
     colors,
-    fonts,
-    borderRadius
+    fontFamily
 }

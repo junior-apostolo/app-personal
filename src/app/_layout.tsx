@@ -1,71 +1,34 @@
-import "@/theme/global.css";
-
-import {  Stack, useRouter, useSegments } from "expo-router";
-import { StatusBar } from "react-native";
+import { Slot, Stack } from "expo-router";
+import { useFonts, Ubuntu_700Bold, Ubuntu_500Medium, Ubuntu_400Regular } from '@expo-google-fonts/ubuntu'
+// import { Loading } from '@/components/loading';
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { StatusBar } from "react-native";
+import { Loading } from "@/components/loading";
 
-import {
-  useFonts,
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_700Bold,
-} from "@expo-google-fonts/poppins";
-import { useCallback, useEffect } from "react";
-import { BottomSheetProvider } from "@/context/MenuSheetRefContext";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+// mantém na tela de splashScreen do aplicativo, garantindo que as fonts carreguem
+// SplashScreen.preventAutoHideAsync()
 
+export default function Layout() {
 
-const StackLayout = () => {
-  const { authState } = useAuth();
-  const segments = useSegments();
-  const router = useRouter();
+  const [fontsLoaded] = useFonts({
+    Ubuntu_700Bold, Ubuntu_500Medium, Ubuntu_400Regular
+  })
 
-  useEffect(() => {
-    const inAuthGroup = segments[0] === "(protected)";
-    if (!authState?.authenticated && inAuthGroup) {
-      router.replace("/welcome/");
-    } else if (authState?.authenticated === true) {
-      router.replace("/(protected)/(admin)/home");
-    }
-  }, [authState]);
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (fontsLoaded) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [fontsLoaded]);
 
-  return (
-    <Stack >
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="welcome/index" options={{ headerShown: false, headerTitle: "Onboarding" }} />
-      <Stack.Screen name="(protected)/(admin)" options={{ headerShown: false }} />
-      <Stack.Screen name="(protected)/(views)/(register)/exercises/index" options={{ headerShown: true, headerTitle: "Cadastro de Exercicio" }} />
-      <Stack.Screen name="login/index" options={{ headerShown: false }} />
-    </Stack>
-  ); 
-};
-
-export default function RootLayoutNav() {
-  const [fontsLoaded, fontError] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_700Bold,
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
-  if (!fontsLoaded && !fontError) {
-    return null;
+  if (!fontsLoaded) {
+    return <Loading/>
   }
 
   return (
-    <SafeAreaProvider>
-      <AuthProvider>
-        <BottomSheetProvider>
-          <StatusBar barStyle={'default'}/>
-          <StackLayout />
-        </BottomSheetProvider>
-      </AuthProvider>
-    </SafeAreaProvider>
-  );
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar barStyle="light-content" />
+      <Slot />
+    </GestureHandlerRootView>
+  )
 }

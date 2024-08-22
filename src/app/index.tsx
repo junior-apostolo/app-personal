@@ -1,9 +1,15 @@
-import React from 'react';
+import { StatusBar } from "expo-status-bar";
+import Welcome from "./welcome";
+import Age from "./form/age";
+import Weight from "./form/weight";
 
-import Welcome from './welcome';
-
-const app: React.FC = () => {
-  return <Welcome/>
+export default function App() {
+  return (
+    <>
+      <StatusBar style="light" backgroundColor="transparent" translucent />
+      <Welcome />
+      {/* <Age /> */}
+      {/* <Weight/> */}
+    </>
+  );
 }
-
-export default app;

@@ -1,10 +1,8 @@
 export const colors = {
-  white: "#ffffff",
-  black: "#000000",
-  white_200: "#EEF5FF",
+  white: "#fff",
+  black: "#000",
 
-  green_100: "#dcfce7",
-  green_600: "#15803d",
+  blue: "#4442f0",
 
   blue_100: "#B4D4FF",
   blue_200: "#86B6F6",
@@ -12,6 +10,8 @@ export const colors = {
   blue_600: "#142c43",
   blue_800: "#265073",
   error: "#FF3B3B",
+
+  bg_color: "#122E46",
 
   gray: {
     100: "#cccccc",
@@ -22,7 +22,6 @@ export const colors = {
     500: "#16181A",
     600: "#0E0F11",
     700: "#040507",
-
     800: "#292929",
   },
-};
+}
