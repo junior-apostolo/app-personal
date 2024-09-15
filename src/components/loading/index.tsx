@@ -5,6 +5,6 @@ import { theme } from "@/theme"
 
 export function Loading() {
     return(
-        <ActivityIndicator style={styles.loading} color={theme.colors.blue_700}/>
+        <ActivityIndicator size="large" style={styles.loading} color={theme.colors.blue_700}/>
     )
 }

@@ -34,9 +34,11 @@ export default function Login() {
           />
         </Input>
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Acessar</Text>
-        </TouchableOpacity>
+        <Link href="(tabs)" asChild>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Acessar</Text>
+          </TouchableOpacity>
+        </Link>
 
         <Link href="welcome">Voltar para Welcome</Link>
       </Animatable.View>
