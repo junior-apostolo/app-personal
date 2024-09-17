@@ -1,6 +1,4 @@
-import { View, TouchableOpacity, Animated } from "react-native";
-import Svg, { G, Circle } from "react-native-svg";
-import { AntDesign } from "@expo/vector-icons";
+import { View, Animated } from "react-native";
 import { styles } from "./styles";
 import { useEffect, useRef, useState } from "react";
 import { theme } from "@/theme";
@@ -41,7 +39,7 @@ export function ProgressBar({
       }}
       style={{
         height,
-        backgroundColor: "rgba(0,0,0,0.1)",
+        backgroundColor: "rgba(0,0,0,0.5)",
         borderRadius: 10,
         overflow: "hidden",
       }}
@@ -51,7 +49,7 @@ export function ProgressBar({
           height,
           width: '100%',
           borderRadius: height,
-          backgroundColor: theme.colors.bg_color,
+          backgroundColor: theme.colors.white,
           position: "absolute",
           left: 0,
           top: 0,

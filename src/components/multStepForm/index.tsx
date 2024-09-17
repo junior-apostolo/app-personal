@@ -1,10 +1,11 @@
-import { View, TouchableOpacity } from "react-native";
-import { useForm, FormProvider } from "react-hook-form";
-import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { useState } from "react";
 import stepsConfig from "./steps";
-import { styles } from "./styles";
+import { FormProvider, useForm } from "react-hook-form";
+import { TouchableOpacity, View } from "react-native";
 import { theme } from "@/theme";
+import { styles } from "./styles";
+import { AntDesign } from "@expo/vector-icons";
+import { ProgressBar } from "../progressBar";
 
 const stepKeys = Object.keys(stepsConfig) as Array<keyof typeof stepsConfig>;
 
@@ -26,8 +27,15 @@ export function MultiStepForm() {
   return (
     <View style={{ flex: 1 }}>
       <FormProvider {...methods}>
-        <View style={{ flex: 1, backgroundColor: theme.colors.bg_color }}>
+        <View style={{ flex: 1, backgroundColor: theme.colors.bg_color}}>
           <StepComponent nextStep={handleNext} prevStep={handlePrev} />
+          <View style={{ padding: 20}}>
+            <ProgressBar
+              currentStep={currentStep + 1}
+              steps={stepKeys.length}
+              height={10}
+            />
+          </View>
           <View style={styles.containerButtons}>
             {currentStep > 0 && (
               <TouchableOpacity
