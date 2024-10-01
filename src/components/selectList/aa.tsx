@@ -7,9 +7,7 @@ import {
   Dimensions,
   Text,
   Animated,
-  useWindowDimensions,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { height, width } = Dimensions.get("window");
 
@@ -32,10 +30,10 @@ export function SelectList({
 }: SelectListProps) {
   const scroll = useRef(new Animated.Value(0)).current;
   const ITEM_SIZE = getItemSize(orientation);
-  const width = useWindowDimensions()?.width;
+
   const scrollEventName = orientation === "horizontal" ? "x" : "y";
 
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(18); // Para controlar o item selecionado
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // Para controlar o item selecionado
 
   return (
     <View
@@ -43,12 +41,12 @@ export function SelectList({
         flex: 1,
         width: "100%",
         alignItems: "center",
+        backgroundColor: "#000",
         justifyContent: "center",
       }}
     >
       <Animated.FlatList
         data={data}
-        initialScrollIndex={0}
         keyExtractor={(item) => item.toString()}
         bounces={false}
         onScroll={Animated.event(
@@ -57,10 +55,9 @@ export function SelectList({
         )}
         onMomentumScrollEnd={(event) => {
           const index = Math.round(
-            event.nativeEvent.contentOffset.x + 200/ width 
+            event.nativeEvent.contentOffset[scrollEventName] / ITEM_SIZE
           );
-
-          setSelectedIndex(() => data[index]); // Atualiza o item selecionado
+          setSelectedIndex(index); // Atualiza o item selecionado
           setState(() => data[index]);
         }}
         showsHorizontalScrollIndicator={false}
@@ -81,44 +78,46 @@ export function SelectList({
 
           const opacity = scroll.interpolate({
             inputRange,
-            outputRange: [0.7, 1, 0.7],
+            outputRange: [0.4, 1, 0.4],
           });
 
           const scale = scroll.interpolate({
             inputRange,
             outputRange: [0.7, 1, 0.7],
           });
-          const isSelected = selectedIndex == item;
+
+          const visibleInfo = scroll.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0],
+          });
+
+          const isSelected = index === selectedIndex; // Verifica se é o item selecionado
+
           return (
-            <TouchableOpacity
-            onPress={() => {
-              setSelectedIndex(() => data[index]); // Atualiza o item selecionado
-              setState(() => data[index]);
-            }}
+            <View
               style={{
-                width: 90,
+                width: orientation === "horizontal" ? ITEM_SIZE : "100%",
+                height: orientation === "vertical" ? ITEM_SIZE : "100%",
                 justifyContent: "center",
                 alignItems: "center",
-                marginLeft: 2,
-                height: 130,
-                opacity: isSelected ? 1 : 0.7, // Todos os itens terão opacidade 0.7, exceto o selecionado
               }}
             >
+              {/* Texto acima do item */}
               {isSelected && (
-                <Text style={styles.selectedText}>KG</Text>
+                <Text style={styles.selectedText}>Item Selecionado</Text>
               )}
 
-              {/* Número do item */}
               <Animated.Text
                 style={[
+                  isSelected ? {...styles.ageNumber, color: colors.blue_700 }: styles.ageNumber,
                   {
+                    opacity,
+                    transform: [{ scale }],
                     fontSize: ITEM_SIZE * 0.3,
                   },
-                  isSelected
-                    ? { ...styles.ageNumber, color: colors.blue_700, fontSize: ITEM_SIZE * 0.4, opacity: 1 }
-                    :  { ...styles.ageNumber, fontSize: ITEM_SIZE * 0.3 },
                 ]}
               >
+
                 {item}
               </Animated.Text>
 
@@ -126,7 +125,7 @@ export function SelectList({
               {isSelected && (
                 <Text style={styles.arrow}>▲</Text>
               )}
-            </TouchableOpacity>
+            </View>
           );
         }}
       />
@@ -138,13 +137,14 @@ const styles = StyleSheet.create({
   ageNumber: {
     fontFamily: theme.fontFamily.bold,
     color: colors.white,
-    opacity: 0.7
   },
   infoText: {
     fontFamily: theme.fontFamily.bold,
     color: colors.white,
   },
   selectedText: {
+    position: "relative",
+    top: 200,
     fontSize: 16,
     color: colors.blue_700,
     fontFamily: theme.fontFamily.bold,
@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
   arrow: {
     fontSize: 24,
     color: colors.blue_700,
-    opacity: 1,
     marginTop: 5, // Espaço entre o número e a seta
   },
 });

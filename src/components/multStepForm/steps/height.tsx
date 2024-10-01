@@ -7,15 +7,15 @@ import { View, StyleSheet, Text } from "react-native";
 import { styles } from "./styles";
 import { SelectListHorizontal } from "@/components/selectListHorizontal";
 
-const startAge = 18;
-const endAge = 100;
-const numberOfAges = endAge - startAge + 1;
-const ages = [...Array(numberOfAges).keys()].map((i) => startAge + i);
+const startHeight = 120; // Altura mínima (em cm)
+const endHeight = 210;   // Altura máxima (em cm)
+const numberOfHeights = endHeight - startHeight + 1;
+const heights = [...Array(numberOfHeights).keys()].map((i) => startHeight + i);
 
-export function Age() {
+
+export function Height() {
   const { register, setValue, watch } = useFormContext();
-  const [selectAge, setSelectAge] = useState(ages[0]);
-
+  const [selectAge, setSelectAge] = useState(heights[0]);
   useEffect(() => {
     register("age");
   }, [register]);
@@ -34,7 +34,7 @@ export function Age() {
         </Text>
       </View>
 
-      <SelectListHorizontal data={ages} setState={setSelectAge} />
+      <SelectListHorizontal data={heights} setState={setSelectAge} label={"CM"}/>
       <View
         style={[
           {

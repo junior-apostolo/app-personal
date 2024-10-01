@@ -1,3 +1,4 @@
+
 import { StatusBar } from "expo-status-bar";
 import Welcome from "./welcome";
 // import {Age} from "../components/multStepForm/steps/age";

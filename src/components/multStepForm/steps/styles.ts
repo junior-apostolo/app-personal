@@ -30,6 +30,18 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 20,
   },
+  selectedText: {
+    fontSize: 30,
+    color: colors.blue_700,
+    fontFamily: theme.fontFamily.bold,
+    marginBottom: 5, // Espaço entre o texto e o número
+  },
+  arrow: {
+    fontSize: 24,
+    color: colors.blue_700,
+    opacity: 1,
+    marginTop: 5, // Espaço entre o número e a seta
+  },
 
   // Step Age
   containerAge: {
@@ -58,3 +70,4 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
 });
+

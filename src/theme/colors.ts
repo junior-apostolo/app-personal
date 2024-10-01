@@ -1,12 +1,13 @@
 export const colors = {
-  white: "#fff",
+  white: "#ffffff",
   black: "#000",
 
   blue: "#4442f0",
 
   blue_100: "#B4D4FF",
   blue_200: "#86B6F6",
-  blue_700: "#2D9596",
+ // blue_700: "#41f0be",
+ blue_700: "#2D9596",
   blue_600: "#142c43",
   blue_800: "#265073",
   error: "#FF3B3B",

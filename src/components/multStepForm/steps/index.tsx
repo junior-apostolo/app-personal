@@ -1,5 +1,6 @@
 import { Age } from "./age";
 import { Weight } from "./weight";
+import { Height } from "./height";
 
 interface StepConfig {
   title: string;
@@ -20,6 +21,10 @@ const stepsConfig: Record<string, StepConfig> = {
   contactDetails: {
     title: "Contact Details",
     component: Weight,
+  },
+  contactHeight: {
+    title: "Contact Details",
+    component: Height,
   },
 };
 
