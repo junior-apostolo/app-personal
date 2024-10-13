@@ -6,6 +6,7 @@ import { useFormContext } from "react-hook-form";
 import { View, StyleSheet, Text } from "react-native";
 import { styles } from "./styles";
 import { SelectListHorizontal } from "@/components/selectListHorizontal";
+import { PageRegister } from "@/components/pageRegister";
 
 const startAge = 18;
 const endAge = 100;
@@ -25,30 +26,13 @@ export function Age() {
   }, [selectAge, setValue]);
 
   return (
-    <View style={styles.containerAge}>
-      <View style={styles.textContainerAge}>
-        <Text style={styles.titleAge}>Qual a sua idade?</Text>
-
-        <Text style={styles.descriptionAge}>
-          Isso nos ajuda a criar seu plano de personalização
-        </Text>
+    <PageRegister
+      title="Qual a sua idade?"
+      description="Isso nos ajuda a criar seu plano de personalização"
+    >
+      <View style={{height: "80%", width: "100%"}}>
+        <SelectListHorizontal data={ages} />
       </View>
-
-      <SelectListHorizontal data={ages} setState={setSelectAge} />
-      <View
-        style={[
-          {
-            justifyContent: "center",
-            alignItems: "flex-end",
-            padding: "10%",
-          },
-        ]}
-      >
-
-        {/* <TouchableOpacity style={styles.button}>
-          <AntDesign name="arrowright" size={32} color={theme.colors.white} />
-        </TouchableOpacity> */}
-      </View>
-    </View>
+    </PageRegister>
   );
 }

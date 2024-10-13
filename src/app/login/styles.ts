@@ -24,16 +24,20 @@ export const styles = StyleSheet.create({
       borderTopRightRadius: 20,
       paddingStart: "5%",
       paddingEnd: "5%",
+      alignItems: "center",
+      width: "100%"
     },
     button: {
-      backgroundColor: theme.colors.blue_600,
       width: "100%",
+      alignSelf: "center",
+      backgroundColor: theme.colors.blue_750,
       height: 50,
       borderRadius: 12,
       paddingVertical: 8,
       marginTop: 14,
       justifyContent: "center",
       alignItems: "center",
+      padding: 20,
     },
     buttonText: {
       color: theme.colors.white,

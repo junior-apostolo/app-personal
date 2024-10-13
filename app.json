@@ -27,6 +27,17 @@
     "plugins": [
       "expo-font",
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "5f301d5c-6865-4e28-8035-fb9d2e1c56ed"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/5f301d5c-6865-4e28-8035-fb9d2e1c56ed"
+    }
   }
 }

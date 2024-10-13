@@ -42,7 +42,32 @@ export const styles = StyleSheet.create({
     opacity: 1,
     marginTop: 5, // Espaço entre o número e a seta
   },
-
+  session: {
+    marginTop: 20,
+  },
+  contentButtonDayHours: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  content: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: "auto",
+    marginTop: 50
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    margin: "auto"
+  },
+  subtitle: {
+    color: colors.white,
+    fontSize: 25,
+    marginBottom: 10
+  },
   // Step Age
   containerAge: {
     flex: 1,
@@ -58,6 +83,8 @@ export const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: theme.fontFamily.bold,
     color: colors.white,
+    width: 300,
+    textAlign: "center"
   },
   descriptionAge: {
     fontSize: 18,
@@ -69,5 +96,33 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 20,
   },
+  ball: {
+    width: 180,
+    height: 180,
+    borderRadius: 100, // Para fazer a bola redonda
+    backgroundColor: colors.blue_750, // Cor de fundo (pode ser alterada)
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30
+  },
+  symbol: {
+    fontSize: 80,
+    color: colors.white, // Azul para masculino
+  },
+  genderContainer: {
+    alignItems: 'center', // Centraliza a bola e o texto
+  },
+  genderText: {
+    fontSize: 20,
+    color: colors.white,
+  },
+  textInput: {
+    width: "50%",
+    borderBottomWidth: 1,
+    borderBottomColor: colors.blue_800,
+    fontSize: 20,
+    paddingTop: 10,
+    color: colors.white
+  }
 });
 

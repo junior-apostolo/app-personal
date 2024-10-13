@@ -1,15 +1,18 @@
+import React from "react";
 import { Input } from "@/components/input";
-import { Link } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import { Link, router } from "expo-router";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { theme } from "@/theme";
 import * as Animatable from "react-native-animatable";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
+import { colors } from "@/theme/colors";
 
 export default function Login() {
   return (
     <View style={styles.container}>
+      {/* Animação de Boas-vindas */}
       <Animatable.View
         animation="fadeInLeft"
         delay={500}
@@ -18,7 +21,17 @@ export default function Login() {
         <Text style={styles.text}>Bem-vindo(a)</Text>
       </Animatable.View>
 
+      {/* Conteúdo principal */}
       <Animatable.View animation="fadeInUp" style={styles.containerForm}>
+        {/* Imagem do logo */}
+        <Image
+          source={require('../../../assets/logo-image.png')}
+          style={{ width: 100, height: 100 }}
+          resizeMode="contain"
+        />
+
+        {/* Inputs de e-mail e senha */}
+        <Text style={{ textAlign: "left", width: "100%", color: colors.white, fontSize: 20, marginTop: 30 }}>Faça o login: </Text>
         <Input>
           <Feather name="user" size={16} color={theme.colors.black} />
           <Input.Field placeholder="E-mail" />
@@ -33,14 +46,15 @@ export default function Login() {
             keyboardType="default"
           />
         </Input>
-
-        <Link href="(tabs)" asChild>
-          <TouchableOpacity style={styles.button}>
+        <View style={{width: "100%"}}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("(tabs)")}>
             <Text style={styles.buttonText}>Acessar</Text>
           </TouchableOpacity>
-        </Link>
+        </View>
 
-        <Link href="welcome">Voltar para Welcome</Link>
+        <Link href="form">
+          <Text >Voltar para Welcome</Text>
+        </Link>
       </Animatable.View>
     </View>
   );

@@ -36,8 +36,8 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" backgroundColor="transparent" translucent />
-      <Form/>
-      {/* <Welcome /> */}
+      {/* <Form/> */}
+       <Welcome /> 
       {/* <Age /> */}
       {/* <Weight/> */}
       {/* <View style={{

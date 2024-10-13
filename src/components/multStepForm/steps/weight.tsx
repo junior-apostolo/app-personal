@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form";
 import { styles } from "./styles";
 import { TextInput } from "react-native-gesture-handler";
 import { colors } from "@/theme/colors";
+import { PageRegister } from "@/components/pageRegister";
 
 const startWeight = 30;
 const endWeight = 350;
@@ -23,7 +24,7 @@ export function Weight() {
     setValue("weight", selectWeight);
   }, [selectWeight, setValue]);
 
-  const onChangeValue = (text) => {
+  const onChangeValue = (text: string) => {
     // Permite apenas números e ponto
     const formattedValue = text.replace(/[^0-9,.]/g, "");
     setSelectWeight(formattedValue);
@@ -34,47 +35,34 @@ export function Weight() {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"} // Define o comportamento do teclado
     >
-      <View style={styles.containerWeight}>
-        <View
-          style={[
-            StyleSheet.absoluteFillObject,
-            {
-              paddingBottom: 100,
-              justifyContent: "flex-end",
+      <PageRegister
+        title="Qual o seu peso?"
+        description="Peso em kg. Não se preocupe, você sempre poderá alterá-lo mais tarde."
+      >
+        <View style={{height: "90%"}}>
+          <View
+            style={{
               alignItems: "center",
-            },
-          ]}
-        ></View>
-
-        <View style={styles.textContainerWeight}>
-          <Text style={styles.titleWeight}>Qual o seu peso?</Text>
-
-          <Text style={styles.descriptionWeight}>
-            Peso em kg. Não se preocupe, você sempre poderá alterá-lo mais tarde.
-          </Text>
+              justifyContent: "center",
+              marginTop: "auto",
+              marginBottom: "auto",
+              width: 180,
+            }}
+          >
+            <Text style={styles.selectedText}>KG</Text>
+            <TextInput
+              //keyboardType="numeric"
+              maxLength={6}
+              placeholderTextColor={colors.blue_700}
+              placeholder="0.00"
+              style={[styles.selectedText, { textAlign: "center", fontSize: 40 }]}
+              value={selectWeight}
+              onChangeText={onChangeValue} // Adiciona o filtro no input
+            />
+            <Text style={styles.arrow}>▲</Text>
+          </View>
         </View>
-
-        <View
-          style={{
-            margin: "auto",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 180,
-          }}
-        >
-          <Text style={styles.selectedText}>KG</Text>
-          <TextInput
-            //keyboardType="numeric"
-            maxLength={6}
-            placeholderTextColor={colors.blue_700}
-            placeholder="0.00"
-            style={[styles.selectedText, { textAlign: "center", fontSize: 40 }]}
-            value={selectWeight}
-            onChangeText={onChangeValue} // Adiciona o filtro no input
-          />
-          <Text style={styles.arrow}>▲</Text>
-        </View>
-      </View>
+      </PageRegister>
     </KeyboardAvoidingView>
   );
 }

@@ -11,11 +11,12 @@ export const styles = StyleSheet.create({
     borderRadius: 18,
     height: 54,
     padding: 12,
+    marginVertical: 10,
   },
   input: {
     flex: 1,
     fontSize: 16,
     color: theme.colors.black,
-    fontFamily: theme.fontFamily.regular
+    fontFamily: theme.fontFamily.regular,
   }
 })
