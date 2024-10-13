@@ -35,7 +35,7 @@ export function DaysHours() {
       titleStyle={{ textAlign: "center" }}
       containerStyle={{ marginTop: 40 }}
     >
-      <ScrollView style={{ marginTop: 20, width: "80%" }}>
+      <ScrollView style={{ marginTop: 20, width: "70%" }}>
         <View style={styles.row}>
           <Text style={[styles.subtitle, { marginRight: 10 }]}>Dias:</Text>
           <ButtonDay text="Segunda" isSelect onPress={() => {}} />
