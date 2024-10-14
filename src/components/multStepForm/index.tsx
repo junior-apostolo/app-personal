@@ -5,19 +5,31 @@ import React, { useState } from "react";
 import stepsConfig from "./steps";
 import { styles } from "./styles";
 import { theme } from "@/theme";
+import { router } from "expo-router";
 
 const stepKeys = Object.keys(stepsConfig) as Array<keyof typeof stepsConfig>;
 
-export function MultiStepForm() {
-  const [currentStep, setCurrentStep] = useState(0);
+interface MultiStepForm {
+  step?: number;
+}
+
+
+export function MultiStepForm({step}: MultiStepForm) {
+  const [currentStep, setCurrentStep] = useState(step || 0);
   const methods = useForm();
 
   const currentStepKey = stepKeys[currentStep];
   const StepComponent = stepsConfig[currentStepKey].component;
 
-  const handleNext = () =>
-    setCurrentStep((prev) => Math.min(prev + 1, stepKeys.length - 1));
+  const handleNext = () => {
+    setCurrentStep((prev) => Math.min(prev + 1, stepKeys.length))
+    if(currentStep == stepKeys.length - 2){
+      router.push("(tabs)")
+    }
+  };
   const handlePrev = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
+
+
   const handleSubmit = () => {
     console.log(methods.getValues());
     // Aqui você pode fazer o que quiser com os dados do formulário

@@ -66,6 +66,10 @@ const stepsConfig: Record<string, StepConfig> = {
     title: "Personal Information",
     component: SkillsPractice
   },
+  NextPage:{
+    title: "NextPage",
+    component: SkillsPractice
+  },
 };
 
 export default stepsConfig;

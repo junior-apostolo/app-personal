@@ -1,51 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { colors } from '@/theme/colors'; // Certifique-se de que os valores de cor estão definidos corretamente.
 import { ExpandeInformationPersonal } from '@/components/expandeInformationPersonal';
 import { MeasurementTable } from '@/components/measurementTable';
 import BodyCompositionChart from '@/components/bodyCompositionChart';
+import { transformMeasurements } from '@/utils/transformMeasurements';
+import { getPhysicalAssessmentAsync } from '@/services/physicalAssessmentService';
+import { TokenStorageAsync } from '@/constants/global';
+import { getData } from '@/utils/tokenSave';
 
 export default function Workout() {
+  const [measurementsObject, setMeasurementsObject] = useState<any>({
+    measurements: [],
+    bodyComposition: [],
+    measurementsArray: [],
+    skinFolds: []
+  })
   const massLean = 60; // Exemplo de massa magra em porcentagem
   const massFat = 40; // Exemplo de massa gorda em porcentagem
-  const personName = "Vinicius Leal do Nascimento"; // Nome da pessoa
+  const [personName, setPersonName] = useState(""); // Nome da pessoa
+  
+  
+  const getInformationUser = async () => {
+    try {
+      
+      const tokenData: any = await getData(TokenStorageAsync);
+      console.log(tokenData)
+      setPersonName(tokenData.name)
+      const result = await getPhysicalAssessmentAsync(tokenData.id);
+      console.log(result)
+      const measurements = transformMeasurements(result);
+      setMeasurementsObject(measurements);
+    } catch (err) {
+      return false;
+    }
+  }
 
-  const measurements = [
-    { label: 'Ombro', value: '111cm' },
-    { label: 'Peito', value: '100cm' },
-    { label: 'Cintura', value: '80cm' },
-    { label: 'Abdômen', value: '85cm' },
-    { label: 'Quadril', value: '95cm' },
-  ];
+  useEffect(() => {
+    getInformationUser()
+  }, [])
 
-  const bodyComposition = [
-    { label: 'Altura', value: '1.75m' },          // Altura em metros
-    { label: 'Peso', value: '75kg' },              // Peso em kg
-    { label: 'Massa magra', value: '60kg' },       // Massa magra em kg
-    { label: 'Massa gorda', value: '15kg' },       // Massa gorda em kg
-    { label: 'Percentual de gordura', value: '20%' }, // Percentual de gordura
-    { label: 'Média', value: '22%' },               // Média do percentual de gordura
-    { label: 'Classificação', value: 'Na média' },  // Classificação com base na média
-  ];
 
-  const measurementsArray = [
-    { label: 'Braço', right: '35cm', left: '34cm' },
-    { label: 'Antebraço', right: '30cm', left: '29cm' },
-    { label: 'Coxa', right: '60cm', left: '59cm' },
-    { label: 'Panturrilha', right: '40cm', left: '39cm' },
-  ];
-
-  const skinFolds = [
-    { label: 'Tricipital', value: '12mm' },
-    { label: 'Subescapular', value: '14mm' },
-    { label: 'Peitoral', value: '10mm' },
-    { label: 'Axilar', value: '11mm' },
-    { label: 'Suprailiaca', value: '9mm' },
-    { label: 'Abdominal', value: '15mm' },
-    { label: 'Coxa', value: '13mm' },
-    { label: 'Panturrilha', value: '8mm' },
-    { label: 'Somatório', value: '82mm' }, // Exemplo de somatório das medições
-  ];
 
   return (
     <View style={styles.container}>
@@ -58,28 +53,28 @@ export default function Workout() {
           <View style={styles.infoContainer}>
             <View style={styles.infoBox}>
               <Text style={styles.infoLabel}>Peso</Text>
-              <Text style={styles.infoValue}>75kg</Text>
+              <Text style={styles.infoValue}>{measurementsObject.bodyComposition[1]?.value}</Text>
             </View>
 
             <View style={styles.infoBox}>
               <Text style={styles.infoLabel}>Altura</Text>
-              <Text style={styles.infoValue}>1.75m</Text>
+              <Text style={styles.infoValue}>{measurementsObject.bodyComposition[0]?.value}</Text>
             </View>
           </View>
         </View>
 
         {/* Circunferências */}
-        <ExpandeInformationPersonal title='Circunferências' measurements={measurements}>
-          <MeasurementTable measurements={measurementsArray} />
+        <ExpandeInformationPersonal title='Circunferências' measurements={measurementsObject.measurements}>
+          <MeasurementTable measurements={measurementsObject.measurementsArray} />
         </ExpandeInformationPersonal>
 
         {/* Composição Corporal */}
-        <ExpandeInformationPersonal title='Composição Corporal' measurements={bodyComposition}>
+        <ExpandeInformationPersonal title='Composição Corporal' measurements={measurementsObject.bodyComposition}>
           <BodyCompositionChart massLean={massLean} massFat={massFat} />
         </ExpandeInformationPersonal>
 
         {/* Dobras Cutâneas */}
-        <ExpandeInformationPersonal title='Dobras Cutâneas' measurements={skinFolds} />
+        <ExpandeInformationPersonal title='Dobras Cutâneas' measurements={measurementsObject.skinFolds} />
       </ScrollView>
     </View>
   );
