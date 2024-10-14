@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
-import { View, StyleSheet, Text } from "react-native";
-import { styles } from "./styles";
-import { Button } from "@/components/button";
-import { ScrollView } from "react-native-gesture-handler";
+import React, { useContext, useEffect, useState } from "react";
+import { View, ScrollView, Text } from "react-native";
 import { PageRegister } from "@/components/pageRegister";
+import { Button } from "@/components/button";
+import { FormContext } from "@/contexts/FormContext";
 
-// Lista de níveis de atividade
 const activityLevels = [
-  "Iniciante", // Pouco ou nenhum exercício
-  "Intermediário", // Exercício leve, 1-3 dias/semana
-  "Avançado", // Exercício moderado, 3-5 dias/semana
+  "Iniciante",
+  "Intermediário",
+  "Avançado",
 ];
 
 const descriptionLevel = [
   "Ideal para iniciantes que buscam introduzir exercícios leves a moderados para melhorar a saúde e desenvolver uma rotina regular.",
   "Pessoas com alguma experiência, envolve exercícios de intensidade moderada a alta para aumentar a resistência e a força muscular.",
   "Para aqueles com habilidades avançadas e metas atléticas elevadas, envolve exercícios de alta intensidade e volume para maximizar o desempenho físico."
-]
+];
+
 export function ActivityLevel() {
-  const { register, setValue } = useFormContext();
+  const { updateFormData } = useContext(FormContext);
   const [selectedActivityLevel, setSelectedActivityLevel] = useState(activityLevels[0]);
   const [selectedActivityLevelIndex, setSelectedActivityLevelIndex] = useState(0);
 
   useEffect(() => {
-    register("activityLevel");
-  }, [register]);
-
-  useEffect(() => {
-    setValue("activityLevel", selectedActivityLevel);
-  }, [selectedActivityLevel, setValue]);
+    updateFormData(
+      {
+        question: "Qual é o seu nível de atividade?",
+        answer: selectedActivityLevel,
+      },
+      4
+    );
+  }, [selectedActivityLevel]);
 
   const handleValueChange = (level: string, index: number) => {
     setSelectedActivityLevel(level);
-    setSelectedActivityLevelIndex(index)
+    setSelectedActivityLevelIndex(index);
   };
 
   return (
@@ -44,18 +44,20 @@ export function ActivityLevel() {
       containerStyle={{ marginTop: 40 }}
     >
       <ScrollView>
-
-        <View style={[styles.content, {width: "90%"}]}>
-          {
-            activityLevels.map((item, index) => <Button text={item} isSelect={item == selectedActivityLevel} onPress={() => handleValueChange(item, index)} />)
-          }
-          <Text style={[styles.descriptionAge, { textAlign: "justify", color: "white", fontWeight: "100", marginTop: 40, backgroundColor: "rgba(0,0,0,0.3)", padding: 10 }]}>
+        <View style={{ width: "90%", marginHorizontal: "5%", marginTop: 50 }}>
+          {activityLevels.map((item, index) => (
+            <Button
+              key={index}
+              text={item}
+              isSelect={item === selectedActivityLevel}
+              onPress={() => handleValueChange(item, index)}
+            />
+          ))}
+          <Text style={{ textAlign: "justify", color: "white", fontWeight: "100", marginTop: 40, backgroundColor: "rgba(0,0,0,0.3)", padding: 10 }}>
             {descriptionLevel[selectedActivityLevelIndex]}
           </Text>
         </View>
       </ScrollView>
     </PageRegister>
-
   );
 }
-

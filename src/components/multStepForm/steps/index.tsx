@@ -2,13 +2,17 @@ import { Age } from "./age";
 import { Weight } from "./weight";
 import { Height } from "./height";
 import { ActivityLevel } from "./activityLevel";
-import { DaysHours } from "./daysHours";
+import { SelectDays } from "./selectDay";
 import { Objective } from "./objective";
 import { Pathophysiological } from "./pathophysiological";
 import { HowLongTraining } from "./howLongTraining";
 import { MuscleFocus } from "./muscleFocus";
 import { Gender } from "./gender";
 import { SkillsPractice } from "./skillsPractice";
+import { SelectTime } from "./selectTime";
+import { InterestInTraining } from "./interestInTraining";
+import { SportsSelection } from "./sportsSelection";
+import { FrequencySelection } from "./frequencySelection";
 
 interface StepConfig {
   title: string;
@@ -20,7 +24,7 @@ interface StepProps {
   prevStep?: () => void;
   submitForm?: () => void;
 }
-
+//vinicius.leal34@gmail.com
 const stepsConfig: Record<string, StepConfig> = {
   personalInfo: {
     title: "Personal Information",
@@ -54,22 +58,34 @@ const stepsConfig: Record<string, StepConfig> = {
     title: "Personal Information",
     component: Pathophysiological,
   },
-  DaysHours: {
+  SelectDays: {
     title: "Personal Information",
-    component: DaysHours,
+    component: SelectDays,
+  },
+  SelectTime: {
+    title: "Personal Information",
+    component: SelectTime,
+  },
+  InterestInTraining: {
+    title: "Personal Information",
+    component: InterestInTraining,
+  },
+  SportsSelection:{
+    title: "Personal Information",
+    component: SportsSelection
+  },
+  FrequencySelection:{
+    title: "Personal Information",
+    component: FrequencySelection
   },
   Gender:{
     title: "Personal Information",
     component: Gender,
   },
-  SkillsPractice:{
-    title: "Personal Information",
-    component: SkillsPractice
-  },
   NextPage:{
     title: "NextPage",
-    component: SkillsPractice
+    component: Gender
   },
 };
-
+ 
 export default stepsConfig;

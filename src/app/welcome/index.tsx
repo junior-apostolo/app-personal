@@ -1,11 +1,33 @@
 import { Link } from 'expo-router';
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, Pressable } from 'react-native';
 import { styles } from "./styles";
-
-import * as Animatable from 'react-native-animatable'
+import * as Animatable from 'react-native-animatable';
+import { useRouter } from 'expo-router';
+import { getData } from '@/utils/tokenSave';
+import { TokenStorageAsync } from '@/constants/global';
+import { useEffect } from 'react';
 
 
 export default function Welcome() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const tokenData: any = await getData(TokenStorageAsync);
+
+      if (tokenData) {
+ 
+        const { isAccess, planExpirationDate } = tokenData;
+
+        if (isAccess && new Date(planExpirationDate) > new Date()) {
+          router.push('(tabs)'); 
+        }
+      }
+    };
+
+    checkToken();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.containerLogo}>
@@ -31,12 +53,6 @@ export default function Welcome() {
           </Pressable>
         </Link>
       </Animatable.View>
-      {/* <Text>Hello</Text>
-
-      <Link href="(tabs)">Ir para Tabs</Link>
-      <Link href="login">Ir para Login</Link> */}
-
     </View>
-  )
+  );
 }
-

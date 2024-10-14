@@ -10,8 +10,8 @@ export interface ResponseRegisterUser extends AxiosResponse {
 
 export const postAnamnesisQuestionAsync = async (questionAnswerInput: QuestionAnswerInput) => {
   try {
-    const response = await api.post(ANAMNESIS_QUESTION_PATH, questionAnswerInput);
-    return response.data.data;
+    await api.post(ANAMNESIS_QUESTION_PATH, questionAnswerInput);
+    return true;
   } catch (err) {
     console.log(err);
     return false;

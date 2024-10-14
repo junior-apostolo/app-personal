@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { ButtonDay } from "@/components/buttonDay";
 import { PageRegister } from "@/components/pageRegister";
 import { FormContext } from "@/contexts/FormContext";
@@ -15,7 +15,7 @@ export const SelectDays: React.FC = () => {
                 question: "Quais dias você pretende treinar?",
                 answer: selectedDays.join(", ") || "",
             },
-            0
+            0 // Altere o índice conforme necessário
         );
     }, [selectedDays]);
 
@@ -25,6 +25,14 @@ export const SelectDays: React.FC = () => {
         );
     };
 
+    // Agrupa os dias em grupos de 3
+    const days = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+    const groupedDays = [];
+
+    for (let i = 0; i < days.length; i += 3) {
+        groupedDays.push(days.slice(i, i + 3));
+    }
+
     return (
         <PageRegister
             title="Dias de Treino"
@@ -33,16 +41,18 @@ export const SelectDays: React.FC = () => {
             containerStyle={{ marginTop: 40 }}
         >
             <ScrollView style={{ marginTop: 20, width: "70%" }}>
-                <View style={styles.row}>
-                    {["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"].map((day) => (
-                        <ButtonDay 
-                            key={day} 
-                            text={day} 
-                            isSelect={selectedDays.includes(day)} 
-                            onPress={() => toggleDay(day)} 
-                        />
-                    ))}
-                </View>
+                {groupedDays.map((group, index) => (
+                    <View key={index} style={[styles.row,{justifyContent: "center"}]}>
+                        {group.map((day) => (
+                            <ButtonDay 
+                                key={day} 
+                                text={day} 
+                                isSelect={selectedDays.includes(day)} 
+                                onPress={() => toggleDay(day)} 
+                            />
+                        ))}
+                    </View>
+                ))}
             </ScrollView>
         </PageRegister>
     );

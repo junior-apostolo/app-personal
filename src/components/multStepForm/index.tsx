@@ -1,11 +1,14 @@
 import { View, TouchableOpacity } from "react-native";
 import { useForm, FormProvider } from "react-hook-form";
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import stepsConfig from "./steps";
 import { styles } from "./styles";
 import { theme } from "@/theme";
 import { router } from "expo-router";
+import { FormContext } from "@/contexts/FormContext";
+import { getData, storeUserAndToken } from "@/utils/tokenSave";
+import { TokenStorageAsync } from "@/constants/global";
 
 const stepKeys = Object.keys(stepsConfig) as Array<keyof typeof stepsConfig>;
 
@@ -16,14 +19,19 @@ interface MultiStepForm {
 
 export function MultiStepForm({step}: MultiStepForm) {
   const [currentStep, setCurrentStep] = useState(step || 0);
+  const { submitForm } = useContext(FormContext);
   const methods = useForm();
 
   const currentStepKey = stepKeys[currentStep];
   const StepComponent = stepsConfig[currentStepKey].component;
 
-  const handleNext = () => {
+  const handleNext = async() => {
     setCurrentStep((prev) => Math.min(prev + 1, stepKeys.length))
+    await submitForm()
+    const tokenData: any = await getData(TokenStorageAsync);
+    storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep})
     if(currentStep == stepKeys.length - 2){
+      storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep, isFirstAccess: true})
       router.push("(tabs)")
     }
   };

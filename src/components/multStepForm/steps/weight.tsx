@@ -1,31 +1,27 @@
-import { SelectList } from "@/components/selectList";
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, KeyboardAvoidingView, Platform } from "react-native";
-import { useFormContext } from "react-hook-form";
-import { styles } from "./styles";
-import { TextInput } from "react-native-gesture-handler";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 import { colors } from "@/theme/colors";
 import { PageRegister } from "@/components/pageRegister";
-
-const startWeight = 30;
-const endWeight = 350;
-const numberOfWeights = endWeight - startWeight + 1;
-const weights = [...Array(numberOfWeights).keys()].map((i) => startWeight + i);
+import { FormContext } from "@/contexts/FormContext";
+import { styles } from "./styles";
 
 export function Weight() {
-  const { register, setValue, watch } = useFormContext();
   const [selectWeight, setSelectWeight] = useState("");
+  const { updateFormData } = useContext(FormContext);
 
   useEffect(() => {
-    register("weight");
-  }, [register]);
-
-  useEffect(() => {
-    setValue("weight", selectWeight);
-  }, [selectWeight, setValue]);
+    if (selectWeight) {
+      updateFormData(
+        {
+          question: "Qual o seu peso?",
+          answer: `${selectWeight} kg`,
+        },
+        2 
+      );
+    }
+  }, [selectWeight]);
 
   const onChangeValue = (text: string) => {
-    // Permite apenas números e ponto
     const formattedValue = text.replace(/[^0-9,.]/g, "");
     setSelectWeight(formattedValue);
   };
@@ -33,13 +29,13 @@ export function Weight() {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"} // Define o comportamento do teclado
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <PageRegister
         title="Qual o seu peso?"
         description="Peso em kg. Não se preocupe, você sempre poderá alterá-lo mais tarde."
       >
-        <View style={{height: "90%"}}>
+        <View style={{ height: "90%" }}>
           <View
             style={{
               alignItems: "center",
@@ -51,13 +47,12 @@ export function Weight() {
           >
             <Text style={styles.selectedText}>KG</Text>
             <TextInput
-              //keyboardType="numeric"
               maxLength={6}
               placeholderTextColor={colors.blue_700}
               placeholder="0.00"
               style={[styles.selectedText, { textAlign: "center", fontSize: 40 }]}
               value={selectWeight}
-              onChangeText={onChangeValue} // Adiciona o filtro no input
+              onChangeText={onChangeValue}
             />
             <Text style={styles.arrow}>▲</Text>
           </View>

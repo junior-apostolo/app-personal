@@ -1,11 +1,9 @@
 import { PageRegister } from '@/components/pageRegister';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { styles } from './styles';
-import { Button } from '@/components/button';
 import { ButtonSelectMulti } from '@/components/buttonSelect';
-
-// import { Container } from './styles';
+import { FormContext } from '@/contexts/FormContext';
 
 const longTimeTraining = [
     "Menos de 6 meses",
@@ -14,9 +12,26 @@ const longTimeTraining = [
     "Entre 2 a 5 anos",
     "Acima de 5 anos",
     "Nunca treinei"
-]
+];
 
 export const HowLongTraining: React.FC = () => {
+    const { updateFormData } = useContext(FormContext);
+    const [selectedTrainingTime, setSelectedTrainingTime] = useState<string | null>(null); // Modificado para armazenar um único valor
+
+    useEffect(() => {
+        updateFormData(
+            {
+                question: "Treina há quanto tempo",
+                answer: selectedTrainingTime || "", // Se não houver seleção, retorna uma string vazia
+            },
+            7 // Alterar o índice conforme necessário
+        );
+    }, [selectedTrainingTime]);
+
+    const handleSelectTrainingTime = (time: string) => {
+        setSelectedTrainingTime(time); // Apenas define a nova seleção
+    };
+
     return (
         <PageRegister
             title="Treina há quanto tempo"
@@ -26,13 +41,19 @@ export const HowLongTraining: React.FC = () => {
             descriptionStyle={{ textAlign: "center" }}
         >
             <ScrollView style={{ width: "90%", height: "70%", marginTop: 20 }}>
-
                 <View style={[styles.content]}>
                     {
-                        longTimeTraining.map((item, index) => <ButtonSelectMulti text={item} isSelect={index === 3} onPress={() => { }} />)
+                        longTimeTraining.map((item) => (
+                            <ButtonSelectMulti 
+                                key={item}
+                                text={item} 
+                                isSelect={selectedTrainingTime === item} // Verifica se o item é o selecionado
+                                onPress={() => handleSelectTrainingTime(item)} 
+                            />
+                        ))
                     }
                 </View>
             </ScrollView>
         </PageRegister>
-    )
-}
+    );
+};

@@ -1,12 +1,36 @@
 import { PageRegister } from '@/components/pageRegister';
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { styles } from './styles';
 import { Button } from '@/components/button';
-
-// import { Container } from './styles';
+import { FormContext } from '@/contexts/FormContext';
 
 export const MuscleFocus: React.FC = () => {
+    const { updateFormData } = useContext(FormContext);
+    const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (selectedMuscles.length) {
+            updateFormData(
+                {
+                    question: "Músculo que gostaria de focar",
+                    answer: selectedMuscles.join(", "),
+                },
+                6
+            );
+        }
+    }, [selectedMuscles]);
+
+    const handleSelectMuscle = (muscle: string) => {
+        setSelectedMuscles((prev) => {
+            if (prev.includes(muscle)) {
+                return prev.filter((item) => item !== muscle);
+            } else {
+                return [...prev, muscle];
+            }
+        });
+    };
+
     return (
         <PageRegister
             title='Músculo que gostaria de focar'
@@ -14,24 +38,84 @@ export const MuscleFocus: React.FC = () => {
             descriptionStyle={{ textAlign: "center" }}
         >
             <View style={styles.content}>
-                <ScrollView style={{ marginTop: 40}}>
+                <ScrollView style={{ marginTop: 40 }}>
                     <View style={styles.row}>
-                    <Button text={"Braço"} containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
-                    <Button text={"Peito"} isSelect containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
-                    <Button text={"Ombro"} isSelect containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
+                        <Button 
+                            text={"Braço"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Braço")} 
+                            onPress={() => handleSelectMuscle("Braço")} 
+                        />
+                        <Button 
+                            text={"Peito"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Peito")} 
+                            onPress={() => handleSelectMuscle("Peito")} 
+                        />
+                        <Button 
+                            text={"Ombro"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Ombro")} 
+                            onPress={() => handleSelectMuscle("Ombro")} 
+                        />
                     </View>
                     <View style={styles.row}>
-                    <Button text={"Costas"} containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
-                    <Button text={"Abdômen"}  containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
-                    <Button text={"Posterior"} containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
+                        <Button 
+                            text={"Costas"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Costas")} 
+                            onPress={() => handleSelectMuscle("Costas")} 
+                        />
+                        <Button 
+                            text={"Abdômen"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Abdômen")} 
+                            onPress={() => handleSelectMuscle("Abdômen")} 
+                        />
+                        <Button 
+                            text={"Posterior"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Posterior")} 
+                            onPress={() => handleSelectMuscle("Posterior")} 
+                        />
                     </View>
                     <View style={styles.row}>
-                    <Button text={"Quadríceps"} isSelect containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 16}}/>
-                    <Button text={"Glúteos"} containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 18}}/>
-                    <Button text={"Panturrilha"} containerStyle={{width: 100, height: 40, marginHorizontal: 5}} textStyle={{fontSize: 16}}/>
+                        <Button 
+                            text={"Quadríceps"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 16 }} 
+                            isSelect={selectedMuscles.includes("Quadríceps")} 
+                            onPress={() => handleSelectMuscle("Quadríceps")} 
+                        />
+                        <Button 
+                            text={"Glúteos"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 18 }} 
+                            isSelect={selectedMuscles.includes("Glúteos")} 
+                            onPress={() => handleSelectMuscle("Glúteos")} 
+                        />
+                        <Button 
+                            text={"Panturrilha"} 
+                            containerStyle={{ width: 100, height: 40, marginHorizontal: 5 }} 
+                            textStyle={{ fontSize: 16 }} 
+                            isSelect={selectedMuscles.includes("Panturrilha")} 
+                            onPress={() => handleSelectMuscle("Panturrilha")} 
+                        />
                     </View>
-                    <Button text={"Corpo Todo"} containerStyle={{width: "80%", height: 45, alignSelf: "center"}} textStyle={{fontSize: 20}}/>
-
+                    <Button 
+                        text={"Corpo Todo"} 
+                        containerStyle={{ width: "80%", height: 45, alignSelf: "center" }} 
+                        textStyle={{ fontSize: 20 }} 
+                        onPress={() => {
+                            setSelectedMuscles(["Braço", "Peito", "Ombro", "Costas", "Abdômen", "Posterior", "Quadríceps", "Glúteos", "Panturrilha"]);
+                        }} 
+                    />
                 </ScrollView>
             </View>
         </PageRegister>
