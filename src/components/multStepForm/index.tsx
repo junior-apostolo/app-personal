@@ -9,6 +9,7 @@ import { router } from "expo-router";
 import { FormContext } from "@/contexts/FormContext";
 import { getData, storeUserAndToken } from "@/utils/tokenSave";
 import { TokenStorageAsync } from "@/constants/global";
+import { patchAlterIsFirstAccess } from "@/services/userService";
 
 const stepKeys = Object.keys(stepsConfig) as Array<keyof typeof stepsConfig>;
 
@@ -31,7 +32,8 @@ export function MultiStepForm({step}: MultiStepForm) {
     const tokenData: any = await getData(TokenStorageAsync);
     storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep})
     if(currentStep == stepKeys.length - 2){
-      storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep, isFirstAccess: true})
+      storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep, isFirstAccess: false})
+      await patchAlterIsFirstAccess()
       router.push("(tabs)")
     }
   };

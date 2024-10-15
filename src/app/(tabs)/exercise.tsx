@@ -5,12 +5,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
 import { colors } from '@/theme/colors';
+import { useLocalSearchParams } from 'expo-router';
 
 const Exercise: React.FC = () => {
+    const { nome, linkVideo, description, observacao } = useLocalSearchParams();
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
-    const [lastLoad, setLastLoad] = useState<string>(''); // Estado para armazenar a carga
-    const [isInputEnabled, setIsInputEnabled] = useState<boolean>(false); // Estado para controlar se o input está habilitado
-    const [exerciseLoads, setExerciseLoads] = useState<{ name: string; load: string }[]>([]); // Estado para armazenar as cargas
+    const [lastLoad, setLastLoad] = useState<string>('');
+    const [isInputEnabled, setIsInputEnabled] = useState<boolean>(false); 
+    const [exerciseLoads, setExerciseLoads] = useState<{ name: string; load: string }[]>([]);
 
     useEffect(() => {
         // Carrega as cargas do AsyncStorage quando o componente é montado
@@ -60,15 +62,15 @@ const Exercise: React.FC = () => {
         >
             <ScrollView style={{ width: "100%" }} contentContainerStyle={styles.scrollContent}>
                 <Card
-                    imageUri="https://youtu.be/v6-QIOY0nW0?si=wzSEkcsMmTa11CCw"
+                    imageUri=""
                     isYouTube={true}
-                    youTubeVideoId="v6-QIOY0nW0"
-                    text="Pulldown"
+                    youTubeVideoId={linkVideo}
+                    text={nome}
                 />
 
                 <ExpandedSection
                     title="Descrição"
-                    content="O Pull Down (ou Pull-Down) é um exercício de musculação voltado para o fortalecimento das costas, especificamente do músculo grande dorsal, embora também ative outros músculos da região, como os bíceps, trapézio, rombóides e deltoides posteriores. O movimento é realizado em uma máquina com cabo e barra, onde o praticante puxa a barra em direção ao peito ou atrás da cabeça."
+                    content={description}
                     sectionKey="dicasDeTreino"
                     expandedSection={expandedSection}
                     toggleExpand={toggleExpand}

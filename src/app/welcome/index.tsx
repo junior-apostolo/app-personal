@@ -14,12 +14,10 @@ export default function Welcome() {
   useEffect(() => {
     const checkToken = async () => {
       const tokenData: any = await getData(TokenStorageAsync);
-
+      console.log(tokenData)
       if (tokenData) {
- 
-        const { isAccess, planExpirationDate } = tokenData;
-
-        if (isAccess && new Date(planExpirationDate) > new Date()) {
+        const {isFirstAccess, planExpirationDate } = tokenData;
+        if (!isFirstAccess && new Date(planExpirationDate) > new Date()) {
           router.push('(tabs)'); 
         }
       }

@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, LayoutAnimation } from 'react-native';
 import { colors } from '@/theme/colors';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
 import { router, useNavigation } from 'expo-router';
+import { getAllTrainingAsync } from '@/services/trainingService';
+import { Training } from '@/interfaces/Training';
 
-const treinos = ['A', 'B', 'C', "D"]; // Lista de treinos
 
 export default function Home() {
+  const [currentTreinoIndex, setCurrentTreinoIndex] = useState(0);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [treinos, setTreinos] = useState<Array<Training>>([])
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -33,7 +38,7 @@ export default function Home() {
     },
     weekContainer: {
       flexDirection: 'row',
-      justifyContent: treinos.length > 4 ? 'space-between' : 'flex-start', // Se houver mais de 4 treinos, espaçar uniformemente; se não, centralizar
+      justifyContent: treinos.length > 4 ? 'space-between' : 'flex-start',
       width: '80%',
       marginBottom: 30,
     },
@@ -44,25 +49,37 @@ export default function Home() {
       backgroundColor: 'transparent',
       width: 35,
       alignItems: 'center',
-      marginHorizontal: treinos.length > 5 ? 2: 8,
+      marginHorizontal: treinos.length > 5 ? 2 : 8,
     },
     dayText: {
       fontSize: 18,
     }
   });
-  
-  const [currentTreinoIndex, setCurrentTreinoIndex] = useState(0); // Controla o índice do treino atual
-  const [expandedSection, setExpandedSection] = useState<string | null>(null); // Control which section is expanded
-  const navigation = useNavigation();
+
+
 
   const toggleExpand = (section: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedSection(section === expandedSection ? null : section);
   }
-  // Função para avançar para o próximo treino ao clicar no botão "Iniciar"
-  const handleStartTreino = () => {
-    setCurrentTreinoIndex((prevIndex) => (prevIndex + 1) % treinos.length); // Avança para o próximo treino, reinicia se chegar ao final
-  };
+
+  const loadingTraining = async () => {
+    try {
+      const response = await getAllTrainingAsync();
+      if(response == false){
+        return false;
+      }
+      console.log(response)
+      setTreinos(response);
+    } catch (err) {
+      return false;
+    }
+  }
+
+  useEffect(() => {
+    loadingTraining();
+  },[])
+
 
   return (
     <View style={styles.container}>
@@ -71,7 +88,6 @@ export default function Home() {
         Cada gota de suor é um passo mais perto do seu melhor; continue firme e transforme esforço em conquista!
       </Text>
 
-      {/* Botões de treinos */}
       <View style={styles.weekContainer}>
         {treinos.map((treino, index) => (
           <TouchableOpacity
@@ -88,21 +104,29 @@ export default function Home() {
                 index === currentTreinoIndex ? { color: colors.black } : { color: colors.white },
               ]}
             >
-              {treino}
+              {treino.nome.split(" - ")[0]}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Exibe o treino atual */}
-      <Card
+      {treinos?.length > 0 && <Card
         imageUri="https://i.ytimg.com/vi/NuqoFIwx-7Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCI2w6Soaw7CrHq5wTn2N3bAmBc9A"
-        text={`Treino ${treinos[currentTreinoIndex]}`}
+        text={`${treinos[currentTreinoIndex].nome.split(" - ")[1]}`}
         buttonText="Iniciar"
-        onPress={() => {router.push("(tabs)/training")}} // Avança para o próximo treino ao clicar
-      />
+        onPress={() => { 
+          router.push({
+            pathname: "(tabs)/training",
+            params: {
+              id: treinos[currentTreinoIndex].id,
+              nome: treinos[currentTreinoIndex].nome.split(" - ")[1],
+              image: "https://i.ytimg.com/vi/NuqoFIwx-7Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCI2w6Soaw7CrHq5wTn2N3bAmBc9A",
+              description: treinos[currentTreinoIndex].observacao
+            },
+          })
+        }} 
+      />}
 
-      {/* Seções expandidas */}
       <ScrollView style={{ width: "90%" }}>
         <ExpandedSection
           title="Dicas de treino"

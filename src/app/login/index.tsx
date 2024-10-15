@@ -25,7 +25,7 @@ export default function Login() {
         if (result.user.isFirstAccess) {
           storeUserAndToken(result.token.tokenString, result.user);
           router.push({
-            pathname: "form",  // Nome da tela de destino
+            pathname: "form", 
             params: {
               step: result.user.step
             },

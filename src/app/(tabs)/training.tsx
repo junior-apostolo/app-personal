@@ -1,41 +1,61 @@
+import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
+import { TrainingDetail } from '@/interfaces/TrainingDetail';
 import { colors } from '@/theme/colors';
-import { router } from 'expo-router';
-import React, { useState } from 'react';
+import { router, useLocalSearchParams } from 'expo-router';
 import { LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { getAllExerciseTraining } from '@/services/exerciseTraining';
 
 const Training: React.FC = () => {
     const [expandedSection, setExpandedSection] = useState<string | null>(null); // Control which section is expanded
-
+    const [exercises, setExercises] = useState<Array<TrainingDetail>>([]);
+    const { id, image, nome, description } = useLocalSearchParams();
     const toggleExpand = (section: string) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpandedSection(section === expandedSection ? null : section);
     }
 
-    // Lista de exercícios para exibir
-    const exercises = [
-        { name: 'Supino Reto com Barra', reps: "12-15" },
-        { name: 'Desenvolvimento com Halteres', reps: "12-15" },
-        { name: 'Agachamento Livre', reps: "12-15" },
-        { name: 'Remada Curvada com Barra', reps: "12-15" },
-        { name: 'Rosca Direta com Barra', reps: "12-15" },
-        { name: 'Leg Press', reps: "12-15" },
-        { name: 'Flexão de Braço', reps: "12-15" },
-        { name: 'Extensão de Tríceps', reps: "12-15" }
-    ];
+    const nextStep = (item: TrainingDetail) => {
+        router.push({
+            pathname: "(tabs)/exercise",
+            params: {
+             nome: item.exercise.nome,
+             linkVideo: item.exercise.linkVideo,
+             description: item.exercise.descricao,
+             observacao: item.observacao
+            },
+          })
+    };
+   
+    const loadingExercises = async() => {
+        try{
+            const response = await getAllExerciseTraining(id);
+            if(!response){
+                return false;
+            }
+            setExercises(response)
+        }catch(err){
+            return false;
+        }
+    }
+
+    useEffect(()=> {
+        loadingExercises()
+    },[])
+
 
     return (
         <View style={styles.container}>
             <Card
-                imageUri="https://i.ytimg.com/vi/NuqoFIwx-7Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCI2w6Soaw7CrHq5wTn2N3bAmBc9A"
-                text="Dorsais e Bíceps"
+                imageUri={image}
+                text={nome}
             />
 
             <ScrollView style={{ width: "90%" }}>
                 <ExpandedSection
                     title="Orientações"
-                    content="Aqui estão algumas dicas para melhorar seus treinos: mantenha consistência, tenha um plano de alimentação balanceado e não se esqueça de descansar."
+                    content={description}
                     sectionKey="dicasDeTreino"
                     expandedSection={expandedSection}
                     toggleExpand={toggleExpand}
@@ -44,11 +64,11 @@ const Training: React.FC = () => {
                 {/* Sequência de Botões de Exercício */}
                 <View style={styles.exerciseList}>
                     {exercises.map((exercise, index) => (
-                        <TouchableOpacity key={index} style={styles.exerciseButton} onPress={() => {router.push("(tabs)/exercise")}}>
+                        <TouchableOpacity key={index} style={styles.exerciseButton} onPress={() => nextStep(exercise)}>
                             <Text style={styles.exerciseText}>
-                                {exercise.name}
+                                {exercise.exercise.nome}
                             </Text>
-                            <Text style={styles.repText}>{exercise.reps}</Text>
+                            <Text style={styles.repText}>12-15</Text>
                         </TouchableOpacity>
                     ))}
                 </View>

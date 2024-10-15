@@ -4,7 +4,7 @@ import { SelectListHorizontal } from "@/components/selectListHorizontal";
 import { PageRegister } from "@/components/pageRegister";
 import { FormContext } from "@/contexts/FormContext";
 
-const startAge = 18;
+const startAge = 10;
 const endAge = 100;
 const numberOfAges = endAge - startAge + 1;
 const ages = [...Array(numberOfAges).keys()].map((i) => startAge + i);
