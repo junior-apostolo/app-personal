@@ -10,25 +10,35 @@ import { useLocalSearchParams } from 'expo-router';
 const Exercise: React.FC = () => {
     const { nome, linkVideo, description, observacao } = useLocalSearchParams();
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
-    const [lastLoad, setLastLoad] = useState<string>('');
-    const [isInputEnabled, setIsInputEnabled] = useState<boolean>(false); 
+    const [lastLoad, setLastLoad] = useState<string>('0kg'); // Estado para a última carga
+    const [isInputEnabled, setIsInputEnabled] = useState<boolean>(false);
     const [exerciseLoads, setExerciseLoads] = useState<{ name: string; load: string }[]>([]);
 
     useEffect(() => {
-        // Carrega as cargas do AsyncStorage quando o componente é montado
         const loadExerciseLoads = async () => {
             try {
-                const storedLoads = await AsyncStorage.getItem('exerciseLoads');
+                const storedLoads:any = await AsyncStorage.getItem('exerciseLoads');
+                console.log(JSON?.parse(storedLoads))
                 if (storedLoads) {
-                    setExerciseLoads(JSON.parse(storedLoads));
+                    const storedParse:any = JSON.parse(storedLoads);
+                    const lastLoadFilter = storedParse?.filter(item => item.name == nome)
+                    if(lastLoadFilter.length > 0){
+                        setLastLoad(() => lastLoadFilter[0].load)
+                    }else{
+                        setLastLoad("0kg")
+                    }
+                    setExerciseLoads(storedParse);
                 }
+              
             } catch (error) {
                 console.error('Failed to load exercise loads:', error);
             }
         };
 
         loadExerciseLoads();
-    }, []);
+    }, [nome]);
+
+
 
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
@@ -37,7 +47,7 @@ const Exercise: React.FC = () => {
     const handleSaveLoad = async () => {
         // Adiciona a carga ao array de cargas
         if (lastLoad.trim() !== '') {
-            const newLoad = { name: 'Pulldown', load: lastLoad };
+            const newLoad = { name: nome, load: lastLoad };
 
             // Atualiza o estado local
             const updatedLoads = [...exerciseLoads, newLoad];
@@ -46,7 +56,7 @@ const Exercise: React.FC = () => {
             // Salva no AsyncStorage
             try {
                 await AsyncStorage.setItem('exerciseLoads', JSON.stringify(updatedLoads));
-                setLastLoad(''); // Limpa o campo após gravar
+                await AsyncStorage.setItem('lastLoad', lastLoad); // Salva a última carga
                 setIsInputEnabled(false); // Desabilita o input novamente
             } catch (error) {
                 console.error('Failed to save exercise load:', error);
@@ -81,7 +91,7 @@ const Exercise: React.FC = () => {
                     <View style={styles.inputContainer}>
                         <Text style={styles.lastLoadText}>Última Carga: </Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: isInputEnabled ? colors.blue_750 : colors.gray }]} // Estilo condicional
                             placeholderTextColor={colors.white}
                             placeholder="Insira sua carga"
                             value={lastLoad}
@@ -142,7 +152,10 @@ const styles = StyleSheet.create({
         marginRight: 0,
         marginLeft: 20,
         width: 50,
-        color: colors.white
+        height: 40,
+        color: colors.white,
+        borderRadius: 20,
+        paddingLeft: 20,
     },
     saveButton: {
         backgroundColor: colors.green_100,

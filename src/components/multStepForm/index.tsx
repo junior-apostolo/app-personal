@@ -27,14 +27,16 @@ export function MultiStepForm({step}: MultiStepForm) {
   const StepComponent = stepsConfig[currentStepKey].component;
 
   const handleNext = async() => {
-    setCurrentStep((prev) => Math.min(prev + 1, stepKeys.length))
-    await submitForm()
-    const tokenData: any = await getData(TokenStorageAsync);
-    storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep})
-    if(currentStep == stepKeys.length - 2){
-      storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep, isFirstAccess: false})
-      await patchAlterIsFirstAccess()
-      router.push("(tabs)")
+    const result = await submitForm()
+    if(result){
+      setCurrentStep((prev) => Math.min(prev + 1, stepKeys.length))
+      const tokenData: any = await getData(TokenStorageAsync);
+      storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep})
+      if(currentStep == stepKeys.length - 2){
+        storeUserAndToken(tokenData.accessToken,{...tokenData, step: currentStep, isFirstAccess: false})
+        await patchAlterIsFirstAccess()
+        router.push("(tabs)")
+      }
     }
   };
   const handlePrev = () => setCurrentStep((prev) => Math.max(prev - 1, 0));

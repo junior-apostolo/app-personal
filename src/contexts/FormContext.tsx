@@ -2,13 +2,14 @@ import { TokenStorageAsync } from '@/constants/global';
 import { postAnamnesisQuestionAsync } from '@/services/anamnesisQuestionService';
 import { getData } from '@/utils/tokenSave';
 import React, { createContext, useState, ReactNode } from 'react';
+import { Alert } from 'react-native';
 
 // Define o tipo de dados do contexto
 interface FormContextType {
   formData: any;
   updateFormData: (stepData: { question: string; answer: string }, step: number) => void;
   updateFormDataAsArray: (stepDataArray: { question: string; answer: string }[], step: number) => void;
-  submitForm: () => Promise<void>;
+  submitForm: () => Promise<boolean>;
 }
 
 export const FormContext = createContext<FormContextType | undefined>(undefined);
@@ -52,6 +53,10 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     try {
 
       if (Object.keys(formData).length) {
+        if(formData.answer == ""){
+          Alert.alert("Erro", "Preencha os campos");
+          return false
+        }
         const response = await postAnamnesisQuestionAsync(formData);
         if (!response) throw new Error('Erro ao enviar o formulário');
         console.log('Formulário enviado com sucesso!', formData);
@@ -65,8 +70,10 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
         if (!listResponse.length) throw new Error('Erro ao enviar o formulário');
         console.log('Lista de formulários enviada com sucesso!');
       }
+      return true;
     } catch (error) {
       console.error('Erro na requisição:', error);
+      return false;
     }
   };
 
