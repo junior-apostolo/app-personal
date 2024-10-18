@@ -27,7 +27,7 @@ export default function Login() {
           router.push({
             pathname: "form", 
             params: {
-              step: result.user.step
+              step: 0 || result.user.step
             },
           })
         } else {

@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import { getData } from '@/utils/tokenSave';
 import { TokenStorageAsync } from '@/constants/global';
 import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Welcome() {
@@ -13,6 +14,7 @@ export default function Welcome() {
 
   useEffect(() => {
     const checkToken = async () => {
+     await AsyncStorage.clear()
       const tokenData: any = await getData(TokenStorageAsync);
       console.log(tokenData)
       if (tokenData) {

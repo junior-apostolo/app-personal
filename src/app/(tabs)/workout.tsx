@@ -25,7 +25,6 @@ export default function Workout() {
     try {
       
       const tokenData: any = await getData(TokenStorageAsync);
-      console.log(tokenData)
       setPersonName(tokenData.name)
       const result = await getPhysicalAssessmentAsync(tokenData.id);
       console.log(result)
