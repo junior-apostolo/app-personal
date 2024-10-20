@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
 import { colors } from '@/theme/colors';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 const Exercise: React.FC = () => {
     const { nome, linkVideo, description, observacao } = useLocalSearchParams();
@@ -17,19 +17,19 @@ const Exercise: React.FC = () => {
     useEffect(() => {
         const loadExerciseLoads = async () => {
             try {
-                const storedLoads:any = await AsyncStorage.getItem('exerciseLoads');
+                const storedLoads: any = await AsyncStorage.getItem('exerciseLoads');
                 console.log(JSON?.parse(storedLoads))
                 if (storedLoads) {
-                    const storedParse:any = JSON.parse(storedLoads);
+                    const storedParse: any = JSON.parse(storedLoads);
                     const lastLoadFilter = storedParse?.filter(item => item.name == nome)
-                    if(lastLoadFilter.length > 0){
+                    if (lastLoadFilter.length > 0) {
                         setLastLoad(() => lastLoadFilter[0].load)
-                    }else{
+                    } else {
                         setLastLoad("0kg")
                     }
                     setExerciseLoads(storedParse);
                 }
-              
+
             } catch (error) {
                 console.error('Failed to load exercise loads:', error);
             }
@@ -56,8 +56,8 @@ const Exercise: React.FC = () => {
             // Salva no AsyncStorage
             try {
                 await AsyncStorage.setItem('exerciseLoads', JSON.stringify(updatedLoads));
-                await AsyncStorage.setItem('lastLoad', lastLoad); // Salva a última carga
-                setIsInputEnabled(false); // Desabilita o input novamente
+                await AsyncStorage.setItem('lastLoad', lastLoad);
+                setIsInputEnabled(false);
             } catch (error) {
                 console.error('Failed to save exercise load:', error);
             }
@@ -67,10 +67,17 @@ const Exercise: React.FC = () => {
     return (
         <KeyboardAvoidingView
             style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'} // Ajusta a posição no iOS
-            keyboardVerticalOffset={90} // Ajuste conforme necessário para o layout
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={90}
         >
+
             <ScrollView style={{ width: "100%" }} contentContainerStyle={styles.scrollContent}>
+            <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => router.back()}
+            >
+                    <Text>{"<"}</Text>
+            </TouchableOpacity>
                 <Card
                     imageUri=""
                     isYouTube={true}
@@ -80,7 +87,7 @@ const Exercise: React.FC = () => {
 
                 <ExpandedSection
                     title="Descrição"
-                    content={description}
+                    content={observacao}
                     sectionKey="dicasDeTreino"
                     expandedSection={expandedSection}
                     toggleExpand={toggleExpand}
@@ -107,7 +114,7 @@ const Exercise: React.FC = () => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView >
     );
 };
 

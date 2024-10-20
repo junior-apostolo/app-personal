@@ -13,6 +13,8 @@ export default function Home() {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [treinos, setTreinos] = useState<Array<Training>>([])
 
+  const imagens = ["https://www.embraplan.com.br/imagens/noticias/11b986fc-d5a6-49a8-ba84-7cbbe8b6f93e.jpg", "https://www.optc.com.br/wp-content/uploads/2021/05/strong-man-training-in-gym.jpg", "https://www.pontotel.com.br/local/wp-content/uploads/2021/12/auxilio-academia.webp", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQUnH2rdVu3kNeMzGkgzbeLmJbH9bVp4qkEeg&s", "https://media.istockphoto.com/id/1322158059/pt/foto/dumbbell-water-bottle-towel-on-the-bench-in-the-gym.jpg?s=612x612&w=0&k=20&c=eFfg0ECbiSopufODZ0Kz6yKTXvay0pXQpwJaUXxpBoc=", "https://blog.damamaefitness.com.br/wp-content/uploads/2020/07/Como-se-acostumar-a-ir-na-academia-frequentemente.jpg", "https://www.pontotel.com.br/local/wp-content/uploads/2021/12/auxilio-academia.webp"]
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -56,7 +58,7 @@ export default function Home() {
     }
   });
 
-
+ 
 
   const toggleExpand = (section: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -64,12 +66,12 @@ export default function Home() {
   }
 
   const loadingTraining = async () => {
-    try {
+    try { 
       const response = await getAllTrainingAsync();
       if(response == false){
         return false;
       }
-      console.log(response)
+      console.log(response) 
       setTreinos(response);
     } catch (err) {
       return false;
@@ -111,7 +113,7 @@ export default function Home() {
       </View>
 
       {treinos?.length > 0 && <Card
-        imageUri="https://i.ytimg.com/vi/NuqoFIwx-7Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCI2w6Soaw7CrHq5wTn2N3bAmBc9A"
+        imageUri={imagens[currentTreinoIndex]}
         text={`${treinos[currentTreinoIndex].nome.split(" - ")[1]}`}
         buttonText="Iniciar"
         onPress={() => { 
@@ -120,7 +122,7 @@ export default function Home() {
             params: {
               id: treinos[currentTreinoIndex].id,
               nome: treinos[currentTreinoIndex].nome.split(" - ")[1],
-              image: "https://i.ytimg.com/vi/NuqoFIwx-7Y/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCI2w6Soaw7CrHq5wTn2N3bAmBc9A",
+              image: imagens[currentTreinoIndex],
               description: treinos[currentTreinoIndex].observacao
             },
           })

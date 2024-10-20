@@ -5,7 +5,7 @@ import React, { createContext, useState, ReactNode } from 'react';
 import { Alert } from 'react-native';
 
 // Define o tipo de dados do contexto
-interface FormContextType {
+export interface FormContextType {
   formData: any;
   updateFormData: (stepData: { question: string; answer: string }, step: number) => void;
   updateFormDataAsArray: (stepDataArray: { question: string; answer: string }[], step: number) => void;

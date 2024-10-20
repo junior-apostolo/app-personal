@@ -17,9 +17,9 @@ import { ComposicaoCorporal, Perimetro, SkinFold } from "@/interfaces/Composicao
       { label: 'Ombro', value: `${data.perimetro.ombro}cm` },
       { label: 'Peito', value: `${data.perimetro.torax}cm` },
       { label: 'Cintura', value: `${data.perimetro.cintura}cm` },
-      { label: 'Abdômen', value: `${data.perimetro.abdomen}cm` },
+      { label: 'Abdômen', value: `${data.perimetro.abdomen}cm` }, 
       { label: 'Quadril', value: `${data.perimetro.quadril}cm` },
-    ];
+    ]; 
   
     const bodyComposition = [
       { label: 'Altura', value: `${(data.altura / 100).toFixed(2)}m` }, // Converte para metros

@@ -20,7 +20,7 @@ interface MultiStepForm {
 
 export function MultiStepForm({step}: MultiStepForm) {
   const [currentStep, setCurrentStep] = useState(step || 0);
-  const { submitForm } = useContext(FormContext);
+  const { submitForm } = useContext<any>(FormContext);
   const methods = useForm();
 
   const currentStepKey = stepKeys[currentStep];
@@ -42,10 +42,7 @@ export function MultiStepForm({step}: MultiStepForm) {
   const handlePrev = () => setCurrentStep((prev) => Math.max(prev - 1, 0));
 
 
-  const handleSubmit = () => {
-    console.log(methods.getValues());
-    // Aqui você pode fazer o que quiser com os dados do formulário
-  };
+ 
 
   return (
     <View style={{ flex: 1 }}>

@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderBottomColor: colors.green_100,
     paddingBottom: 20,
-    marginBottom: 10
+    marginBottom: 10,
+    width: "100%"
   },
 });

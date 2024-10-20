@@ -17,6 +17,7 @@ const Training: React.FC = () => {
     }
 
     const nextStep = (item: TrainingDetail) => {
+
         router.push({
             pathname: "(tabs)/exercise",
             params: {
@@ -31,6 +32,7 @@ const Training: React.FC = () => {
     const loadingExercises = async() => {
         try{
             const response = await getAllExerciseTraining(id);
+            console.log(response)
             if(!response){
                 return false;
             }
@@ -42,7 +44,7 @@ const Training: React.FC = () => {
 
     useEffect(()=> {
         loadingExercises()
-    },[])
+    },[id])
 
 
     return (
@@ -61,14 +63,13 @@ const Training: React.FC = () => {
                     toggleExpand={toggleExpand}
                 />
 
-                {/* Sequência de Botões de Exercício */}
                 <View style={styles.exerciseList}>
                     {exercises.map((exercise, index) => (
                         <TouchableOpacity key={index} style={styles.exerciseButton} onPress={() => nextStep(exercise)}>
                             <Text style={styles.exerciseText}>
                                 {exercise.exercise.nome}
                             </Text>
-                            <Text style={styles.repText}>12-15</Text>
+                            <Text style={styles.repText}>{exercise?.serie} - {exercise?.rep}</Text>
                         </TouchableOpacity>
                     ))}
                 </View>

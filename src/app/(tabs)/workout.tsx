@@ -16,9 +16,9 @@ export default function Workout() {
     measurementsArray: [],
     skinFolds: []
   })
-  const massLean = 60; // Exemplo de massa magra em porcentagem
-  const massFat = 40; // Exemplo de massa gorda em porcentagem
-  const [personName, setPersonName] = useState(""); // Nome da pessoa
+  const massLean = 60; 
+  const massFat = 40; 
+  const [personName, setPersonName] = useState(""); 
   
   
   const getInformationUser = async () => {
