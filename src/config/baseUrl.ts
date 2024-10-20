@@ -1,3 +1,3 @@
 export default {
-    URL: "http://localhost:5025/api/v1"
+    URL: "https://personalapi-a0gnasaxg3avb6by.brazilsouth-01.azurewebsites.net/"
   };
