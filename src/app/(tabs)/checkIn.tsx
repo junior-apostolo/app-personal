@@ -8,7 +8,6 @@ export default function CheckIn() {
     const [selectedWorkout, setSelectedWorkout] = useState('');
     const [trainedDays, setTrainedDays] = useState(0);
     const [lastWorkoutDate, setLastWorkoutDate] = useState(null);
-    const [workoutDescription, setWorkoutDescription] = useState('');
 
     const saveWorkout = async () => {
         try {
@@ -24,10 +23,10 @@ export default function CheckIn() {
                 trainings = JSON?.parse(trainings);
             }
 
-            await AsyncStorage.setItem('@lastWorkout', JSON.stringify([...trainings, { date: currentDate, workout: selectedWorkout, description: workoutDescription }]));
+            await AsyncStorage.setItem('@lastWorkout', JSON.stringify([...trainings, { date: currentDate, workout: selectedWorkout }]));
             alert('Check-in salvo com sucesso!');
             getTrainedDays();
-            setWorkoutDescription('');
+            setSelectedWorkout('')
         } catch (err) {
             console.log(err);
         }
