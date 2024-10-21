@@ -18,8 +18,6 @@ export default function App() {
 
       if (value !== null) {
         setViewedOnboarding(true);
-      } else {
-        await AsyncStorage.setItem("@viewedOnboarding", "true");
       }
     } catch (err) {
       console.log("Error @checkOnboarding: ", err);
