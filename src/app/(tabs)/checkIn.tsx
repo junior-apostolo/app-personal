@@ -3,9 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-nativ
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/theme/colors';
 import { format } from 'date-fns';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function CheckIn() {
-    const [selectedWorkout, setSelectedWorkout] = useState('A');
+    const [selectedWorkout, setSelectedWorkout] = useState('');
     const [trainedDays, setTrainedDays] = useState(0);
     const [lastWorkoutDate, setLastWorkoutDate] = useState(null);
     const [workoutDescription, setWorkoutDescription] = useState('');
@@ -54,6 +55,7 @@ export default function CheckIn() {
 
     return (
         <View style={styles.container}>
+            <ScrollView>
             <View style={styles.card}>
                 <Text style={styles.title}>Check-in de Treino</Text>
 
@@ -70,7 +72,7 @@ export default function CheckIn() {
                     style={styles.input}
                     placeholder="Descreva seu treino..."
                     placeholderTextColor="#ccc"
-                    value={workoutDescription}
+                    value={selectedWorkout}
                     onChangeText={setSelectedWorkout}
                 />
 
@@ -78,6 +80,7 @@ export default function CheckIn() {
                     <Text style={styles.saveButtonText}>Concluir</Text>
                 </TouchableOpacity>
             </View>
+            </ScrollView>
         </View>
     );
 }
