@@ -32,13 +32,11 @@ export default function Calendar() {
         if (storedWorkout) {
           const parsedWorkout = JSON.parse(storedWorkout);
           
-          // Verifica se temos dados armazenados
           if (parsedWorkout) {
-            const workDates = parsedWorkout?.map((item:any)=> item.date); // Usar a data do último treino
+            const workDates = parsedWorkout?.map((item:any)=> item.date); 
             setSelectedDays(workDates);
-            setTrainedDays(workDates?.length); // Conta como 1 dia treinado
+            setTrainedDays(workDates?.length); 
 
-            // Atualiza o estado do treino realizado
           }
         }
       } catch (err) {
@@ -46,26 +44,23 @@ export default function Calendar() {
       }
     };
 
-    fetchWorkouts(); // Busca os treinos ao montar o componente
+    fetchWorkouts();
   }, []);
 
   return (
     <View style={styles.container}>
-      {/* Título com o ícone de fogo e os dias treinados */}
       <View style={styles.content}>
         <Text style={styles.title}>Dias treinados</Text>
         <View style={styles.titleContainer}>
           <Fire />
           <Text style={styles.trainedDays}>{trainedDays} Dias</Text>
         </View>
-        {/* Calendário com dropdowns de mês e ano */}
         <CustomCalendar selectedDays={selectedDays} setDaySelect={setDaySelect}/>
 
-        {/* Exibir o treino realizado abaixo do calendário */}
         {lastWorkout ? (
           <Text style={styles.workoutText}>Treino realizado: {lastWorkout}</Text>
         ) : (
-          <Text style={styles.workoutText}>Nenhum treino registrado para hoje.</Text>
+          <Text style={styles.workoutText}>Nenhum treino registrado nesta data.</Text>
         )}
       </View>
     </View>

@@ -58,7 +58,7 @@ export default function Home() {
     }
   });
 
- 
+
 
   const toggleExpand = (section: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -66,12 +66,12 @@ export default function Home() {
   }
 
   const loadingTraining = async () => {
-    try { 
+    try {
       const response = await getAllTrainingAsync();
-      if(response == false){
+      if (response == false) {
         return false;
       }
-      console.log(response) 
+      console.log(response)
       setTreinos(response);
     } catch (err) {
       return false;
@@ -80,7 +80,7 @@ export default function Home() {
 
   useEffect(() => {
     loadingTraining();
-  },[])
+  }, [])
 
 
   return (
@@ -116,7 +116,7 @@ export default function Home() {
         imageUri={imagens[currentTreinoIndex]}
         text={`${treinos[currentTreinoIndex].nome.split(" - ")[1]}`}
         buttonText="Iniciar"
-        onPress={() => { 
+        onPress={() => {
           router.push({
             pathname: "(tabs)/training",
             params: {
@@ -126,13 +126,13 @@ export default function Home() {
               description: treinos[currentTreinoIndex].observacao
             },
           })
-        }} 
+        }}
       />}
 
       <ScrollView style={{ width: "90%" }}>
         <ExpandedSection
           title="Dicas de treino"
-          content="Aqui estão algumas dicas para melhorar seus treinos: mantenha consistência, tenha um plano de alimentação balanceado e não se esqueça de descansar."
+          content="Para alcançar melhores resultados, seja consistente e mantenha um foco contínuo. Combine treinos intensos com uma alimentação equilibrada, hidrate-se e garanta um sono de qualidade para otimizar sua recuperação."
           sectionKey="dicasDeTreino"
           expandedSection={expandedSection}
           toggleExpand={toggleExpand}
@@ -140,7 +140,7 @@ export default function Home() {
 
         <ExpandedSection
           title="Como utilizar o app"
-          content="O app foi desenvolvido para otimizar seu treino e monitorar seu progresso. Explore as seções para personalizar suas rotinas."
+          content="Selecione o treino desejado clicando nos dias da semana acima. Ao clicar em 'Iniciar', você terá acesso aos exercícios detalhados do treino escolhido. Siga as orientações e registre seu progresso diariamente!"
           sectionKey="comoUtilizarApp"
           expandedSection={expandedSection}
           toggleExpand={toggleExpand}
@@ -148,11 +148,12 @@ export default function Home() {
 
         <ExpandedSection
           title="Meu perfil"
-          content="No seu perfil, você pode ajustar suas preferências, visualizar seu histórico de treino e atualizar suas metas."
+          content="Acesse sua avaliação física para acompanhar sua evolução ao longo do tempo. Utilize também o botão de 'Logout' para sair do app com segurança e manter suas informações protegidas."
           sectionKey="meuPerfil"
           expandedSection={expandedSection}
           toggleExpand={toggleExpand}
         />
+
       </ScrollView>
     </View>
   );

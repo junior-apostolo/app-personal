@@ -1,38 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/theme/colors';
 import { format } from 'date-fns';
 
 export default function CheckIn() {
-    const [selectedWorkout, setSelectedWorkout] = useState('A'); // Valor padrão
+    const [selectedWorkout, setSelectedWorkout] = useState('A');
     const [trainedDays, setTrainedDays] = useState(0);
-    const [lastWorkoutDate, setLastWorkoutDate] = useState(null); // Armazenar a data do último treino
+    const [lastWorkoutDate, setLastWorkoutDate] = useState(null);
+    const [workoutDescription, setWorkoutDescription] = useState('');
 
-    // Função para salvar treino e data no AsyncStorage
     const saveWorkout = async () => {
         try {
-            const currentDate = format(new Date(), 'yyyy-MM-dd'); // Formato compatível com o calendário
+            const currentDate = format(new Date(), 'yyyy-MM-dd');
             if (lastWorkoutDate === currentDate) {
                 alert('Você já fez check-in hoje!');
                 return;
             }
-            let trainings: any = await AsyncStorage.getItem('@lastWorkout');
+            let trainings = await AsyncStorage.getItem('@lastWorkout');
             if (trainings == null) {
-                trainings = []
+                trainings = [];
             } else {
-                trainings = JSON?.parse(trainings)
+                trainings = JSON?.parse(trainings);
             }
 
-            await AsyncStorage.setItem('@lastWorkout', JSON.stringify([...trainings, { date: currentDate, workout: selectedWorkout }]));
+            await AsyncStorage.setItem('@lastWorkout', JSON.stringify([...trainings, { date: currentDate, workout: selectedWorkout, description: workoutDescription }]));
             alert('Check-in salvo com sucesso!');
             getTrainedDays();
+            setWorkoutDescription('');
         } catch (err) {
             console.log(err);
         }
     };
 
-    // Recuperar o número de dias treinados e a data do último treino
     const getTrainedDays = async () => {
         try {
             const storedWorkout = await AsyncStorage.getItem('@lastWorkout');
@@ -40,10 +40,7 @@ export default function CheckIn() {
                 const parsedWorkout = JSON.parse(storedWorkout);
                 const lastWorkoutDate = parsedWorkout[parsedWorkout?.length - 1]?.date;
 
-                // Atualiza o estado com a data do último treino
                 setLastWorkoutDate(lastWorkoutDate);
-
-                // Incrementa dias treinados (lógica pode ser ajustada conforme necessário)
                 setTrainedDays(parsedWorkout.length);
             }
         } catch (err) {
@@ -52,7 +49,7 @@ export default function CheckIn() {
     };
 
     useEffect(() => {
-        getTrainedDays(); // Recupera dias treinados ao carregar a tela
+        getTrainedDays();
     }, []);
 
     return (
@@ -69,7 +66,13 @@ export default function CheckIn() {
                     Mantenha a consistência! Faça check-in para acompanhar sua evolução.
                 </Text>
 
-
+                <TextInput
+                    style={styles.input}
+                    placeholder="Descreva seu treino..."
+                    placeholderTextColor="#ccc"
+                    value={workoutDescription}
+                    onChangeText={setSelectedWorkout}
+                />
 
                 <TouchableOpacity style={styles.saveButton} onPress={saveWorkout}>
                     <Text style={styles.saveButtonText}>Concluir</Text>
@@ -88,12 +91,12 @@ const styles = StyleSheet.create({
         paddingTop: 70,
     },
     card: {
-        width: '90%', // Largura do card
-        backgroundColor: colors.blue_750, // Cor de fundo do card
-        borderRadius: 10, // Arredondar os cantos do card
-        borderBottomWidth: 4, // Largura da borda
-        borderBottomColor: colors.green_100, // Cor da borda
-        padding: 20, // Espaçamento interno do card
+        width: '90%',
+        backgroundColor: colors.blue_750,
+        borderRadius: 10,
+        borderBottomWidth: 4,
+        borderBottomColor: colors.green_100,
+        padding: 20,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -101,13 +104,13 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.3,
         shadowRadius: 4,
-        elevation: 5, // Sombra para Android
+        elevation: 5,
         alignItems: "center",
         justifyContent: "center"
     },
     title: {
         fontSize: 24,
-        color: 'white', // Mudou a cor do texto para black para melhor legibilidade
+        color: 'white',
         fontWeight: 'bold',
         marginBottom: 20,
     },
@@ -122,30 +125,34 @@ const styles = StyleSheet.create({
     },
     trainedDaysText: {
         fontSize: 20,
-        color: 'white', // Mudou a cor do texto para black para melhor legibilidade
+        color: 'white',
         fontWeight: 'bold',
     },
     guidanceText: {
         fontSize: 16,
-        color: 'white', // Mudou a cor do texto para black para melhor legibilidade
+        color: 'white',
         textAlign: 'center',
         marginBottom: 30,
         paddingHorizontal: 20,
     },
-    picker: {
-        height: 50,
-        width: '100%', // Ajustar a largura do picker
-        color: 'black', // Mudou a cor do texto do picker para black
-        marginBottom: 30,
+    input: {
+        height: 40,
+        width: '100%',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+        color: 'white',
     },
     saveButton: {
         backgroundColor: colors.green_100,
         padding: 15,
-        borderRadius: 20, // Arredondar mais
+        borderRadius: 20,
     },
     saveButtonText: {
         fontSize: 18,
-        color: 'black', // Texto do botão em preto
+        color: 'black',
         fontWeight: 'bold',
         textAlign: "center"
     },
