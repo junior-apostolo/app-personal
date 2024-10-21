@@ -8,7 +8,7 @@ import { colors } from '@/theme/colors';
 import { router, useLocalSearchParams } from 'expo-router';
 
 const Exercise: React.FC = () => {
-    const { nome, linkVideo, description, observacao } = useLocalSearchParams();
+    const { id, image, nomeExercicio, nome, linkVideo, descriptionExercicio, description, observacao } = useLocalSearchParams();
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const [lastLoad, setLastLoad] = useState<string>('0kg'); // Estado para a última carga
     const [isInputEnabled, setIsInputEnabled] = useState<boolean>(false);
@@ -18,14 +18,13 @@ const Exercise: React.FC = () => {
         const loadExerciseLoads = async () => {
             try {
                 const storedLoads: any = await AsyncStorage.getItem('exerciseLoads');
-                console.log(JSON?.parse(storedLoads))
                 if (storedLoads) {
                     const storedParse: any = JSON.parse(storedLoads);
-                    const lastLoadFilter = storedParse?.filter(item => item.name == nome)
+                    const lastLoadFilter = storedParse?.filter(item => item.name == nome);
                     if (lastLoadFilter.length > 0) {
-                        setLastLoad(() => lastLoadFilter[0].load)
+                        setLastLoad(() => lastLoadFilter[0].load);
                     } else {
-                        setLastLoad("0kg")
+                        setLastLoad("0kg");
                     }
                     setExerciseLoads(storedParse);
                 }
@@ -37,8 +36,6 @@ const Exercise: React.FC = () => {
 
         loadExerciseLoads();
     }, [nome]);
-
-
 
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
@@ -64,25 +61,37 @@ const Exercise: React.FC = () => {
         }
     };
 
+    const goBack = () => {
+        router.push({
+            pathname: "(tabs)/training",
+            params: {
+                id,
+                nome,
+                image,
+                description
+            },
+        })
+    }
+
     return (
         <KeyboardAvoidingView
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={90}
         >
-
             <ScrollView style={{ width: "100%" }} contentContainerStyle={styles.scrollContent}>
-            <TouchableOpacity
-                style={styles.backButton}
-                onPress={() => router.back()}
-            >
-                    <Text>{"<"}</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={goBack}
+                >
+                    <Text style={styles.backButtonText}>{"< Voltar"}</Text>
+                </TouchableOpacity>
+
                 <Card
                     imageUri=""
                     isYouTube={true}
                     youTubeVideoId={linkVideo}
-                    text={nome}
+                    text={nomeExercicio}
                 />
 
                 <ExpandedSection
@@ -103,7 +112,7 @@ const Exercise: React.FC = () => {
                             placeholder="Insira sua carga"
                             value={lastLoad}
                             onChangeText={setLastLoad}
-                            editable={isInputEnabled} // Habilita o input com base no estado
+                            editable={isInputEnabled} 
                         />
                         <TouchableOpacity onPress={() => setIsInputEnabled(true)}>
                             <Feather name="edit" size={24} color={colors.white} />
@@ -114,7 +123,7 @@ const Exercise: React.FC = () => {
                     </TouchableOpacity>
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView >
+        </KeyboardAvoidingView>
     );
 };
 
@@ -129,6 +138,19 @@ const styles = StyleSheet.create({
     },
     scrollContent: {
         alignItems: 'center',
+    },
+    backButton: {
+        alignSelf: 'flex-start',
+        marginBottom: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        backgroundColor: colors.blue_750, // Cor de fundo para o botão de voltar
+        borderRadius: 5,
+    },
+    backButtonText: {
+        color: colors.white,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     loadSection: {
         marginTop: 20,

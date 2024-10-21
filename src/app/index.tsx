@@ -1,15 +1,12 @@
-
 import { StatusBar } from "expo-status-bar";
 import Welcome from "./welcome";
-// import {Age} from "../components/multStepForm/steps/age";
-// import Weight from "../components/multStepForm/steps/weight";
 import Intro from "./intro";
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/loading";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ProgressBar } from "@/components/progressBar";
-import { View } from "react-native-animatable";
-import Form from "./form";
+import { router } from "expo-router";
+import { getData } from "@/utils/tokenSave";
+import { TokenStorageAsync } from "@/constants/global";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -21,33 +18,46 @@ export default function App() {
 
       if (value !== null) {
         setViewedOnboarding(true);
+      } else {
+        await AsyncStorage.setItem("@viewedOnboarding", "true");
       }
     } catch (err) {
       console.log("Error @checkOnboarding: ", err);
-    } finally {
-      setLoading(false);
     }
   };
 
+  const checkToken = async () => {
+    try {
+      const tokenData: any = await getData(TokenStorageAsync);
+      if (tokenData) {
+        const { isFirstAccess, planExpirationDate } = tokenData;
+        if (!isFirstAccess && new Date(planExpirationDate) < new Date()) {
+          router.push("(tabs)");
+        }
+      }
+    } catch (err) {
+      console.log("Error @checkToken: ", err);
+    }
+  };
+  const initialize = async () => {
+   // await AsyncStorage.clear()
+    await checkOnboarding();
+    await checkToken();
+    setLoading(false); 
+  };
+
   useEffect(() => {
-    checkOnboarding();
-  }, []);
+    initialize(); 
+  }, [viewedOnboarding]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
       <StatusBar style="light" backgroundColor="transparent" translucent />
-      {/* <Form/> */}
-       <Welcome /> 
-      {/* <Age /> */}
-      {/* <Weight/> */}
-      {/* <View style={{
-        flex: 1,
-        justifyContent: 'center',
-        padding: 20,
-      }}>
-        <ProgressBar currentStep={3} steps={10} height={20} />
-      </View> */}
-      {/* {loading ? <Loading /> : viewedOnboarding ? <Welcome /> : <Intro />} */}
+      {viewedOnboarding ? <Welcome /> : <Intro setViewedOnboarding={setViewedOnboarding} />}
     </>
   );
 }

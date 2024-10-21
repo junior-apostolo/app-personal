@@ -28,37 +28,38 @@ export const SelectTime: React.FC = () => {
             titleStyle={{ textAlign: "center" }}
             containerStyle={{ marginTop: 40 }}
         >
-            <ScrollView style={{ marginTop: 20, width: "70%" }}>
-                <View style={styles.row}>
+            <ScrollView style={{ marginTop: 20, width: "100%" }}>
+                <View style={[styles.row, { justifyContent: "center" }]}>
                     {["30 Min", "1 Hora", "1h 30 Min"].map((time) => (
-                        <ButtonDay 
-                            key={time} 
-                            text={time} 
-                            isSelect={selectedTime === time} 
-                            onPress={() => setSelectedTime(time)} 
+                        <ButtonDay
+                            key={time}
+                            text={time}
+                            isSelect={selectedTime === time}
+                            onPress={() => setSelectedTime(time)}
                         />
                     ))}
                 </View>
+                <View style={{width: "70%", alignSelf: "center"}}>
+                    <Text style={{ textAlign: "left", marginVertical: 15, fontSize: 18, color: colors.green_100 }}>
+                        Ou insira seu próprio tempo:
+                    </Text>
 
-                <Text style={{ textAlign: "left", marginVertical: 15, fontSize: 18, color: colors.green_100 }}>
-                    Ou insira seu próprio tempo:
-                </Text>
-
-                <TextInput
-                    style={{
-                        borderBottomWidth: 1,
-                        borderBottomColor: colors.green_100,
-                        padding: 10,
-                        paddingTop: 0,
-                        paddingLeft: 0,
-                        fontSize: 18,
-                        color: colors.white, 
-                    }}
-                    placeholder="Ex: 45 Min"
-                    placeholderTextColor={colors.green_100} 
-                    value={otherTime}
-                    onChangeText={setOtherTime}
-                />
+                    <TextInput
+                        style={{
+                            borderBottomWidth: 1,
+                            borderBottomColor: colors.green_100,
+                            padding: 10,
+                            paddingTop: 0,
+                            paddingLeft: 0,
+                            fontSize: 18,
+                            color: colors.white,
+                        }}
+                        placeholder="Ex: 45 Min"
+                        placeholderTextColor={colors.green_100}
+                        value={otherTime}
+                        onChangeText={setOtherTime}
+                    />
+                </View>
             </ScrollView>
         </PageRegister>
     );

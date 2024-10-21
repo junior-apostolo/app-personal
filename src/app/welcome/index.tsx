@@ -2,31 +2,10 @@ import { Link } from 'expo-router';
 import { View, Text, Pressable } from 'react-native';
 import { styles } from "./styles";
 import * as Animatable from 'react-native-animatable';
-import { useRouter } from 'expo-router';
-import { getData } from '@/utils/tokenSave';
-import { TokenStorageAsync } from '@/constants/global';
-import { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Welcome() {
-  const router = useRouter();
 
-  useEffect(() => {
-    const checkToken = async () => {
-     await AsyncStorage.clear()
-      const tokenData: any = await getData(TokenStorageAsync);
-      console.log(tokenData)
-      if (tokenData) {
-        const {isFirstAccess, planExpirationDate } = tokenData;
-        if (!isFirstAccess && new Date(planExpirationDate) > new Date()) {
-          router.push('(tabs)'); 
-        }
-      }
-    };
-
-    checkToken();
-  }, []);
 
   return (
     <View style={styles.container}>

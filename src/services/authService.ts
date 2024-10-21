@@ -11,7 +11,6 @@ export interface ResponseRegisterUser extends AxiosResponse {
 export const postSingInAsync = async (credencials: UserCredentials) => {
     try {
         const response = await api.post(AUTH_PATH, credencials);
-        console.log(response)
         if (response.data.data.user == null) {
             return false;
         }

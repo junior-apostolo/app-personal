@@ -16,9 +16,12 @@ export default function Workout() {
     measurementsArray: [],
     skinFolds: []
   })
-  const massLean = 60; 
-  const massFat = 40; 
+
   const [personName, setPersonName] = useState(""); 
+  const [percentuais, setPercentuais] = useState<any>({
+    massFat: 0,
+    massLean: 0
+  })
   
   
   const getInformationUser = async () => {
@@ -27,9 +30,15 @@ export default function Workout() {
       const tokenData: any = await getData(TokenStorageAsync);
       setPersonName(tokenData.name)
       const result = await getPhysicalAssessmentAsync(tokenData.id);
-      console.log(result)
+      if(!result){
+        return false;
+      }
       const measurements = transformMeasurements(result);
       setMeasurementsObject(measurements);
+      setPercentuais({
+        massFat: Number(result.composicaoCorporal.gordura) || 0,
+        massLean: Number(result.composicaoCorporal.massaMagra) || 0
+      })
     } catch (err) {
       return false;
     }
@@ -69,7 +78,7 @@ export default function Workout() {
 
         {/* Composição Corporal */}
         <ExpandeInformationPersonal title='Composição Corporal' measurements={measurementsObject.bodyComposition}>
-          <BodyCompositionChart massLean={massLean} massFat={massFat} />
+          <BodyCompositionChart massLean={percentuais.massLean} massFat={percentuais.massFat} />
         </ExpandeInformationPersonal>
 
         {/* Dobras Cutâneas */}

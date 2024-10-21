@@ -24,8 +24,6 @@ export const CustomCalendar: React.FC<CalendarProps> = ({ selectedDays, setDaySe
   const [selectedDate, setSelectedDate] = useState(moment().format('YYYY-MM-DD'));
   const [month, setMonth] = useState(moment().month() + 1);
   const [year, setYear] = useState(moment().year());
-    console.log(selectedDays)
-  // Marcar os dias selecionados
   const markedDates = selectedDays.reduce((acc: any, day: string) => {
     acc[day] = { selected: true, selectedColor: colors.green_100 };
     return acc;

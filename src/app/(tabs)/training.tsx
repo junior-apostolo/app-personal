@@ -21,10 +21,14 @@ const Training: React.FC = () => {
         router.push({
             pathname: "(tabs)/exercise",
             params: {
-             nome: item.exercise.nome,
+             nomeExercicio: item.exercise.nome,
              linkVideo: item.exercise.linkVideo,
-             description: item.exercise.descricao,
-             observacao: item.observacao
+             descriptionExercicio: item.exercise.descricao,
+             observacao: item.observacao,
+             id: id,
+             nome: nome,
+             image: image,
+             description: description
             },
           })
     };
@@ -32,7 +36,6 @@ const Training: React.FC = () => {
     const loadingExercises = async() => {
         try{
             const response = await getAllExerciseTraining(id);
-            console.log(response)
             if(!response){
                 return false;
             }
