@@ -5,6 +5,8 @@ import { styles } from './styles';
 import { Button } from '@/components/button';
 import { FormContext } from '@/contexts/FormContext';
 
+const muscleGroups = ["Braço", "Peito", "Ombro", "Costas", "Abdômen", "Posterior", "Quadríceps", "Glúteos", "Panturrilha"];
+
 export const MuscleFocus: React.FC = () => {
     const { updateFormData } = useContext(FormContext);
     const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
@@ -14,7 +16,7 @@ export const MuscleFocus: React.FC = () => {
             updateFormData(
                 {
                     question: "Músculo que gostaria de focar",
-                    answer: selectedMuscles.join(", "),
+                    answer: selectedMuscles.toString()
                 },
                 6
             );
@@ -29,6 +31,14 @@ export const MuscleFocus: React.FC = () => {
                 return [...prev, muscle];
             }
         });
+    };
+
+    const handleSelectAll = () => {
+        if (selectedMuscles.length === muscleGroups.length) {
+            setSelectedMuscles([]);
+        } else {
+            setSelectedMuscles(muscleGroups);
+        }
     };
 
     return (
@@ -109,12 +119,10 @@ export const MuscleFocus: React.FC = () => {
                         />
                     </View>
                     <Button 
-                        text={"Corpo Todo"} 
+                        text={selectedMuscles.length === muscleGroups.length ? "Desmarcar Todos" : "Corpo Todo"} 
                         containerStyle={{ width: "80%", height: 45, alignSelf: "center" }} 
                         textStyle={{ fontSize: 20 }} 
-                        onPress={() => {
-                            setSelectedMuscles(["Braço", "Peito", "Ombro", "Costas", "Abdômen", "Posterior", "Quadríceps", "Glúteos", "Panturrilha"]);
-                        }} 
+                        onPress={handleSelectAll} 
                     />
                 </ScrollView>
             </View>

@@ -40,7 +40,7 @@ export default function App() {
     }
   };
   const initialize = async () => {
-   // await AsyncStorage.clear()
+    //await AsyncStorage.clear()
     await checkOnboarding();
     await checkToken();
     setLoading(false); 

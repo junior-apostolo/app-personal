@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { colors } from '@/theme/colors'; // Certifique-se de que os valores de cor estão definidos corretamente.
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; // Importa o ícone
+import { colors } from '@/theme/colors';
 import { ExpandeInformationPersonal } from '@/components/expandeInformationPersonal';
 import { MeasurementTable } from '@/components/measurementTable';
 import BodyCompositionChart from '@/components/bodyCompositionChart';
 import { transformMeasurements } from '@/utils/transformMeasurements';
 import { getPhysicalAssessmentAsync } from '@/services/physicalAssessmentService';
 import { TokenStorageAsync } from '@/constants/global';
-import { getData } from '@/utils/tokenSave';
+import { getData, removeData } from '@/utils/tokenSave';
+import { useNavigation } from '@react-navigation/native';
+import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Workout() {
   const [measurementsObject, setMeasurementsObject] = useState<any>({
@@ -15,22 +19,22 @@ export default function Workout() {
     bodyComposition: [],
     measurementsArray: [],
     skinFolds: []
-  })
+  });
 
   const [personName, setPersonName] = useState(""); 
   const [percentuais, setPercentuais] = useState<any>({
     massFat: 0,
     massLean: 0
-  })
-  
-  
+  });
+
+  const navigation = useNavigation();
+
   const getInformationUser = async () => {
     try {
-      
       const tokenData: any = await getData(TokenStorageAsync);
-      setPersonName(tokenData.name)
+      setPersonName(tokenData.name);
       const result = await getPhysicalAssessmentAsync(tokenData.id);
-      if(!result){
+      if (!result) {
         return false;
       }
       const measurements = transformMeasurements(result);
@@ -38,25 +42,36 @@ export default function Workout() {
       setPercentuais({
         massFat: Number(result.composicaoCorporal.gordura) || 0,
         massLean: Number(result.composicaoCorporal.massaMagra) || 0
-      })
+      });
     } catch (err) {
       return false;
     }
-  }
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem(TokenStorageAsync);
+    router.push("login")
+  };
 
   useEffect(() => {
-    getInformationUser()
-  }, [])
-
-
+    getInformationUser();
+  }, []);
 
   return (
     <View style={styles.container}>
       <ScrollView style={{ width: "100%" }}>
-
         <View>
           <Text style={styles.title}>Avaliação Física</Text>
-          <Text style={styles.name}>{personName}</Text>
+
+          {/* Container para o nome e o botão de logout */}
+          <View style={styles.headerRow}>
+            <Text style={styles.name}>{personName}</Text>
+
+            {/* Ícone de logout */}
+            <TouchableOpacity onPress={handleLogout} style={styles.logoutIcon}>
+              <Icon name="power" size={24} color="white" />
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.infoContainer}>
             <View style={styles.infoBox}>
@@ -93,7 +108,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.bg_color, // Fundo da tela
+    backgroundColor: colors.bg_color,
     paddingTop: 70,
   },
   title: {
@@ -103,14 +118,26 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginBottom: 20,
+  },
   name: {
     fontSize: 18,
     color: 'white',
-    textAlign: 'center',
-    marginBottom: 20,
-    textTransform: "uppercase",
-    marginTop: 50,
-    fontWeight: "bold"
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+  },
+  logoutIcon: {
+    marginLeft: 15, 
+    backgroundColor: colors.blue_750,
+    borderRadius: 100,
+    height: 40,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center"
   },
   infoContainer: {
     flexDirection: 'row',
@@ -132,27 +159,5 @@ export const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  card: {
-    backgroundColor: colors.blue_750,
-    width: '90%',
-    borderRadius: 10,
-    padding: 20,
-    elevation: 5, // Sombra do card (Android)
-    shadowColor: '#000', // Sombra do card (iOS)
-    shadowOffset: { width: 0, height: 2 }, // Sombra do card (iOS)
-    shadowOpacity: 0.3, // Sombra do card (iOS)
-    shadowRadius: 4, // Sombra do card (iOS)
-  },
-  cardText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  borderBottom: {
-    borderBottomColor: colors.green_100,
-    borderBottomWidth: 4,
-    marginVertical: 10,
   },
 });
