@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '@/theme/colors';
 import { format } from 'date-fns';
-import { ScrollView } from 'react-native-gesture-handler';
 
 export default function CheckIn() {
     const [selectedWorkout, setSelectedWorkout] = useState('');
@@ -54,8 +53,10 @@ export default function CheckIn() {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <ScrollView>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
             <View style={styles.card}>
                 <Text style={styles.title}>Check-in de Treino</Text>
 
@@ -80,8 +81,7 @@ export default function CheckIn() {
                     <Text style={styles.saveButtonText}>Concluir</Text>
                 </TouchableOpacity>
             </View>
-            </ScrollView>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
