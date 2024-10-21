@@ -10,9 +10,9 @@ import { router, useLocalSearchParams } from 'expo-router';
 const Exercise: React.FC = () => {
     const { id, image, nomeExercicio, nome, linkVideo, descriptionExercicio, description, observacao } = useLocalSearchParams();
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
-    const [lastLoad, setLastLoad] = useState<string>('0kg'); // Estado para a última carga
+    const [lastLoad, setLastLoad] = useState<string>('0kg');
     const [isInputEnabled, setIsInputEnabled] = useState<boolean>(false);
-    const [exerciseLoads, setExerciseLoads] = useState<{ name: string; load: string }[]>([]);
+    const [exerciseLoads, setExerciseLoads] = useState<{ name: string; load: string }[] | any>([]);
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -20,7 +20,7 @@ const Exercise: React.FC = () => {
                 const storedLoads: any = await AsyncStorage.getItem('exerciseLoads');
                 if (storedLoads) {
                     const storedParse: any = JSON.parse(storedLoads);
-                    const lastLoadFilter = storedParse?.filter(item => item.name == nome);
+                    const lastLoadFilter = storedParse?.filter(item => item.name == nomeExercicio);
                     if (lastLoadFilter.length > 0) {
                         setLastLoad(() => lastLoadFilter[0].load);
                     } else {
@@ -35,22 +35,18 @@ const Exercise: React.FC = () => {
         };
 
         loadExerciseLoads();
-    }, [nome]);
+    }, [nomeExercicio, id]);
 
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
     };
 
     const handleSaveLoad = async () => {
-        // Adiciona a carga ao array de cargas
         if (lastLoad.trim() !== '') {
-            const newLoad = { name: nome, load: lastLoad };
+            const newLoad = { name: nomeExercicio, load: lastLoad };
 
-            // Atualiza o estado local
             const updatedLoads = [...exerciseLoads, newLoad];
             setExerciseLoads(updatedLoads);
-
-            // Salva no AsyncStorage
             try {
                 await AsyncStorage.setItem('exerciseLoads', JSON.stringify(updatedLoads));
                 await AsyncStorage.setItem('lastLoad', lastLoad);

@@ -32,7 +32,7 @@ const API = () => {
         router.push("welcome");
       }
 
-      return Promise.reject(error); // Corrigido para `Promise.reject` ao invés de `PromiseRejectionEvent`
+      return Promise.reject(error); 
     }
   );
 
