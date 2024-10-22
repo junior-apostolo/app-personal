@@ -197,7 +197,7 @@ const Exercise: React.FC = () => {
                                 placeholder="Custom"
                                 value={customTime}
                                 placeholderTextColor={colors.white}
-                                onChangeText={() => handleCustomTimeInput(customTime)}
+                                onChangeText={handleCustomTimeInput}
                                 keyboardType="numeric"
                                 onFocus={() => setSelectedTime('')}
                             />
