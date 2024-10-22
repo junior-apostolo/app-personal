@@ -113,6 +113,7 @@ const Exercise: React.FC = () => {
     };
     
     const triggerNotification = async (timer: string) => {
+        handleTimeSelection(timer)
         await Notifications.scheduleNotificationAsync({
             content: {
                 title: 'Tempo de descanso acabou!',
@@ -196,7 +197,7 @@ const Exercise: React.FC = () => {
                                 placeholder="Custom"
                                 value={customTime}
                                 placeholderTextColor={colors.white}
-                                onChangeText={() => triggerNotification(customTime)}
+                                onChangeText={() => handleCustomTimeInput(customTime)}
                                 keyboardType="numeric"
                                 onFocus={() => setSelectedTime('')}
                             />
@@ -208,7 +209,7 @@ const Exercise: React.FC = () => {
                         )}
                         <TouchableOpacity
                             style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
-                            onPress={() => handleTimeSelection(customTime)}
+                            onPress={() => triggerNotification(customTime)}
                         >
                             <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar timer</Text>
                         </TouchableOpacity>
