@@ -112,14 +112,17 @@ const Exercise: React.FC = () => {
         setCustomTime(sanitizedInput)
     };
     
-    const triggerNotification = async () => {
+    const triggerNotification = async (timer: string) => {
         await Notifications.scheduleNotificationAsync({
             content: {
                 title: 'Tempo de descanso acabou!',
                 body: 'É hora de voltar ao treino!',
                 sound: 'default',
             },
-            trigger: null, // dispara imediatamente
+            trigger: {
+                seconds: Number(timer), // agenda para 30 segundos depois
+                repeats: false, // não se repete
+            },
         });
     };
     return (
@@ -193,7 +196,7 @@ const Exercise: React.FC = () => {
                                 placeholder="Custom"
                                 value={customTime}
                                 placeholderTextColor={colors.white}
-                                onChangeText={handleCustomTimeInput}
+                                onChangeText={() => triggerNotification(customTime)}
                                 keyboardType="numeric"
                                 onFocus={() => setSelectedTime('')}
                             />
