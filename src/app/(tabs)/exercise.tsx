@@ -44,7 +44,7 @@ const Exercise: React.FC = () => {
             const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
-            Vibration.vibrate(); // Vibra quando a contagem chega a 0
+            Vibration.vibrate(1000); 
             setCountdown(null);
         }
     }, [countdown]);
@@ -193,7 +193,6 @@ const Exercise: React.FC = () => {
                             </Text>
                         )}
                     </View>
-
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
