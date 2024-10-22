@@ -187,7 +187,7 @@ const Exercise: React.FC = () => {
                             style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10}]}
                             onPress={() => handleTimeSelection(customTime)}
                         >
-                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white }]}>Iniciar time Custom</Text>
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white }]}>Iniciar timer</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
                             <Text style={styles.saveButtonText}>Salvar Peso</Text>
