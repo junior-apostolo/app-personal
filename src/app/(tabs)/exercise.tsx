@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Vibration } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Vibration, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
@@ -47,6 +47,17 @@ const Exercise: React.FC = () => {
 
         loadExerciseLoads();
     }, [nomeExercicio, id]);
+
+    useEffect(() => {
+        const requestNotificationPermission = async () => {
+            const { status } = await Notifications.requestPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert('Permissão necessária', 'Por favor, habilite as notificações para receber alertas.');
+            }
+        };
+
+        requestNotificationPermission();
+    }, []);
 
     useEffect(() => {
         if (countdown !== null && countdown > 0) {
