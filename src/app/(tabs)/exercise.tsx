@@ -151,22 +151,22 @@ const Exercise: React.FC = () => {
                         <Text style={styles.timerTitle}>Escolha o tempo de descanso:</Text>
                         <View style={styles.timerOptions}>
                             <TouchableOpacity
-                                style={[styles.timerButton, selectedTime === '30s' && styles.selectedTimerButton]}
-                                onPress={() => handleTimeSelection('30s')}
+                                style={[styles.timerButton, customTime === '30' && styles.selectedTimerButton]}
+                                onPress={() => handleCustomTimeInput('30')}
                             >
-                                <Text style={styles.timerButtonText}>30s</Text>
+                                <Text style={[styles.timerButtonText,  customTime === '30' && { color: colors.black}]}>30s</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                style={[styles.timerButton, selectedTime === '1min30s' && styles.selectedTimerButton]}
-                                onPress={() => handleTimeSelection('1min30s')}
+                                style={[styles.timerButton, customTime === '90' && styles.selectedTimerButton]}
+                                onPress={() => handleCustomTimeInput('90')}
                             >
-                                <Text style={styles.timerButtonText}>1min30s</Text>
+                                <Text style={[styles.timerButtonText,  customTime === '90' && { color: colors.black}]}>1min30s</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                style={[styles.timerButton, selectedTime === '2min' && styles.selectedTimerButton]}
-                                onPress={() => handleTimeSelection('2min')}
+                                style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
+                                onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={styles.timerButtonText}>2min</Text>
+                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.black}]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
