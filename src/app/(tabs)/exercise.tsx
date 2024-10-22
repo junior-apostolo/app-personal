@@ -44,7 +44,7 @@ const Exercise: React.FC = () => {
             const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
-            Vibration.vibrate(1000); 
+            Vibration.vibrate(3000); 
             setCountdown(null);
         }
     }, [countdown]);
