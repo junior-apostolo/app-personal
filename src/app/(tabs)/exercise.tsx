@@ -4,8 +4,17 @@ import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
+import * as Notifications from 'expo-notifications';
 import { colors } from '@/theme/colors';
 import { router, useLocalSearchParams } from 'expo-router';
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+});
 
 const Exercise: React.FC = () => {
     const { id, image, nomeExercicio, nome, linkVideo, descriptionExercicio, description, observacao } = useLocalSearchParams();
@@ -46,6 +55,7 @@ const Exercise: React.FC = () => {
         } else if (countdown === 0) {
             Vibration.vibrate(3000);
             setCountdown(null);
+            triggerNotification();
         }
     }, [countdown]);
 
@@ -101,7 +111,17 @@ const Exercise: React.FC = () => {
         const timeInSeconds = convertTimeToSeconds(sanitizedInput);
         setCustomTime(sanitizedInput)
     };
-
+    
+    const triggerNotification = async () => {
+        await Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Tempo de descanso acabou!',
+                body: 'É hora de voltar ao treino!',
+                sound: 'default',
+            },
+            trigger: null, // dispara imediatamente
+        });
+    };
     return (
         <KeyboardAvoidingView
             style={styles.container}
@@ -133,9 +153,9 @@ const Exercise: React.FC = () => {
                 </View>
 
                 <View style={styles.loadSection}>
-                    <Text style={styles.loadTitle}>Minha Carga</Text>
+                    <Text style={styles.loadTitle}>Minhas Cargas</Text>
                     <View style={styles.inputContainer}>
-                        <Text style={styles.lastLoadText}>Última Carga: </Text>
+                        <Text style={styles.lastLoadText}>Cargas: </Text>
                         <TextInput
                             style={[styles.input, { backgroundColor: isInputEnabled ? colors.blue_750 : colors.gray }]}
                             placeholderTextColor={colors.white}
@@ -154,19 +174,19 @@ const Exercise: React.FC = () => {
                                 style={[styles.timerButton, customTime === '30' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('30')}
                             >
-                                <Text style={[styles.timerButtonText,  customTime === '30' && { color: colors.black}]}>30s</Text>
+                                <Text style={styles.timerButtonText}>30s</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.timerButton, customTime === '90' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('90')}
                             >
-                                <Text style={[styles.timerButtonText,  customTime === '90' && { color: colors.black}]}>1min30s</Text>
+                                <Text style={styles.timerButtonText}>1min30s</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.black}]}>2min</Text>
+                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.white}]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
@@ -184,10 +204,10 @@ const Exercise: React.FC = () => {
                             </Text>
                         )}
                         <TouchableOpacity
-                            style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10}]}
+                            style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
                             onPress={() => handleTimeSelection(customTime)}
                         >
-                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white }]}>Iniciar timer</Text>
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar timer</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
                             <Text style={styles.saveButtonText}>Salvar Peso</Text>
