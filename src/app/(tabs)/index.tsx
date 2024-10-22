@@ -85,7 +85,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.greeting}>Olá Vinicius,</Text>
+      <Text style={styles.greeting}>Olá {treinos[0]?.userNome || "usuario"}</Text>
       <Text style={styles.motivation}>
         Cada gota de suor é um passo mais perto do seu melhor; continue firme e transforme esforço em conquista!
       </Text>
