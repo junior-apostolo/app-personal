@@ -44,7 +44,7 @@ const Exercise: React.FC = () => {
             const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
-            Vibration.vibrate(3000); 
+            Vibration.vibrate(3000);
             setCountdown(null);
         }
     }, [countdown]);
@@ -122,14 +122,15 @@ const Exercise: React.FC = () => {
                     youTubeVideoId={linkVideo}
                     text={nomeExercicio}
                 />
-
-                <ExpandedSection
-                    title="Descrição"
-                    content={observacao}
-                    sectionKey="dicasDeTreino"
-                    expandedSection={expandedSection}
-                    toggleExpand={toggleExpand}
-                />
+                <View style={{ width: "90%" }}>
+                    <ExpandedSection
+                        title="Descrição"
+                        content={observacao}
+                        sectionKey="dicasDeTreino"
+                        expandedSection={expandedSection}
+                        toggleExpand={toggleExpand}
+                    />
+                </View>
 
                 <View style={styles.loadSection}>
                     <Text style={styles.loadTitle}>Minha Carga</Text>
@@ -141,15 +142,11 @@ const Exercise: React.FC = () => {
                             placeholder="Insira sua carga"
                             value={lastLoad}
                             onChangeText={setLastLoad}
-                            editable={isInputEnabled}
+                            editable={true}
                         />
-                        <TouchableOpacity onPress={() => setIsInputEnabled(true)}>
-                            <Feather name="edit" size={24} color={colors.white} />
-                        </TouchableOpacity>
+
                     </View>
-                    <TouchableOpacity style={styles.saveButton} onPress={handleSaveLoad}>
-                        <Text style={styles.saveButtonText}>Salvar Peso</Text>
-                    </TouchableOpacity>
+
                     <View style={styles.timerSection}>
                         <Text style={styles.timerTitle}>Escolha o tempo de descanso:</Text>
                         <View style={styles.timerOptions}>
@@ -181,17 +178,20 @@ const Exercise: React.FC = () => {
                                 onFocus={() => setSelectedTime('')}
                             />
                         </View>
-                        <TouchableOpacity
-                            style={[styles.timerButton, { marginTop: 20, width: 200, backgroundColor: colors.green_100 }]}
-                            onPress={() => handleTimeSelection(customTime)}
-                        >
-                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.black }]}>Iniciar time Custom</Text>
-                        </TouchableOpacity>
                         {countdown !== null && (
                             <Text style={styles.countdownText}>
                                 Tempo restante: {Math.floor(countdown / 60)}:{countdown % 60 < 10 ? '0' : ''}{countdown % 60}s
                             </Text>
                         )}
+                        <TouchableOpacity
+                            style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
+                            onPress={() => handleTimeSelection(customTime)}
+                        >
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar time Custom</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
+                            <Text style={styles.saveButtonText}>Salvar Peso</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </ScrollView>
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     },
     loadSection: {
         marginTop: 20,
-        width: '100%',
+        width: '90%',
         padding: 15,
         borderRadius: 10,
     },
@@ -251,35 +251,39 @@ const styles = StyleSheet.create({
         flex: 1,
         borderRadius: 5,
         marginRight: 0,
-        marginLeft: 20,
         width: 50,
         height: 40,
         color: colors.white,
-        borderRadius: 20,
-        paddingLeft: 20,
+        paddingLeft: 10,
     },
     saveButton: {
         backgroundColor: colors.green_100,
-        padding: 10,
         borderRadius: 5,
         alignItems: 'center',
+        marginTop: 20,
+        width: "100%",
+        alignSelf: "center"
     },
     saveButtonText: {
-        color: colors.bg_color,
-        fontWeight: 'bold',
+        color: colors.black,
+        textAlign: "center"
     },
     timerSection: {
         marginTop: 20,
-        alignItems: 'center',
+        width: "100%",
         justifyContent: "center"
     },
     timerTitle: {
         fontSize: 16,
         color: colors.white,
+        textAlign: "left",
+        marginLeft: 5
     },
     timerOptions: {
         flexDirection: 'row',
+        justifyContent: "space-between",
         marginTop: 10,
+        width: "100%"
     },
     timerButton: {
         padding: 10,
@@ -306,6 +310,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: colors.white,
         fontWeight: 'bold',
+        textAlign: "center"
     },
 });
 
