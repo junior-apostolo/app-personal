@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Vibration, Alert } from 'react-native';
-import * as TaskManager from 'expo-task-manager';
-import * as BackgroundFetch from 'expo-background-fetch';
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
@@ -26,8 +25,6 @@ const Exercise: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string>('30s');
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
-    const TIMER_TASK = 'background-timer-task';
-
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -69,33 +66,8 @@ const Exercise: React.FC = () => {
         } else if (countdown === 0) {
             Vibration.vibrate(3000);
             setCountdown(null);
+            triggerNotification();
         }
-    }, [countdown]);
-
-    useEffect(() => {
-        TaskManager.defineTask(TIMER_TASK, async () => {
-            try {
-                const countdown = await AsyncStorage.getItem('countdown');
-                const countdownValue = countdown ? parseInt(countdown) : null;
-
-                if (countdownValue && countdownValue > 0) {
-                    const newCountdown = countdownValue - 1;
-                    await AsyncStorage.setItem('countdown', newCountdown.toString());
-                    setCountdown(newCountdown);
-
-                    if (newCountdown === 0) {
-                        Vibration.vibrate(3000);
-                        setCountdown(null);
-                    }
-
-                    return BackgroundFetch.Result.NewData;
-                }
-
-                return BackgroundFetch.Result.Failed;
-            } catch (err) {
-                return BackgroundFetch.Result.Failed;
-            }
-        });
     }, [countdown]);
 
     const toggleExpand = (section: string) => {
@@ -247,13 +219,13 @@ const Exercise: React.FC = () => {
                             </Text>
                         )}
                         <TouchableOpacity
-                            style={[styles.timerButton, { marginTop: 20, width: 160 }]}
+                            style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
                             onPress={() => triggerNotification(customTime)}
                         >
-                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar descanso</Text>
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar timer</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: 160, borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
-                            <Text style={{textAlign: "center"}} >Salvar Peso</Text>
+                        <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
+                            <Text style={styles.saveButtonText}>Salvar Peso</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -265,91 +237,115 @@ const Exercise: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: colors.bg_color,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingTop: 70
     },
     scrollContent: {
         alignItems: 'center',
-        paddingVertical: 20,
     },
     backButton: {
-        marginBottom: 20,
+        alignSelf: 'flex-start',
+        marginBottom: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        backgroundColor: colors.blue_750,
+        borderRadius: 5,
     },
     backButtonText: {
         color: colors.white,
         fontSize: 16,
+        fontWeight: 'bold',
     },
     loadSection: {
-        width: "90%",
-        marginVertical: 20,
-        paddingVertical: 20,
-        borderWidth: 1,
-        borderColor: colors.blue_750,
+        marginTop: 20,
+        width: '90%',
+        padding: 15,
         borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
     },
     loadTitle: {
-        color: colors.white,
         fontSize: 18,
-        marginBottom: 20,
+        color: colors.white,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        textAlign: "center"
+    },
+    lastLoadText: {
+        fontSize: 16,
+        color: colors.white,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 20,
+        justifyContent: "center"
     },
     input: {
+        flex: 1,
+        borderRadius: 5,
+        marginRight: 0,
+        width: 50,
+        height: 40,
         color: colors.white,
-        padding: 10,
-        width: 200,
-        textAlign: 'center',
-        borderRadius: 10,
+        paddingLeft: 10,
     },
-    lastLoadText: {
-        color: colors.white,
-        fontSize: 16,
-        marginRight: 10,
+    saveButton: {
+        backgroundColor: colors.green_100,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 20,
+        width: "100%",
+        alignSelf: "center"
+    },
+    saveButtonText: {
+        color: colors.black,
+        textAlign: "center"
     },
     timerSection: {
         marginTop: 20,
+        width: "100%",
+        justifyContent: "center"
     },
     timerTitle: {
+        fontSize: 16,
         color: colors.white,
-        fontSize: 18,
-        marginBottom: 10,
+        textAlign: "left",
+        marginLeft: 5
     },
     timerOptions: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
+        justifyContent: "space-between",
+        marginTop: 10,
+        width: "100%"
     },
     timerButton: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,
+        padding: 10,
         backgroundColor: colors.blue_750,
-        borderRadius: 10,
-        marginHorizontal: 5
+        borderRadius: 5,
+        marginHorizontal: 5,
+    },
+    selectedTimerButton: {
+        backgroundColor: colors.green_100,
     },
     timerButtonText: {
         color: colors.white,
-        fontSize: 16,
-    },
-    selectedTimerButton: {
-        backgroundColor: colors.blue_750,
     },
     customTimeInput: {
         width: 80,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        backgroundColor: colors.blue_750,
         color: colors.white,
+        backgroundColor: colors.blue_750,
+        borderRadius: 5,
+        padding: 5,
         textAlign: 'center',
-        borderRadius: 10,
     },
     countdownText: {
+        marginTop: 10,
+        fontSize: 18,
         color: colors.white,
-        fontSize: 16,
-        marginTop: 20,
+        fontWeight: 'bold',
+        textAlign: "center"
     },
 });
 
