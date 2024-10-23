@@ -49,7 +49,7 @@ const Training: React.FC = () => {
         loadingExercises();
     }, [id]);
 
-    
+
     const groupReps = (rep: string) => {
         const repsArray = rep.split('-');
 
@@ -58,7 +58,7 @@ const Training: React.FC = () => {
             if (i == 0) {
                 groupedReps += `${repsArray[i]}\n`;
             } else {
-                groupedReps += `${repsArray[i]}${repsArray[i + 1] ? ` x ${repsArray[i + 1]}` : ''}\n`;
+                groupedReps += `${repsArray[i]}${repsArray[i + 1] ? ` - ${repsArray[i + 1]}` : ''}\n`;
             }
         }
 
