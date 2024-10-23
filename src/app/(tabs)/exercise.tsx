@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Vibration, Alert } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import * as TaskManager from 'expo-task-manager';
+import * as BackgroundFetch from 'expo-background-fetch';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
@@ -25,6 +26,52 @@ const Exercise: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string>('30s');
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
+
+    const TIMER_TASK = 'background-timer-task';
+
+    TaskManager.defineTask(TIMER_TASK, async () => {
+        try {
+            // Aqui você pode salvar o estado do timer no AsyncStorage
+            const countdown = await AsyncStorage.getItem('countdown');
+            const countdownValue = countdown ? parseInt(countdown) : null;
+
+            if (countdownValue && countdownValue > 0) {
+                // Decrementa o valor do timer
+                const newCountdown = countdownValue - 1;
+                await AsyncStorage.setItem('countdown', newCountdown.toString());
+
+                if (newCountdown === 0) {
+                    // Vibra e envia a notificação quando o timer chega a 0
+                    Vibration.vibrate(3000);
+                    await Notifications.scheduleNotificationAsync({
+                        content: {
+                            title: 'Tempo de descanso acabou!',
+                            body: 'É hora de voltar ao treino!',
+                            sound: 'default',
+                        },
+                        trigger: null,
+                    });
+                }
+            }
+
+            return BackgroundFetch.Result.NewData;
+        } catch (err) {
+            return BackgroundFetch.Result.Failed;
+        }
+    });
+
+    useEffect(() => {
+        const startBackgroundTimerTask = async () => {
+            const isRegistered = await TaskManager.isTaskRegisteredAsync(TIMER_TASK);
+            if (!isRegistered) {
+                await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+                    minimumInterval: 1, // Tempo mínimo entre execuções em segundos
+                });
+            }
+        };
+
+        startBackgroundTimerTask();
+    }, []);
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -61,18 +108,31 @@ const Exercise: React.FC = () => {
 
     useEffect(() => {
         if (countdown !== null && countdown > 0) {
-            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+            AsyncStorage.setItem('countdown', countdown.toString());
+            const timer = setTimeout(() => {
+                setCountdown(countdown - 1)
+            }, 1000);
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
             Vibration.vibrate(3000);
             setCountdown(null);
-            triggerNotification();
         }
     }, [countdown]);
 
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
     };
+
+    useEffect(() => {
+        const loadStoredCountdown = async () => {
+            const storedCountdown = await AsyncStorage.getItem('countdown');
+            if (storedCountdown !== null) {
+                setCountdown(parseInt(storedCountdown));
+            }
+        };
+
+        loadStoredCountdown();
+    }, []);
 
     const handleSaveLoad = async () => {
         if (lastLoad.trim() !== '') {
@@ -122,7 +182,7 @@ const Exercise: React.FC = () => {
         const timeInSeconds = convertTimeToSeconds(sanitizedInput);
         setCustomTime(sanitizedInput)
     };
-    
+
     const triggerNotification = async (timer: string) => {
         handleTimeSelection(timer)
         await Notifications.scheduleNotificationAsync({
@@ -201,7 +261,7 @@ const Exercise: React.FC = () => {
                                 style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.white}]}>2min</Text>
+                                <Text style={[styles.timerButtonText, customTime === '120' && { color: colors.white }]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
