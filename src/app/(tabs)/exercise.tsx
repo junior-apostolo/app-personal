@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Vibration, Alert } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import * as TaskManager from 'expo-task-manager';
+import * as BackgroundFetch from 'expo-background-fetch';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
@@ -25,6 +26,7 @@ const Exercise: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string>('30s');
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
+    const TIMER_TASK = 'background-timer-task';
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -58,6 +60,31 @@ const Exercise: React.FC = () => {
 
         requestNotificationPermission();
     }, []);
+    useEffect(() => {
+        TaskManager.defineTask(TIMER_TASK, async () => {
+            try {
+                const countdown = await AsyncStorage.getItem('countdown');
+                const countdownValue = countdown ? parseInt(countdown) : null;
+
+                if (countdownValue && countdownValue > 0) {
+                    const newCountdown = countdownValue - 1;
+                    await AsyncStorage.setItem('countdown', newCountdown.toString());
+                    setCountdown(newCountdown);
+
+                    if (newCountdown === 0) {
+                        Vibration.vibrate(3000);
+                        setCountdown(null);
+                    }
+
+                    return BackgroundFetch.Result.NewData;
+                }
+
+                return BackgroundFetch.Result.Failed;
+            } catch (err) {
+                return BackgroundFetch.Result.Failed;
+            }
+        });
+    }, [countdown]);
 
     useEffect(() => {
         if (countdown !== null && countdown > 0) {
