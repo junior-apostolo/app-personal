@@ -26,52 +26,8 @@ const Exercise: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string>('30s');
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
-
     const TIMER_TASK = 'background-timer-task';
 
-    TaskManager.defineTask(TIMER_TASK, async () => {
-        try {
-            // Aqui você pode salvar o estado do timer no AsyncStorage
-            const countdown = await AsyncStorage.getItem('countdown');
-            const countdownValue = countdown ? parseInt(countdown) : null;
-
-            if (countdownValue && countdownValue > 0) {
-                // Decrementa o valor do timer
-                const newCountdown = countdownValue - 1;
-                await AsyncStorage.setItem('countdown', newCountdown.toString());
-
-                if (newCountdown === 0) {
-                    // Vibra e envia a notificação quando o timer chega a 0
-                    Vibration.vibrate(3000);
-                    await Notifications.scheduleNotificationAsync({
-                        content: {
-                            title: 'Tempo de descanso acabou!',
-                            body: 'É hora de voltar ao treino!',
-                            sound: 'default',
-                        },
-                        trigger: null,
-                    });
-                }
-            }
-
-            return BackgroundFetch.Result.NewData;
-        } catch (err) {
-            return BackgroundFetch.Result.Failed;
-        }
-    });
-
-    useEffect(() => {
-        const startBackgroundTimerTask = async () => {
-            const isRegistered = await TaskManager.isTaskRegisteredAsync(TIMER_TASK);
-            if (!isRegistered) {
-                await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-                    minimumInterval: 1, // Tempo mínimo entre execuções em segundos
-                });
-            }
-        };
-
-        startBackgroundTimerTask();
-    }, []);
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -108,10 +64,7 @@ const Exercise: React.FC = () => {
 
     useEffect(() => {
         if (countdown !== null && countdown > 0) {
-            AsyncStorage.setItem('countdown', countdown.toString());
-            const timer = setTimeout(() => {
-                setCountdown(countdown - 1)
-            }, 1000);
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
         } else if (countdown === 0) {
             Vibration.vibrate(3000);
@@ -119,20 +72,35 @@ const Exercise: React.FC = () => {
         }
     }, [countdown]);
 
+    useEffect(() => {
+        TaskManager.defineTask(TIMER_TASK, async () => {
+            try {
+                const countdown = await AsyncStorage.getItem('countdown');
+                const countdownValue = countdown ? parseInt(countdown) : null;
+
+                if (countdownValue && countdownValue > 0) {
+                    const newCountdown = countdownValue - 1;
+                    await AsyncStorage.setItem('countdown', newCountdown.toString());
+                    setCountdown(newCountdown);
+
+                    if (newCountdown === 0) {
+                        Vibration.vibrate(3000);
+                        setCountdown(null);
+                    }
+
+                    return BackgroundFetch.Result.NewData;
+                }
+
+                return BackgroundFetch.Result.Failed;
+            } catch (err) {
+                return BackgroundFetch.Result.Failed;
+            }
+        });
+    }, [countdown]);
+
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
     };
-
-    useEffect(() => {
-        const loadStoredCountdown = async () => {
-            const storedCountdown = await AsyncStorage.getItem('countdown');
-            if (storedCountdown !== null) {
-                setCountdown(parseInt(storedCountdown));
-            }
-        };
-
-        loadStoredCountdown();
-    }, []);
 
     const handleSaveLoad = async () => {
         if (lastLoad.trim() !== '') {
@@ -182,7 +150,7 @@ const Exercise: React.FC = () => {
         const timeInSeconds = convertTimeToSeconds(sanitizedInput);
         setCustomTime(sanitizedInput)
     };
-
+    
     const triggerNotification = async (timer: string) => {
         handleTimeSelection(timer)
         await Notifications.scheduleNotificationAsync({
@@ -261,7 +229,7 @@ const Exercise: React.FC = () => {
                                 style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={[styles.timerButtonText, customTime === '120' && { color: colors.white }]}>2min</Text>
+                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.white}]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
@@ -279,13 +247,13 @@ const Exercise: React.FC = () => {
                             </Text>
                         )}
                         <TouchableOpacity
-                            style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
+                            style={[styles.timerButton, { marginTop: 20, width: 160 }]}
                             onPress={() => triggerNotification(customTime)}
                         >
-                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar timer</Text>
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar descanso</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
-                            <Text style={styles.saveButtonText}>Salvar Peso</Text>
+                        <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: 160, borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
+                            <Text style={{textAlign: "center"}} >Salvar Peso</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -297,115 +265,91 @@ const Exercise: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.bg_color,
-        justifyContent: 'center',
         alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingTop: 70
+        backgroundColor: colors.bg_color,
     },
     scrollContent: {
         alignItems: 'center',
+        paddingVertical: 20,
     },
     backButton: {
-        alignSelf: 'flex-start',
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        backgroundColor: colors.blue_750,
-        borderRadius: 5,
+        marginBottom: 20,
     },
     backButtonText: {
         color: colors.white,
         fontSize: 16,
-        fontWeight: 'bold',
     },
     loadSection: {
-        marginTop: 20,
-        width: '90%',
-        padding: 15,
+        width: "90%",
+        marginVertical: 20,
+        paddingVertical: 20,
+        borderWidth: 1,
+        borderColor: colors.blue_750,
         borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     loadTitle: {
+        color: colors.white,
         fontSize: 18,
-        color: colors.white,
-        marginBottom: 10,
-        fontWeight: 'bold',
-        textAlign: "center"
-    },
-    lastLoadText: {
-        fontSize: 16,
-        color: colors.white,
+        marginBottom: 20,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
-        justifyContent: "center"
     },
     input: {
-        flex: 1,
-        borderRadius: 5,
-        marginRight: 0,
-        width: 50,
-        height: 40,
         color: colors.white,
-        paddingLeft: 10,
+        padding: 10,
+        width: 200,
+        textAlign: 'center',
+        borderRadius: 10,
     },
-    saveButton: {
-        backgroundColor: colors.green_100,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginTop: 20,
-        width: "100%",
-        alignSelf: "center"
-    },
-    saveButtonText: {
-        color: colors.black,
-        textAlign: "center"
+    lastLoadText: {
+        color: colors.white,
+        fontSize: 16,
+        marginRight: 10,
     },
     timerSection: {
         marginTop: 20,
-        width: "100%",
-        justifyContent: "center"
     },
     timerTitle: {
-        fontSize: 16,
         color: colors.white,
-        textAlign: "left",
-        marginLeft: 5
+        fontSize: 18,
+        marginBottom: 10,
     },
     timerOptions: {
         flexDirection: 'row',
-        justifyContent: "space-between",
-        marginTop: 10,
-        width: "100%"
+        justifyContent: 'space-between',
+        marginBottom: 20,
     },
     timerButton: {
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
         backgroundColor: colors.blue_750,
-        borderRadius: 5,
-        marginHorizontal: 5,
-    },
-    selectedTimerButton: {
-        backgroundColor: colors.green_100,
+        borderRadius: 10,
+        marginHorizontal: 5
     },
     timerButtonText: {
         color: colors.white,
+        fontSize: 16,
+    },
+    selectedTimerButton: {
+        backgroundColor: colors.blue_750,
     },
     customTimeInput: {
         width: 80,
-        color: colors.white,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
         backgroundColor: colors.blue_750,
-        borderRadius: 5,
-        padding: 5,
+        color: colors.white,
         textAlign: 'center',
+        borderRadius: 10,
     },
     countdownText: {
-        marginTop: 10,
-        fontSize: 18,
         color: colors.white,
-        fontWeight: 'bold',
-        textAlign: "center"
+        fontSize: 16,
+        marginTop: 20,
     },
 });
 
