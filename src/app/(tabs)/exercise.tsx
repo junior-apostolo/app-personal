@@ -121,7 +121,7 @@ const Exercise: React.FC = () => {
         const timeInSeconds = convertTimeToSeconds(sanitizedInput);
         setCustomTime(sanitizedInput)
     };
-    
+
     const triggerNotification = async (timer: string) => {
         handleTimeSelection(timer)
         await Notifications.scheduleNotificationAsync({
@@ -166,22 +166,22 @@ const Exercise: React.FC = () => {
                     />
                 </View>
 
-                <View style={styles.loadSection}>
-                    <Text style={styles.loadTitle}>Minhas Cargas</Text>
-                    <View style={styles.inputContainer}>
-                        <Text style={styles.lastLoadText}>Cargas: </Text>
-                        <TextInput
-                            style={[styles.input, { backgroundColor: isInputEnabled ? colors.blue_750 : colors.gray }]}
-                            placeholderTextColor={colors.white}
-                            placeholder="Insira sua carga"
-                            value={lastLoad}
-                            onChangeText={setLastLoad}
-                            editable={true}
-                        />
 
-                    </View>
+                <View style={styles.timerSection}>
+                    <View style={styles.loadSection}>
+                        <Text style={styles.loadTitle}>Minhas Cargas</Text>
+                        <View style={styles.inputContainer}>
+                            <Text style={styles.lastLoadText}>Cargas: </Text>
+                            <TextInput
+                                style={[styles.input, { backgroundColor: isInputEnabled ? colors.blue_750 : colors.gray }]}
+                                placeholderTextColor={colors.white}
+                                placeholder="Insira sua carga"
+                                value={lastLoad}
+                                onChangeText={setLastLoad}
+                                editable={true}
+                            />
 
-                    <View style={styles.timerSection}>
+                        </View>
                         <Text style={styles.timerTitle}>Escolha o tempo de descanso:</Text>
                         <View style={styles.timerOptions}>
                             <TouchableOpacity
@@ -200,7 +200,7 @@ const Exercise: React.FC = () => {
                                 style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.white}]}>2min</Text>
+                                <Text style={[styles.timerButtonText, customTime === '120' && { color: colors.white }]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
@@ -221,7 +221,7 @@ const Exercise: React.FC = () => {
                             style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
                             onPress={() => triggerNotification(customTime)}
                         >
-                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar timer</Text>
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar descanso</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
                             <Text style={styles.saveButtonText}>Salvar Peso</Text>
@@ -262,6 +262,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         width: '90%',
         padding: 15,
+        paddingTop: 0,
         borderRadius: 10,
     },
     loadTitle: {
@@ -289,6 +290,8 @@ const styles = StyleSheet.create({
         height: 40,
         color: colors.white,
         paddingLeft: 10,
+        borderBottomWidth: 1,
+        borderColor: colors.green_100,
     },
     saveButton: {
         backgroundColor: colors.green_100,
@@ -305,7 +308,12 @@ const styles = StyleSheet.create({
     timerSection: {
         marginTop: 20,
         width: "100%",
-        justifyContent: "center"
+        justifyContent: "center",
+        borderWidth: 1,
+        borderColor: colors.blue_750,
+        padding: 10,
+        marginBottom: 20,
+        alignItems: "center"
     },
     timerTitle: {
         fontSize: 16,
@@ -322,7 +330,6 @@ const styles = StyleSheet.create({
     timerButton: {
         padding: 10,
         backgroundColor: colors.blue_750,
-        borderRadius: 5,
         marginHorizontal: 5,
     },
     selectedTimerButton: {
