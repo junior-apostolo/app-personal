@@ -11,7 +11,7 @@ const Training: React.FC = () => {
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const [exercises, setExercises] = useState<Array<TrainingDetail>>([]);
     const { id, image, nome, description } = useLocalSearchParams();
-    
+
     const toggleExpand = (section: string) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpandedSection(section === expandedSection ? null : section);
@@ -32,8 +32,8 @@ const Training: React.FC = () => {
             },
         })
     };
-   
-    const loadingExercises = async() => {
+
+    const loadingExercises = async () => {
         try {
             const response = await getAllExerciseTraining(id);
             if (!response) {
@@ -48,6 +48,22 @@ const Training: React.FC = () => {
     useEffect(() => {
         loadingExercises();
     }, [id]);
+
+    
+    const groupReps = (rep: string) => {
+        const repsArray = rep.split('-');
+
+        let groupedReps = '';
+        for (let i = 0; i < repsArray.length; i += 2) {
+            if (i == 0) {
+                groupedReps += `${repsArray[i]}\n`;
+            } else {
+                groupedReps += `${repsArray[i]}${repsArray[i + 1] ? ` x ${repsArray[i + 1]}` : ''}\n`;
+            }
+        }
+
+        return groupedReps.trim();
+    }
 
     return (
         <View style={styles.container}>
@@ -64,33 +80,33 @@ const Training: React.FC = () => {
                     expandedSection={expandedSection}
                     toggleExpand={toggleExpand}
                 />
- 
+
                 <View style={styles.exerciseList}>
                     {exercises.map((exercise, index) => {
                         const isBiset = exercise.metodo.toLocaleLowerCase() === 'biset';
                         const isLastBiset = isBiset && (index === exercises.length - 1 || exercises[index + 1]?.metodo !== 'biset');
                         return (
-                            <TouchableOpacity 
-                            key={index} 
-                            style={[
-                                styles.exerciseButton,
-                                isLastBiset && styles.lastBiset,
-                                exercise.metodo.toLocaleLowerCase() != "biset" && {marginTop: 10},
-                                exercises[index + 1]?.metodo.toLocaleLowerCase() !== 'biset' && {borderBottomWidth: 4}
-                            ]}
-                            onPress={() => nextStep(exercise)}
-                        >
-                            <Text style={styles.exerciseText}>
-                                {exercise.exercise.nome}
-                            </Text>
-                            <Text style={styles.repText}>
-                                {exercise?.serie} X {exercise?.rep.replace(/-/g, '\n')}
-                            </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                key={index}
+                                style={[
+                                    styles.exerciseButton,
+                                    isLastBiset && styles.lastBiset,
+                                    exercise.metodo.toLocaleLowerCase() != "biset" && { marginTop: 10 },
+                                    exercises[index + 1]?.metodo.toLocaleLowerCase() !== 'biset' && { borderBottomWidth: 4 }
+                                ]}
+                                onPress={() => nextStep(exercise)}
+                            >
+                                <Text style={styles.exerciseText}>
+                                    {exercise.exercise.nome}
+                                </Text>
+                                <Text style={styles.repText}>
+                                    {exercise?.serie} x {groupReps(exercise?.rep)}
+                                </Text>
+                            </TouchableOpacity>
                         );
                     })}
                 </View>
-            </ScrollView> 
+            </ScrollView>
         </View>
     );
 };
@@ -122,7 +138,7 @@ const styles = StyleSheet.create({
         minHeight: 50
     },
     lastBiset: {
-        borderBottomWidth: 0, 
+        borderBottomWidth: 0,
         marginBottom: 0,
         borderRadius: 0,
     },
@@ -135,7 +151,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: colors.green_100,
         marginLeft: 10,
-        textAlign: "right"
     }
 });
 
