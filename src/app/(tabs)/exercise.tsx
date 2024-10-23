@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Vibration, Alert } from 'react-native';
-import * as TaskManager from 'expo-task-manager';
-import * as BackgroundFetch from 'expo-background-fetch';
+import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
@@ -26,11 +25,9 @@ const Exercise: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string>('30s');
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
-    const TIMER_TASK = 'background-timer-task';
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
-            2
             try {
                 const storedLoads: any = await AsyncStorage.getItem('exerciseLoads');
                 if (storedLoads) {
@@ -62,57 +59,15 @@ const Exercise: React.FC = () => {
         requestNotificationPermission();
     }, []);
 
-
-    TaskManager.defineTask(TIMER_TASK, async () => {
-        console.log('aa')
-        try {
-            const countdowntime = countdown;
-            var countdownValue = countdowntime ? parseInt(countdowntime) : null;
-            if (countdownValue && countdownValue > 0) {
-                while (countdownValue > 0) {
-                    const newCountdown = countdownValue - 1;
-                    setTimeout(() => {
-                        
-                        setCountdown(newCountdown);
-                    }, 1000);
-
-                    if (newCountdown === 0) {
-                        Vibration.vibrate(3000);
-                        setCountdown(null);
-                    }
-                }
-
-                return BackgroundFetch.Result.NewData;
-            }
-
-            return BackgroundFetch.Result.Failed;
-        } catch (err) {
-            console.log(err)
-            return BackgroundFetch.Result.Failed;
-        }
-    });
-
-
     useEffect(() => {
-        const startBackgroundTimerTask = async () => {
-    
-                await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
-                    minimumInterval: 1,
-                });
-        };
-
-        startBackgroundTimerTask();
+        if (countdown !== null && countdown > 0) {
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+            return () => clearTimeout(timer);
+        } else if (countdown === 0) {
+            Vibration.vibrate(3000);
+            setCountdown(null);
+        }
     }, [countdown]);
-
-    // useEffect(() => {
-    //     if (countdown !== null && countdown > 0) {
-    //         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-    //         return () => clearTimeout(timer);
-    //     } else if (countdown === 0) {
-    //         Vibration.vibrate(3000);
-    //         setCountdown(null);
-    //     }
-    // }, [countdown]);
 
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
@@ -166,7 +121,7 @@ const Exercise: React.FC = () => {
         const timeInSeconds = convertTimeToSeconds(sanitizedInput);
         setCustomTime(sanitizedInput)
     };
-
+    
     const triggerNotification = async (timer: string) => {
         handleTimeSelection(timer)
         await Notifications.scheduleNotificationAsync({
@@ -245,7 +200,7 @@ const Exercise: React.FC = () => {
                                 style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={[styles.timerButtonText, customTime === '120' && { color: colors.white }]}>2min</Text>
+                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.white}]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
