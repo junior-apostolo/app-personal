@@ -64,33 +64,33 @@ const Training: React.FC = () => {
                     expandedSection={expandedSection}
                     toggleExpand={toggleExpand}
                 />
-
+ 
                 <View style={styles.exerciseList}>
                     {exercises.map((exercise, index) => {
                         const isBiset = exercise.metodo.toLocaleLowerCase() === 'biset';
                         const isLastBiset = isBiset && (index === exercises.length - 1 || exercises[index + 1]?.metodo !== 'biset');
                         return (
                             <TouchableOpacity 
-                                key={index} 
-                                style={[
-                                    styles.exerciseButton,
-                                    isLastBiset && styles.lastBiset,
-                                    exercise.metodo.toLocaleLowerCase() != "biset" && {marginTop: 10},
-                                    exercises[index + 1]?.metodo.toLocaleLowerCase() !== 'biset' && {borderBottomWidth: 4}
-                                ]}
-                                onPress={() => nextStep(exercise)}
-                            >
-                                <Text style={styles.exerciseText}>
-                                    {exercise.exercise.nome}
-                                </Text>
-                                <Text style={styles.repText}>
-                                    {exercise?.serie} - {exercise?.rep}
-                                </Text>
-                            </TouchableOpacity>
+                            key={index} 
+                            style={[
+                                styles.exerciseButton,
+                                isLastBiset && styles.lastBiset,
+                                exercise.metodo.toLocaleLowerCase() != "biset" && {marginTop: 10},
+                                exercises[index + 1]?.metodo.toLocaleLowerCase() !== 'biset' && {borderBottomWidth: 4}
+                            ]}
+                            onPress={() => nextStep(exercise)}
+                        >
+                            <Text style={styles.exerciseText}>
+                                {exercise.exercise.nome}
+                            </Text>
+                            <Text style={styles.repText}>
+                                {exercise?.serie} X {exercise?.rep.replace(/-/g, '\n')}
+                            </Text>
+                        </TouchableOpacity>
                         );
                     })}
                 </View>
-            </ScrollView>
+            </ScrollView> 
         </View>
     );
 };
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     repText: {
         fontSize: 16,
         color: colors.green_100,
-        marginLeft: 10
+        marginLeft: 10,
+        textAlign: "right"
     }
 });
 

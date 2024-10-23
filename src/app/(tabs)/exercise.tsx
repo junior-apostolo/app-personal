@@ -30,6 +30,7 @@ const Exercise: React.FC = () => {
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
+            2
             try {
                 const storedLoads: any = await AsyncStorage.getItem('exerciseLoads');
                 if (storedLoads) {
@@ -60,42 +61,58 @@ const Exercise: React.FC = () => {
 
         requestNotificationPermission();
     }, []);
-    useEffect(() => {
-        TaskManager.defineTask(TIMER_TASK, async () => {
-            try {
-                const countdown = await AsyncStorage.getItem('countdown');
-                const countdownValue = countdown ? parseInt(countdown) : null;
 
-                if (countdownValue && countdownValue > 0) {
+
+    TaskManager.defineTask(TIMER_TASK, async () => {
+        console.log('aa')
+        try {
+            const countdowntime = countdown;
+            var countdownValue = countdowntime ? parseInt(countdowntime) : null;
+            if (countdownValue && countdownValue > 0) {
+                while (countdownValue > 0) {
                     const newCountdown = countdownValue - 1;
-                    await AsyncStorage.setItem('countdown', newCountdown.toString());
-                    setCountdown(newCountdown);
+                    setTimeout(() => {
+                        
+                        setCountdown(newCountdown);
+                    }, 1000);
 
                     if (newCountdown === 0) {
                         Vibration.vibrate(3000);
                         setCountdown(null);
                     }
-
-                    return BackgroundFetch.Result.NewData;
                 }
 
-                return BackgroundFetch.Result.Failed;
-            } catch (err) {
-                return BackgroundFetch.Result.Failed;
+                return BackgroundFetch.Result.NewData;
             }
-        });
-    }, [countdown]);
+
+            return BackgroundFetch.Result.Failed;
+        } catch (err) {
+            console.log(err)
+            return BackgroundFetch.Result.Failed;
+        }
+    });
+
 
     useEffect(() => {
-        if (countdown !== null && countdown > 0) {
-            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-            return () => clearTimeout(timer);
-        } else if (countdown === 0) {
-            Vibration.vibrate(3000);
-            setCountdown(null);
-            triggerNotification();
-        }
+        const startBackgroundTimerTask = async () => {
+    
+                await BackgroundFetch.registerTaskAsync(TIMER_TASK, {
+                    minimumInterval: 1,
+                });
+        };
+
+        startBackgroundTimerTask();
     }, [countdown]);
+
+    // useEffect(() => {
+    //     if (countdown !== null && countdown > 0) {
+    //         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    //         return () => clearTimeout(timer);
+    //     } else if (countdown === 0) {
+    //         Vibration.vibrate(3000);
+    //         setCountdown(null);
+    //     }
+    // }, [countdown]);
 
     const toggleExpand = (section: string) => {
         setExpandedSection(section === expandedSection ? null : section);
@@ -149,7 +166,7 @@ const Exercise: React.FC = () => {
         const timeInSeconds = convertTimeToSeconds(sanitizedInput);
         setCustomTime(sanitizedInput)
     };
-    
+
     const triggerNotification = async (timer: string) => {
         handleTimeSelection(timer)
         await Notifications.scheduleNotificationAsync({
@@ -228,7 +245,7 @@ const Exercise: React.FC = () => {
                                 style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
                                 onPress={() => handleCustomTimeInput('120')}
                             >
-                                <Text style={[styles.timerButtonText,  customTime === '120' && { color: colors.white}]}>2min</Text>
+                                <Text style={[styles.timerButtonText, customTime === '120' && { color: colors.white }]}>2min</Text>
                             </TouchableOpacity>
                             <TextInput
                                 style={styles.customTimeInput}
