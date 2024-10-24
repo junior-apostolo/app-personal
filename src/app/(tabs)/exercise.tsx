@@ -147,7 +147,8 @@ const Exercise: React.FC = () => {
                     style={styles.backButton}
                     onPress={goBack}
                 >
-                    <Text style={styles.backButtonText}>{"< Voltar"}</Text>
+                     <Feather name="arrow-left" size={24} color={colors.white} />
+                    <Text style={styles.backButtonText}>Exercícios</Text>
                 </TouchableOpacity>
 
                 <Card
@@ -246,17 +247,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     backButton: {
+        flexDirection: "row",
         alignSelf: 'flex-start',
         marginBottom: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
         backgroundColor: colors.blue_750,
         borderRadius: 5,
+        padding: 10
     },
     backButtonText: {
         color: colors.white,
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
+
     },
     loadSection: {
         marginTop: 20,
@@ -331,6 +333,7 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: colors.blue_750,
         marginHorizontal: 5,
+        borderRadius: 10
     },
     selectedTimerButton: {
         backgroundColor: colors.green_100,
@@ -342,8 +345,7 @@ const styles = StyleSheet.create({
         width: 80,
         color: colors.white,
         backgroundColor: colors.blue_750,
-        borderRadius: 5,
-        padding: 5,
+        borderRadius: 10,
         textAlign: 'center',
     },
     countdownText: {
