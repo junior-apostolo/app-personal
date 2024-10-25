@@ -158,6 +158,7 @@ const Exercise: React.FC = () => {
         try {
             await AsyncStorage.setItem('completedExercises', JSON.stringify(updatedCompletedExercises));
             Alert.alert('Exercício concluído!', `${nomeExercicio} foi marcado como concluído.`);
+            goBack()
         } catch (error) {
             console.error('Erro ao salvar o exercício concluído:', error);
         }
@@ -175,7 +176,7 @@ const Exercise: React.FC = () => {
                     onPress={goBack}
                 >
                     <Feather name="arrow-left" size={24} color={colors.white} />
-                    <Text style={styles.backButtonText}>xercícios</Text>
+                    <Text style={styles.backButtonText}>ercícios</Text>
                 </TouchableOpacity>
 
                 <Card
