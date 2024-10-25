@@ -176,7 +176,7 @@ const Exercise: React.FC = () => {
                     onPress={goBack}
                 >
                     <Feather name="arrow-left" size={24} color={colors.white} />
-                    <Text style={styles.backButtonText}>ercícios</Text>
+                    <Text style={styles.backButtonText}>Exercícios</Text>
                 </TouchableOpacity>
 
                 <Card
