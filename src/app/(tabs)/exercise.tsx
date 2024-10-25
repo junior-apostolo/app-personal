@@ -25,6 +25,8 @@ const Exercise: React.FC = () => {
     const [selectedTime, setSelectedTime] = useState<string>('30s');
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
+    const [completedExercises, setCompletedExercises] = useState<{ name: string; date: string }[]>([]);
+
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -136,6 +138,31 @@ const Exercise: React.FC = () => {
             },
         });
     };
+
+    const handleCompleteExercise = async () => {
+        const date = new Date().toISOString().split('T')[0];
+        const completedExercise = { name: nomeExercicio, date };
+        const storedData = await AsyncStorage.getItem('completedExercises');
+        if (storedData) {
+            const alreadyCompleted = JSON.parse(storedData).some(
+                (exercise) => exercise.name === nomeExercicio && exercise.date === date
+            );
+            console.log( JSON.parse(storedData))
+            if (alreadyCompleted) {
+                Alert.alert('Exercício já concluído', `${nomeExercicio} já foi marcado como concluído hoje.`);
+                return;
+            }
+        }
+        const updatedCompletedExercises = [...completedExercises, completedExercise];
+        setCompletedExercises(updatedCompletedExercises);
+        try {
+            await AsyncStorage.setItem('completedExercises', JSON.stringify(updatedCompletedExercises));
+            Alert.alert('Exercício concluído!', `${nomeExercicio} foi marcado como concluído.`);
+        } catch (error) {
+            console.error('Erro ao salvar o exercício concluído:', error);
+        }
+    };
+
     return (
         <KeyboardAvoidingView
             style={styles.container}
@@ -147,8 +174,8 @@ const Exercise: React.FC = () => {
                     style={styles.backButton}
                     onPress={goBack}
                 >
-                     <Feather name="arrow-left" size={24} color={colors.white} />
-                    <Text style={styles.backButtonText}>Exercícios</Text>
+                    <Feather name="arrow-left" size={24} color={colors.white} />
+                    <Text style={styles.backButtonText}>xercícios</Text>
                 </TouchableOpacity>
 
                 <Card
@@ -228,6 +255,12 @@ const Exercise: React.FC = () => {
                             <Text style={styles.saveButtonText}>Salvar Peso</Text>
                         </TouchableOpacity>
                     </View>
+                    <TouchableOpacity
+                        style={styles.completeButton}
+                        onPress={handleCompleteExercise}
+                    >
+                        <Text style={styles.completeButtonText}>Concluir Exercício</Text>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
@@ -354,6 +387,18 @@ const styles = StyleSheet.create({
         color: colors.white,
         fontWeight: 'bold',
         textAlign: "center"
+    },
+    completeButton: {
+        backgroundColor: colors.blue_800,
+        padding: 12,
+        borderRadius: 8,
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    completeButtonText: {
+        color: colors.white,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 

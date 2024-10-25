@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
 import { TrainingDetail } from '@/interfaces/TrainingDetail';
 import { colors } from '@/theme/colors';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams, useNavigation } from 'expo-router';
 import { LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getAllExerciseTraining } from '@/services/exerciseTraining';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import dayjs from 'dayjs';
 
 const Training: React.FC = () => {
     const [expandedSection, setExpandedSection] = useState<string | null>(null);
     const [exercises, setExercises] = useState<Array<TrainingDetail>>([]);
     const { id, image, nome, description } = useLocalSearchParams();
+    const navigation = useNavigation<any>();
+    const today = dayjs().format('YYYY-MM-DD');
 
     const toggleExpand = (section: string) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         setExpandedSection(section === expandedSection ? null : section);
-    }
+    };
 
     const nextStep = (item: TrainingDetail) => {
         router.push({
@@ -30,29 +34,52 @@ const Training: React.FC = () => {
                 image: image,
                 description: description
             },
-        })
+        });
+    };
+
+    const clearOldExercises = async () => {
+        const storedData = await AsyncStorage.getItem('completedExercises');
+        if (storedData) {
+            const parsedData = JSON.parse(storedData); 
+            console.log(parsedData)
+              const todayExercises = parsedData.filter((exercise: any) => exercise.date === today);
+             await AsyncStorage.setItem('completedExercises', JSON.stringify(todayExercises));
+        }
     };
 
     const loadingExercises = async () => {
         try {
+            await clearOldExercises();
             const response = await getAllExerciseTraining(id);
             if (!response) {
-                return false;
+                return;
             }
-            setExercises(response);
+            const completedExercises = await AsyncStorage.getItem('completedExercises');
+            console.log(completedExercises) 
+            const completedIds = completedExercises ? JSON.parse(completedExercises).map((ex: any) => ex.name) : [];
+            setExercises(response.map((exercise) => ({
+                ...exercise,
+                isCompleted: completedIds.includes(exercise.exercise.nome)
+            })));
         } catch (err) {
-            return false;
+            console.error("Error loading exercises", err);
         }
-    }
+    };
 
     useEffect(() => {
         loadingExercises();
     }, [id]);
 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            loadingExercises();
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
 
     const groupReps = (rep: string) => {
         const repsArray = rep.split('-');
-
         let groupedReps = '';
         for (let i = 0; i < repsArray.length; i += 2) {
             if (i == 0) {
@@ -61,17 +88,12 @@ const Training: React.FC = () => {
                 groupedReps += `${repsArray[i]}${repsArray[i + 1] ? ` - ${repsArray[i + 1]}` : ''}\n`;
             }
         }
-
         return groupedReps.trim();
-    }
+    };
 
     return (
         <View style={styles.container}>
-            <Card
-                imageUri={image}
-                text={nome}
-            />
-
+            <Card imageUri={image} text={nome} />
             <ScrollView style={{ width: "90%" }}>
                 <ExpandedSection
                     title="Orientações"
@@ -80,23 +102,24 @@ const Training: React.FC = () => {
                     expandedSection={expandedSection}
                     toggleExpand={toggleExpand}
                 />
-
                 <View style={styles.exerciseList}>
                     {exercises.map((exercise, index) => {
                         const isBiset = exercise.metodo.toLocaleLowerCase() === 'biset';
                         const isLastBiset = isBiset && (index === exercises.length - 1 || exercises[index + 1]?.metodo !== 'biset');
+                        const completedStyle = exercise.isCompleted ? styles.completedExercise : {};
                         return (
                             <TouchableOpacity
                                 key={index}
                                 style={[
                                     styles.exerciseButton,
+                                    completedStyle,
                                     isLastBiset && styles.lastBiset,
                                     exercise.metodo.toLocaleLowerCase() != "biset" && { marginTop: 10 },
                                     exercises[index + 1]?.metodo.toLocaleLowerCase() !== 'biset' && { borderBottomWidth: 4 }
                                 ]}
                                 onPress={() => nextStep(exercise)}
                             >
-                                <Text style={styles.exerciseText}>
+                                <Text style={[styles.exerciseText, exercise.isCompleted && styles.completedText]}>
                                     {exercise.exercise.nome}
                                 </Text>
                                 <Text style={styles.repText}>
@@ -136,6 +159,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
         minHeight: 50
+    },
+    completedExercise: {
+        backgroundColor: colors.green_100,
+    },
+    completedText: {
+        color: colors.black,
     },
     lastBiset: {
         borderBottomWidth: 0,
