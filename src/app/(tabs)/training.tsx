@@ -69,13 +69,6 @@ const Training: React.FC = () => {
         loadingExercises();
     }, [id]);
 
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
-            loadingExercises();
-        });
-    
-        return unsubscribe;
-      }, [navigation]);
 
     const groupReps = (rep: string) => {
         const repsArray = rep.split('-');
