@@ -67,7 +67,7 @@ const Training: React.FC = () => {
 
     useEffect(() => {
         loadingExercises();
-    }, [id]);
+    }, [id, navigation]);
 
 
     const groupReps = (rep: string) => {
