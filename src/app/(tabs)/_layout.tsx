@@ -74,7 +74,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="exercise"
+        name="exercise/index"
         options={{
           tabBarButton: () => null, // Oculta a aba 'training'
         }}
