@@ -55,20 +55,24 @@ const Training: React.FC = () => {
             }
             const completedExercises = await AsyncStorage.getItem('completedExercises');
             const completedIds = completedExercises ? JSON.parse(completedExercises).map((ex: any) => ex.name) : [];
+            await clearOldExercises();
             setExercises(response.map((exercise) => ({
                 ...exercise,
                 isCompleted: completedIds.includes(exercise.exercise.nome)
             })));
-            await clearOldExercises();
         } catch (err) {
             console.error("Error loading exercises", err);
         }
     };
 
     useEffect(() => {
+        const unsubscribe = navigation.addListener("focus", () => {
+            loadingExercises();
+        });
+    
         loadingExercises();
+        return unsubscribe
     }, [id, navigation]);
-
 
     const groupReps = (rep: string) => {
         const repsArray = rep.split('-');
