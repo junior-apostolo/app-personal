@@ -49,18 +49,17 @@ const Training: React.FC = () => {
 
     const loadingExercises = async () => {
         try {
-            await clearOldExercises();
             const response = await getAllExerciseTraining(id);
             if (!response) {
                 return;
             }
             const completedExercises = await AsyncStorage.getItem('completedExercises');
-            console.log(completedExercises) 
             const completedIds = completedExercises ? JSON.parse(completedExercises).map((ex: any) => ex.name) : [];
             setExercises(response.map((exercise) => ({
                 ...exercise,
                 isCompleted: completedIds.includes(exercise.exercise.nome)
             })));
+            await clearOldExercises();
         } catch (err) {
             console.error("Error loading exercises", err);
         }
