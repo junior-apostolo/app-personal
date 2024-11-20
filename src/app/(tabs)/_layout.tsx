@@ -8,16 +8,16 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: theme.colors.white, // Cor das guias ativas
-        headerShown: false, // Ocultar header
+        tabBarActiveTintColor: theme.colors.white, 
+        headerShown: false, 
         tabBarStyle: {
-          backgroundColor: theme.colors.tabBar, // Fundo da Tab Bar
-          borderColor: theme.colors.blue_750, // Cor da borda
-          elevation: 0, // Remove sombra no Android
-          shadowOpacity: 0, // Remove sombra no iOS
-          borderTopWidth: 0, // Remove a linha superior
+          backgroundColor: theme.colors.tabBar, 
+          borderColor: theme.colors.blue_750, 
+          elevation: 0, 
+          shadowOpacity: 0, 
+          borderTopWidth: 0, 
         },
-        tabBarLabel: () => null, // Remove o nome do componente embaixo do ícone
+        tabBarLabel: () => null,
       }}
     >
       <Tabs.Screen
@@ -31,8 +31,6 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Ícone de logo sem funcionalidade */}
-
       <Tabs.Screen
         name="checkIn"
         options={{
@@ -44,11 +42,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="logo" // Nome que não interfere na navegação
+        name="logo" 
         options={{
           tabBarButton: () => (
             <Logo />
-          ), // Apenas exibe o logo, sem funcionalidade
+          ), 
         }}
       />
       <Tabs.Screen
@@ -76,13 +74,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="exercise/index"
         options={{
-          tabBarButton: () => null, // Oculta a aba 'training'
+          href: null,
+
         }}
       />
       <Tabs.Screen
         name="training"
         options={{
-          tabBarButton: () => null, // Oculta a aba 'training'
+          href: null,
         }}
       />
     </Tabs>
