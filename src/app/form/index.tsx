@@ -10,7 +10,7 @@ export default function Form() {
     <View style={{ flex: 1 }}>
       <FormProvider>
         <MultiStepForm step={Number(step)} />
-      </FormProvider>
+      </FormProvider>  
     </View>
   );
 }
