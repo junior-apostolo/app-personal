@@ -60,7 +60,6 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Ocultando as abas desnecessárias */}
       <Tabs.Screen
         name="workout"
         options={{
@@ -74,13 +73,14 @@ export default function TabLayout() {
       <Tabs.Screen
         name="exercise/index"
         options={{
-          tabBarButton: () => null, // Oculta a aba 'training'
+          href: null,
         }}
       />
       <Tabs.Screen
         name="training"
         options={{
-          tabBarButton: () => null, // Oculta a aba 'training'
+          href: null,
+
         }}
       />
     </Tabs>
