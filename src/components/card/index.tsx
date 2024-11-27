@@ -33,12 +33,11 @@ export const Card: React.FC<CardProps> = ({
 }) => {
     return (
         <View style={[styles.card, cardStyle]}>
-            {/* Verifica se é YouTube, se for, exibe o YoutubePlayer, senão exibe uma imagem */}
             {isYouTube && youTubeVideoId ? (
                 <YoutubePlayer
                     height={200}
                     width="100%"
-                    play={false} // Altere para true se quiser que o vídeo comece a tocar automaticamente
+                    play={false} 
                     videoId={youTubeVideoId}
                     onReady={e => console.log('Video is ready')}
                     onChange={e => console.log('Video status:', e)}

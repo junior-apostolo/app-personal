@@ -178,7 +178,6 @@ const Exercise: React.FC = () => {
                     <Feather name="arrow-left" size={24} color={colors.white} />
                     <Text style={styles.backButtonText}>Exercícios</Text>
                 </TouchableOpacity>
-
                 <Card
                     imageUri=""
                     isYouTube={true}
