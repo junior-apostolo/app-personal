@@ -178,12 +178,12 @@ const Exercise: React.FC = () => {
                     <Feather name="arrow-left" size={24} color={colors.white} />
                     <Text style={styles.backButtonText}>Exercícios</Text>
                 </TouchableOpacity>
-                <Card
+               {linkVideo && <Card
                     imageUri=""
-                    isYouTube={true}
+                    isYouTube
                     youTubeVideoId={linkVideo}
                     text={nomeExercicio}
-                />
+                />}
                 <View style={{ width: "90%" }}>
                     <ExpandedSection
                         title="Descrição"

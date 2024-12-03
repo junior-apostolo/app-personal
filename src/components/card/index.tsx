@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle, ImageStyle, TextStyle, TouchableOpacityProps } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe'; // Importando o componente YoutubePlayer corretamente
 import { colors } from '@/theme/colors';
@@ -23,31 +23,31 @@ export const Card: React.FC<CardProps> = ({
     text,
     onPress,
     buttonText,
-    isYouTube = false,  // Valor padrão é `false`
-    youTubeVideoId,  // Recebe o ID do vídeo do YouTube
+    isYouTube = false,  
+    youTubeVideoId, 
     cardStyle,
     textStyle,
     imageStyle,
     buttonStyle,
     buttonTextStyle,
 }) => {
+
     return (
         <View style={[styles.card, cardStyle]}>
-            {isYouTube && youTubeVideoId ? (
+            {isYouTube ? (
                 <YoutubePlayer
                     height={200}
                     width="100%"
                     play={false} 
                     videoId={youTubeVideoId}
-                    onReady={e => console.log('Video is ready')}
-                    onChange={e => console.log('Video status:', e)}
                 />
             ) : (
-                <Image
+                <Image 
                     source={{ uri: imageUri }}
                     style={[styles.image, imageStyle]}
                 />
             )}
+         
             <View style={[styles.cardTextContainer, !buttonText && { justifyContent: 'center' }]}>
                 <Text style={[styles.cardText, textStyle]}>{text}</Text>
                 {buttonText && onPress && (

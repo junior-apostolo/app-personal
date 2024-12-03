@@ -8,14 +8,14 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: theme.colors.white, 
-        headerShown: false, 
+        tabBarActiveTintColor: theme.colors.white,
+        headerShown: false,
         tabBarStyle: {
-          backgroundColor: theme.colors.tabBar, 
-          borderColor: theme.colors.blue_750, 
-          elevation: 0, 
-          shadowOpacity: 0, 
-          borderTopWidth: 0, 
+          backgroundColor: theme.colors.tabBar,
+          borderColor: theme.colors.blue_750,
+          elevation: 0,
+          shadowOpacity: 0,
+          borderTopWidth: 0,
         },
         tabBarLabel: () => null,
       }}
@@ -42,11 +42,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="logo" 
+        name="logo"
         options={{
           tabBarButton: () => (
             <Logo />
-          ), 
+          ),
         }}
       />
       <Tabs.Screen
@@ -78,6 +78,13 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name="training"
+        options={{
+          href: null,
+
+        }}
+      />
+      <Tabs.Screen
+        name="exercise/_components/timer"
         options={{
           href: null,
 
