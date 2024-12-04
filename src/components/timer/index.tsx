@@ -9,7 +9,7 @@ type TimerProps = {
 
 export const Timer: React.FC<TimerProps> = ({ onCountdownEnd }) => {
   const [selectedTime, setSelectedTime] = useState<string>('30s');
-  const [customTime, setCustomTime] = useState<string>('');
+  const [customTime, setCustomTime] = useState<string>("5");
   const [countdown, setCountdown] = useState<number | null>(null);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const Timer: React.FC<TimerProps> = ({ onCountdownEnd }) => {
         title: 'Tempo de descanso acabou!',
         body: 'É hora de voltar ao treino!',
       },
-      trigger: { seconds: countdown || 0 },
+      trigger: { seconds: 10 || 0 },
     });
   };
 

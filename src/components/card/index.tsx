@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, ViewStyle, ImageStyle, TextStyle, TouchableOpacityProps } from 'react-native';
-import YoutubePlayer from 'react-native-youtube-iframe'; // Importando o componente YoutubePlayer corretamente
+import YoutubePlayer from 'react-native-youtube-iframe'; 
 import { colors } from '@/theme/colors';
 import { Link } from 'expo-router';
 
@@ -9,8 +9,8 @@ interface CardProps extends TouchableOpacityProps {
     text: string;
     onPress?: () => void;
     buttonText?: string;
-    isYouTube?: boolean;  // Propriedade para verificar se é um vídeo do YouTube
-    youTubeVideoId?: string;  // ID do vídeo do YouTube
+    isYouTube?: boolean;  
+    youTubeVideoId?: string; 
     cardStyle?: ViewStyle;
     textStyle?: TextStyle;
     imageStyle?: ImageStyle;

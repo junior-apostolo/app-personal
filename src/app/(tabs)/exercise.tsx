@@ -4,11 +4,9 @@ import { Feather } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
-import * as Notifications from 'expo-notifications';
 import { colors } from '@/theme/colors';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Button } from '@/components/button';
-import { Timer } from '@/components/timer';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -134,9 +132,9 @@ const Exercise: React.FC = () => {
                 sound: 'default',
             },
             trigger: {
-                second: 20,
-                repeats: false,
-            }
+                seconds: Number(timer), 
+                repeats: false, 
+            },
         });
     };
 
@@ -211,8 +209,47 @@ const Exercise: React.FC = () => {
                             />
 
                         </View>
-                        <Timer onCountdownEnd={() =>{}}/>
-                    
+                        <Text style={styles.timerTitle}>Escolha o tempo de descanso:</Text>
+                        <View style={styles.timerOptions}>
+                            <TouchableOpacity
+                                style={[styles.timerButton, customTime === '30' && styles.selectedTimerButton]}
+                                onPress={() => handleCustomTimeInput('30')}
+                            >
+                                <Text style={styles.timerButtonText}>30s</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.timerButton, customTime === '90' && styles.selectedTimerButton]}
+                                onPress={() => handleCustomTimeInput('90')}
+                            >
+                                <Text style={styles.timerButtonText}>1min30s</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.timerButton, customTime === '120' && styles.selectedTimerButton]}
+                                onPress={() => handleCustomTimeInput('120')}
+                            >
+                                <Text style={[styles.timerButtonText, customTime === '120' && { color: colors.white }]}>2min</Text>
+                            </TouchableOpacity>
+                            <TextInput
+                                style={styles.customTimeInput}
+                                placeholder="Custom"
+                                value={customTime}
+                                placeholderTextColor={colors.white}
+                                onChangeText={handleCustomTimeInput}
+                                keyboardType="numeric"
+                                onFocus={() => setSelectedTime('')}
+                            />
+                        </View>
+                        {countdown !== null && (
+                            <Text style={styles.countdownText}>
+                                Tempo restante: {Math.floor(countdown / 60)}:{countdown % 60 < 10 ? '0' : ''}{countdown % 60}s
+                            </Text>
+                        )}
+                        <TouchableOpacity
+                            style={[styles.timerButton, { marginTop: 20, width: "100%" }]}
+                            onPress={() => triggerNotification(customTime)}
+                        >
+                            <Text style={[styles.timerButtonText, { textAlign: "center", color: colors.white, borderRadius: 10 }]}>Iniciar descanso</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={[styles.timerButton, { marginTop: 20, width: "100%", borderRadius: 10, backgroundColor: colors.green_100 }]} onPress={handleSaveLoad}>
                             <Text style={styles.saveButtonText}>Salvar Peso</Text>
                         </TouchableOpacity>
