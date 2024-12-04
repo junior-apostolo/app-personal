@@ -7,6 +7,7 @@ import { ExpandedSection } from '@/components/expandedSection';
 import * as Notifications from 'expo-notifications';
 import { colors } from '@/theme/colors';
 import { router, useLocalSearchParams } from 'expo-router';
+import { Button } from '@/components/button';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -26,7 +27,6 @@ const Exercise: React.FC = () => {
     const [customTime, setCustomTime] = useState<string>('');
     const [countdown, setCountdown] = useState<number | null>(null);
     const [completedExercises, setCompletedExercises] = useState<{ name: string; date: string }[]>([]);
-
 
     useEffect(() => {
         const loadExerciseLoads = async () => {
@@ -133,7 +133,7 @@ const Exercise: React.FC = () => {
                 sound: 'default',
             },
             trigger: {
-                seconds: Number(timer), // agenda para 30 segundos depois
+                seconds: Number(timer), 
                 repeats: false, // não se repete
             },
         });
@@ -178,12 +178,12 @@ const Exercise: React.FC = () => {
                     <Feather name="arrow-left" size={24} color={colors.white} />
                     <Text style={styles.backButtonText}>Exercícios</Text>
                 </TouchableOpacity>
-               {linkVideo && <Card
+                <Card
                     imageUri=""
                     isYouTube
                     youTubeVideoId={linkVideo}
                     text={nomeExercicio}
-                />}
+                />
                 <View style={{ width: "90%" }}>
                     <ExpandedSection
                         title="Descrição"

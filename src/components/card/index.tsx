@@ -34,7 +34,7 @@ export const Card: React.FC<CardProps> = ({
 
     return (
         <View style={[styles.card, cardStyle]}>
-            {isYouTube ? (
+            {isYouTube  && youTubeVideoId != undefined && youTubeVideoId? (
                 <YoutubePlayer
                     height={200}
                     width="100%"

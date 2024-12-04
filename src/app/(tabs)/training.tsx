@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+  import React, { useCallback, useEffect, useState } from 'react';
 import { Card } from '@/components/card';
 import { ExpandedSection } from '@/components/expandedSection';
 import { TrainingDetail } from '@/interfaces/TrainingDetail';

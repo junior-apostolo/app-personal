@@ -16,6 +16,7 @@ export default function TabLayout() {
           elevation: 0,
           shadowOpacity: 0,
           borderTopWidth: 0,
+          paddingTop: 10
         },
         tabBarLabel: () => null,
       }}
