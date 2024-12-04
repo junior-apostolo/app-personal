@@ -72,20 +72,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="exercise/index"
+        name="exercise"
         options={{
           href: null,
         }}
       />
       <Tabs.Screen
         name="training"
-        options={{
-          href: null,
-
-        }}
-      />
-      <Tabs.Screen
-        name="exercise/_components/timer"
         options={{
           href: null,
 
