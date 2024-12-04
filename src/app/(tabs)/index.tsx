@@ -54,7 +54,7 @@ export default function Home() {
       marginHorizontal: treinos.length > 5 ? 2 : 8,
     },
     dayText: {
-      fontSize: 18,
+      fontSize: 14,
     }
   });
 
